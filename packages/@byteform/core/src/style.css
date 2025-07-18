@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --byteform-scrollbar-color: #535353;
+    --byteform-scrollbar-hover-color: #505050;
+    --byteform-scrollbar-background: transparent;
+}
+
+.byteform-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--byteform-scrollbar-color)
+        var(--byteform-scrollbar-background);
+}
+
+.byteform-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.byteform-scrollbar::-webkit-scrollbar-track {
+    background: var(--byteform-scrollbar-background);
+    border-radius: 4px;
+}
+
+.byteform-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--byteform-scrollbar-color);
+    border-radius: 4px;
+}
+
+.byteform-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--byteform-scrollbar-hover-color);
+}
+
+.byteform-scrollbar::-webkit-scrollbar-button {
+    display: none;
+    width: 0px;
+    height: 0px;
+}
