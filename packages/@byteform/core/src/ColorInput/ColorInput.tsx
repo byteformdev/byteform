@@ -1,0 +1,173 @@
+import { useEffect, useRef, useState } from "react";
+import { useTheme } from "../_theme";
+import { ColorInputProps } from "./types";
+import {
+    useFloating,
+    autoUpdate,
+    offset,
+    flip,
+    shift,
+    useClick,
+    useDismiss,
+    useRole,
+    useInteractions
+} from "@floating-ui/react";
+import { parseColor } from "../ColorPicker";
+import { ColorSwatch } from "../ColorSwatch";
+import { IconPencil } from "@tabler/icons-react";
+import { Input } from "../Input";
+import { Transition } from "../Transition";
+import { ColorPicker } from "../ColorPicker";
+import { IconButton } from "../IconButton";
+
+export const ColorInput = ({
+    value = "#ffffff",
+    defaultValue = "#ffffff",
+    onChange,
+    format = "hex",
+    hidePreview,
+    showEyeDropper,
+    colorSwatchProps,
+    colorPickerProps,
+    withPicker = true,
+    transitionProps,
+    classNames,
+    ...props
+}: ColorInputProps) => {
+    const { theme, cx } = useTheme();
+
+    const [currentColor, setCurrentColor] = useState(value || defaultValue);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const { x, y, strategy, refs, context } = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+        middleware: [offset(5), flip(), shift()],
+        whileElementsMounted: autoUpdate
+    });
+
+    const click = useClick(context);
+    const dismiss = useDismiss(context);
+    const role = useRole(context, { role: "dialog" });
+
+    const { getReferenceProps, getFloatingProps } = useInteractions([
+        click,
+        dismiss,
+        role
+    ]);
+
+    useEffect(() => {
+        if (value) {
+            setCurrentColor(value);
+        }
+    }, [value]);
+
+    const handleColorChange = (newColor: string) => {
+        setCurrentColor(newColor);
+        onChange?.(newColor);
+    };
+
+    const handleInputChange = (inputValue: string) => {
+        try {
+            parseColor(inputValue);
+            handleColorChange(inputValue);
+        } catch (e) {
+            setCurrentColor(inputValue);
+            onChange?.(inputValue);
+        }
+    };
+
+    const activateEyedropper = async () => {
+        try {
+            if ("EyeDropper" in window) {
+                // @ts-ignore - EyeDropper API is not yet in TypeScript types
+                const eyeDropper = new window.EyeDropper();
+                const result = await eyeDropper.open();
+                handleColorChange(result.sRGBHex);
+            } else {
+                alert("Eyedropper not supported in this browser");
+            }
+        } catch (e) {
+            console.error("Error using eyedropper:", e);
+        }
+    };
+
+    const colorSwatch = (
+        <ColorSwatch
+            color={currentColor}
+            className={cx("rounded-md w-6 h-6", classNames?.colorSwatch)}
+            backgroundGrid
+            {...colorSwatchProps}
+        />
+    );
+
+    const eyedropperButton = (
+        <IconButton onClick={activateEyedropper}>
+            <IconPencil size={18} />
+        </IconButton>
+    );
+
+    return (
+        <div className="relative">
+            <Input
+                value={currentColor}
+                onChange={handleInputChange}
+                leftSection={hidePreview ? null : colorSwatch}
+                rightSection={showEyeDropper ? eyedropperButton : null}
+                inputRef={(node) => {
+                    inputRef.current = node as HTMLInputElement;
+                }}
+                containerRef={(node) => {
+                    containerRef.current = node;
+                    refs.setReference(node);
+                }}
+                {...getReferenceProps()}
+                {...props}
+            />
+
+            {withPicker && (
+                <div className="relative z-50">
+                    <Transition
+                        mounted={isOpen}
+                        transition="fade-down"
+                        duration={200}
+                        {...transitionProps}
+                    >
+                        <div
+                            ref={refs.setFloating}
+                            className={cx(
+                                "z-50 shadow-lg rounded-md overflow-hidden p-2 flex",
+                                theme === "light"
+                                    ? "bg-[var(--byteform-light-background)]"
+                                    : "bg-[var(--byteform-dark-background)]",
+
+                                classNames?.colorPicker
+                            )}
+                            style={{
+                                position: strategy,
+                                top: y ?? 0,
+                                left: x ?? 0,
+                                minWidth:
+                                    containerRef.current?.offsetWidth || 200
+                            }}
+                            {...getFloatingProps()}
+                        >
+                            <ColorPicker
+                                value={currentColor}
+                                onChange={handleColorChange}
+                                format={format}
+                                fullWidth
+                                {...colorPickerProps}
+                            />
+                        </div>
+                    </Transition>
+                </div>
+            )}
+        </div>
+    );
+};
+
+ColorInput.displayName = "@byteform/core/ColorInput";
