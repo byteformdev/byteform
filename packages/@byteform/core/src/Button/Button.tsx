@@ -1,7 +1,28 @@
 import { ElementType, forwardRef, ReactNode } from "react";
-import { ButtonProps } from "./types";
+import { ButtonProps, ButtonSize } from "./types";
 import { useTheme } from "../_theme";
 import { Loader } from "../Loader";
+
+const compactStyles = {
+    xs: "text-xs px-1 py-0.5 min-h-4",
+    sm: "text-sm px-2 py-1 min-h-6",
+    md: "text-base px-3 py-1.5 min-h-8",
+    lg: "text-lg px-4 py-2 min-h-10",
+    xl: "text-xl px-5 py-2.5 min-h-12"
+};
+
+const styles = {
+    xs: "text-xs px-2 py-1 min-h-6",
+    sm: "text-sm px-3 py-1.5 min-h-8",
+    md: "text-base px-4 py-2 min-h-10",
+    lg: "text-lg px-5 py-2.5 min-h-12",
+    xl: "text-xl px-6 py-3 min-h-14"
+};
+
+const getSize = (size: ButtonSize, compact?: boolean) => {
+    if (compact) return compactStyles[size] || compactStyles.sm;
+    return styles[size] || styles.sm;
+};
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     (
@@ -26,7 +47,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             target,
             align = "center",
             useAnimation = true,
-            compact,
+            compact = false,
             className,
             classNames,
             ...props
@@ -34,28 +55,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref
     ) => {
         const { theme, cx } = useTheme();
-
-        const sizeClasses = () => {
-            const compactStyles = {
-                xs: "text-xs px-1 h-4",
-                sm: "text-sm px-2 h-6",
-                md: "text-base px-3 h-8",
-                lg: "text-lg px-4 h-10",
-                xl: "text-xl px-5 h-12"
-            };
-
-            if (compact) return compactStyles[size] || compactStyles.sm;
-
-            const styles = {
-                xs: "text-xs px-2 h-6",
-                sm: "text-sm px-3 h-8",
-                md: "text-base px-4 h-10",
-                lg: "text-lg px-5 h-12",
-                xl: "text-xl px-6 h-14"
-            };
-
-            return styles[size] || styles.sm;
-        };
 
         const getVariant = () => {
             const isLight = theme === "light";
@@ -134,11 +133,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         return (
             <Element
                 className={cx(
-                    "inline-flex items-center gap-2 font-medium cursor-pointer relative rounded-md whitespace-nowrap select-none transition-colors duration-300",
+                    "inline-flex items-center gap-2 font-medium cursor-pointer relative rounded-md whitespace-nowrap select-none transition-colors duration-150",
                     useAnimation &&
                         (!disabled || !loading) &&
                         "active:translate-y-0.5",
-                    sizeClasses(),
+                    getSize(size, compact),
                     getVariant(),
                     fullWidth && "w-full",
                     (disabled || loading) &&
