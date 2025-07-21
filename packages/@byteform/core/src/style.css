@@ -3,38 +3,37 @@
 @tailwind utilities;
 
 :root {
-    --byteform-scrollbar-color: #535353;
-    --byteform-scrollbar-hover-color: #505050;
-    --byteform-scrollbar-background: transparent;
+    --byteform-scrollbar-track: transparent;
+    --byteform-scrollbar-thumb: #4b4b4b;
+    --byteform-scrollbar-thumb-hover: #6b6b6b;
 }
 
 .byteform-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: var(--byteform-scrollbar-color)
-        var(--byteform-scrollbar-background);
+    scrollbar-color: var(--byteform-scrollbar-thumb)
+        var(--byteform-scrollbar-track);
 }
 
 .byteform-scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 
 .byteform-scrollbar::-webkit-scrollbar-track {
-    background: var(--byteform-scrollbar-background);
-    border-radius: 4px;
+    background: var(--byteform-scrollbar-track);
 }
 
 .byteform-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--byteform-scrollbar-color);
-    border-radius: 4px;
+    background-color: var(--byteform-scrollbar-thumb);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
 }
 
 .byteform-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: var(--byteform-scrollbar-hover-color);
+    background-color: var(--byteform-scrollbar-thumb-hover);
 }
 
 .byteform-scrollbar::-webkit-scrollbar-button {
     display: none;
-    width: 0px;
-    height: 0px;
 }
