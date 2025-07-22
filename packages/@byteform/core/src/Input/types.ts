@@ -1,6 +1,11 @@
-import { InputHTMLAttributes } from "react";
+import { ComponentType, InputHTMLAttributes, ReactElement } from "react";
 
-export type InputComponent = "input" | "textarea" | "select";
+export type InputComponent =
+    | "input"
+    | "textarea"
+    | "select"
+    | ComponentType<any>
+    | ReactElement;
 export type InputSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 export interface InputProps

@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+    cloneElement,
+    isValidElement,
+    useEffect,
+    useState
+} from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { InputProps, InputSize } from "./types";
 import { useTheme } from "../_theme";
@@ -203,7 +208,7 @@ export const Input = ({
         <div
             ref={containerRef}
             className={cx(
-                "flex items-center overflow-hidden transition-colors rounded-md",
+                "flex items-center overflow-hidden transition-colors rounded-md outline-none",
                 !unstyled && [
                     theme === "light"
                         ? "bg-[var(--byteform-light-background)] border border-[var(--byteform-light-border)]"
@@ -229,17 +234,35 @@ export const Input = ({
     );
 
     const renderComponentByType = () => {
-        if (typeof component === "object") {
-            return React.cloneElement(component as React.ReactElement, {
-                // @ts-ignore
-                value:
-                    controlledValue !== undefined
-                        ? controlledValue
-                        : localValue,
-                onChange: handleChange,
-                ref: inputRef,
-                ...props
-            });
+        if (typeof component === "object" || typeof component === "function") {
+            if (React.isValidElement(component)) {
+                return React.cloneElement(
+                    component as React.ReactElement,
+                    {
+                        ...props,
+                        value:
+                            controlledValue !== undefined
+                                ? controlledValue
+                                : localValue,
+                        onChange: handleChange,
+                        ref: inputRef
+                    } as any
+                );
+            }
+
+            const Component = component as React.ComponentType<any>;
+            return (
+                <Component
+                    value={
+                        controlledValue !== undefined
+                            ? controlledValue
+                            : localValue
+                    }
+                    onChange={handleChange}
+                    ref={inputRef}
+                    {...props}
+                />
+            );
         }
 
         const baseStyles = cx(
@@ -338,7 +361,7 @@ export const Input = ({
                             maxRows={(props as any).maxRows}
                             className={cx(
                                 baseStyles,
-                                "resize-none",
+                                "resize-none byteform-scrollbar",
                                 theme === "light"
                                     ? "text-[var(--byteform-light-text)]"
                                     : "text-[var(--byteform-dark-text)]",
@@ -384,6 +407,7 @@ export const Input = ({
                         cols={cols}
                         className={cx(
                             baseStyles,
+                            "byteform-scrollbar",
                             "resize-" + resize,
                             theme === "light"
                                 ? "text-[var(--byteform-light-text)]"
