@@ -86,6 +86,9 @@ export const Code: React.FC<CodeProps> = ({
                 <div
                     className={cx(
                         "overflow-auto byteform-scrollbar max-h-96",
+                        theme === "light"
+                            ? "bg-[var(--byteform-light-background)]"
+                            : "bg-[var(--byteform-dark-background)]",
                         classNames?.container
                     )}
                 >
@@ -111,10 +114,7 @@ export const Code: React.FC<CodeProps> = ({
                                 <pre
                                     className={cx(
                                         highlightClassName,
-                                        "p-4 text-sm leading-6",
-                                        theme === "light"
-                                            ? "bg-[var(--byteform-light-background)]"
-                                            : "bg-[var(--byteform-dark-background)]",
+                                        "p-4 text-sm leading-6 min-w-full",
                                         classNames?.code,
                                         className
                                     )}
