@@ -1,7 +1,9 @@
 import "./style.css";
 
 export * from "./_theme";
+export * from "./_hooks";
 
+export * from "./Anchor";
 export * from "./Avatar";
 export * from "./Badge";
 export * from "./Button";
@@ -14,9 +16,18 @@ export * from "./ColorSwatch";
 export * from "./IconButton";
 export * from "./Input";
 export * from "./Loader";
+export * from "./Modal";
+export * from "./NumberInput";
+export * from "./Pagination";
 export * from "./Paper";
 export * from "./PasswordInput";
 export * from "./Progress";
+export * from "./ProgressCircle";
+export * from "./Radio";
+export * from "./SegmentedControl";
 export * from "./Select";
 export * from "./Switch";
+export * from "./Text";
+export * from "./Textarea";
+export * from "./Tooltip";
 export * from "./Transition";
