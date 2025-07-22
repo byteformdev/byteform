@@ -47,7 +47,7 @@ const getStyles = (
     theme: "light" | "dark"
 ) => {
     const baseStyles = [
-        "relative inline-flex items-center justify-center rounded-md border transition-all duration-200 ease-in-out cursor-pointer",
+        "relative inline-flex items-center justify-center rounded-md border transition-all duration-200 ease-in-out cursor-pointer outline-none",
         !disabled && "hover:border-[var(--byteform-primary-hover)]"
     ];
 

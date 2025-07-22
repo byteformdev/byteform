@@ -66,7 +66,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         return (
             <Element
                 className={cx(
-                    "inline-flex items-center justify-center overflow-hidden rounded-full",
+                    "inline-flex items-center justify-center overflow-hidden rounded-full outline-none",
                     getSize(size),
                     theme === "light"
                         ? "bg-[var(--byteform-light-background)] text-[var(--byteform-light-text)]"

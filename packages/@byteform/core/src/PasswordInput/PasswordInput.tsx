@@ -29,7 +29,7 @@ export const PasswordInput = ({
         reveal ? <IconEyeOff size={16} /> : <IconEye size={16} />;
 
     const controlButton = visibilityToggle && (
-        <div className="inline-flex flex-col h-full">
+        <div className="inline-flex flex-col h-full outline-none">
             <IconButton onClick={handleToggleVisibility}>
                 {visibilityToggleIcon
                     ? visibilityToggleIcon(isVisible)

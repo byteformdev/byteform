@@ -77,7 +77,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
         const getSwitchStyles = () => {
             const baseStyles = [
-                "relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out cursor-pointer border",
+                "relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out cursor-pointer border outline-none",
                 !disabled && "hover:border-[var(--byteform-primary-hover)]"
             ];
 
@@ -213,6 +213,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
                         <div
                             className={cx(
+                                "outline-none",
                                 currentSize.track,
                                 getSwitchStyles(),
                                 disabled && "cursor-not-allowed",

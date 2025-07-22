@@ -72,7 +72,7 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
                 ref={ref}
                 {...props}
                 className={cx(
-                    "inline-flex items-center whitespace-nowrap font-medium w-fit rounded-md",
+                    "inline-flex items-center whitespace-nowrap font-medium w-fit rounded-md outline-none",
                     getSize(size),
                     getVariant(variant),
                     fullWidth && "w-full",
