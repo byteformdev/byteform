@@ -18,20 +18,20 @@ export const ColorSwatch = forwardRef<HTMLDivElement, ColorSwatchProps>(
         const Element = Component as React.ElementType;
 
         const transparencyGridStyle = {
+            backgroundColor: "#ccc",
             backgroundImage: `
-                linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%),
-                linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%)
+                linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%),
+                linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%)
             `,
-            backgroundSize: "8px 8px",
-            backgroundPosition: "0 0, 4px 4px",
-            backgroundColor: "#ffffff"
+            backgroundSize: "12px 12px",
+            backgroundPosition: "0 0, 6px 6px"
         };
 
         return (
             <Element
                 ref={ref}
                 className={cx(
-                    "relative inline-flex items-center justify-center rounded-md overflow-hidden w-6 h-6",
+                    "relative inline-flex items-center justify-center rounded-md overflow-hidden w-6 h-6 outline-none",
                     classNames?.root,
                     className
                 )}
