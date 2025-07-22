@@ -63,6 +63,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                 filled: "bg-[var(--byteform-light-background)] hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)]",
                 outline:
                     "border border-[var(--byteform-light-border)] hover:border-[var(--byteform-light-border-hover)] text-[var(--byteform-light-text)]",
+                dashed: "border border-dashed border-[var(--byteform-light-border)] hover:border-[var(--byteform-light-border-hover)] text-[var(--byteform-light-text)]",
                 danger: "bg-[var(--byteform-red-light-5)] hover:bg-[var(--byteform-red-light-6)] text-[var(--byteform-red-light-text)]",
                 ghost: "hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)]"
             };
@@ -71,6 +72,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                 filled: "bg-[var(--byteform-dark-background)] hover:bg-[var(--byteform-dark-background-hover)] text-[var(--byteform-dark-text)]",
                 outline:
                     "border border-[var(--byteform-dark-border)] hover:border-[var(--byteform-dark-border-hover)] text-[var(--byteform-dark-text)]",
+                dashed: "border border-dashed border-[var(--byteform-dark-border)] hover:border-[var(--byteform-dark-border-hover)] text-[var(--byteform-dark-text)]",
                 danger: "bg-[var(--byteform-red-light-5)] hover:bg-[var(--byteform-red-light-6)] text-[var(--byteform-red-2)]",
                 ghost: "hover:bg-[var(--byteform-dark-background-hover)] text-[var(--byteform-dark-text)]"
             };
@@ -133,7 +135,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         return (
             <Element
                 className={cx(
-                    "inline-flex items-center gap-2 font-medium cursor-pointer relative rounded-md whitespace-nowrap select-none transition-colors duration-150",
+                    "inline-flex items-center gap-2 font-medium cursor-pointer relative rounded-md whitespace-nowrap select-none outline-none transition-colors duration-150",
                     useAnimation &&
                         (!disabled || !loading) &&
                         "active:translate-y-0.5",

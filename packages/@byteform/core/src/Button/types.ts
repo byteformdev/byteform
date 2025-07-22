@@ -2,7 +2,12 @@ import { ButtonHTMLAttributes, ElementType } from "react";
 import { LoaderProps } from "../Loader";
 
 export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
-export type ButtonVariant = "filled" | "outline" | "danger" | "ghost";
+export type ButtonVariant =
+    | "filled"
+    | "outline"
+    | "dashed"
+    | "danger"
+    | "ghost";
 export type ButtonLoaderPosition = "left" | "right";
 export type ButtonAlign = "left" | "center" | "right";
 export type ButtonType = "button" | "submit" | "reset";
