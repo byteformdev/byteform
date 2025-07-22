@@ -6,7 +6,6 @@ import { cx } from "../../_theme";
 export const Saturation = ({
     value,
     onChange,
-    color,
     className,
     ...rest
 }: SaturationProps) => {
@@ -54,7 +53,7 @@ export const Saturation = ({
         <div
             ref={saturationRef}
             className={cx(
-                "relative h-40 cursor-pointer touch-none rounded-md overflow-hidden",
+                "relative h-36 cursor-pointer touch-none rounded-md overflow-hidden",
                 className
             )}
             style={{ background }}
@@ -76,7 +75,7 @@ export const Saturation = ({
                 }}
             />
             <div
-                className="absolute w-3 h-3 ring-2 ring-[var(--byteform-white)] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-sm"
+                className="absolute w-3 h-3 ring-2 ring-[var(--byteform-white)] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg"
                 style={{
                     left: `${value.s * 100}%`,
                     top: `${(1 - value.v) * 100}%`
