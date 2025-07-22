@@ -30,8 +30,8 @@ export interface ColorPickerProps
     format?: ColorPickerFormat;
     fullWidth?: boolean;
     withPicker?: boolean;
-    hideEyeDropper?: boolean;
     hideAlpha?: boolean;
+    hidePreview?: boolean;
     swatches?: string[];
     className?: string;
     classNames?: ColorPickerClassNames;

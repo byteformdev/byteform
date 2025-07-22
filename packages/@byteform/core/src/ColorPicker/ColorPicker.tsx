@@ -1,12 +1,11 @@
 import { forwardRef, Ref, useEffect, useState } from "react";
 import { ColorPickerProps, HSVColor } from "./types";
-import { useTheme } from "../_theme";
+import { cx } from "../_theme";
 import { formatColor, hsvToRgb, parseColor, rgbToHex } from "./utils";
 import { ColorSwatch } from "../ColorSwatch";
 import { Saturation } from "./Saturation/index";
 import { HueSlider } from "./HueSlider/index";
 import { AlphaSlider } from "./AlphaSlider/index";
-import { IconPencil } from "@tabler/icons-react";
 
 const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
     const {
@@ -16,14 +15,13 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
         format = "hex",
         fullWidth,
         withPicker = true,
-        hideEyeDropper,
         hideAlpha,
+        hidePreview,
         swatches,
         className,
         classNames,
         ...rest
     } = props;
-    const { theme, cx } = useTheme();
 
     const [color, setColor] = useState<HSVColor>(() => {
         try {
@@ -32,7 +30,6 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
             return parseColor("#ffffff");
         }
     });
-    const useAlpha = ["hexa", "rgba", "hsla", "hsva"].includes(format);
 
     useEffect(() => {
         if (value) {
@@ -71,23 +68,9 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
         }
     };
 
-    const activateEyedropper = async () => {
-        try {
-            if ("EyeDropper" in window) {
-                // @ts-ignore
-                const eyeDropper = new window.EyeDropper();
-                const result = await eyeDropper.open();
-                handleChange(parseColor(result.sRGBHex));
-            } else {
-                alert("Eyedropper not supported in this browser");
-            }
-        } catch (e) {
-            console.error("Error using eyedropper:", e);
-        }
-    };
-
     const rgbColor = hsvToRgb(color);
     const hexColor = rgbToHex(rgbColor, false);
+    const colorWithAlpha = formatColor(color, "rgba");
 
     const renderSwatch = (swatch: string, index: number) => {
         return (
@@ -96,7 +79,7 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
                 color={swatch}
                 onClick={() => handleSwatchClick(swatch)}
                 className={cx(
-                    "cursor-pointer rounded-md hover:scale-110 transition-transform w-5 h-5",
+                    "cursor-pointer rounded-md hover:scale-110 transition-transform w-5 h-5 border border-[var(--byteform-light-border)]",
                     classNames?.swatch
                 )}
             />
@@ -125,22 +108,12 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
                             className={classNames?.saturation}
                         />
 
-                        <div className={cx("flex gap-3", classNames?.sliders)}>
-                            {!hideEyeDropper && (
-                                <button
-                                    type="button"
-                                    className={cx(
-                                        "flex items-center justify-center rounded-md p-3 min-w-[44px] h-11 transition-all duration-200 border",
-                                        theme === "light"
-                                            ? "border-[var(--byteform-light-border)] hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)]"
-                                            : "border-[var(--byteform-dark-border)] hover:bg-[var(--byteform-dark-background-hover)] text-[var(--byteform-dark-text)]"
-                                    )}
-                                    onClick={activateEyedropper}
-                                >
-                                    <IconPencil size={20} />
-                                </button>
+                        <div
+                            className={cx(
+                                "flex items-center gap-3",
+                                classNames?.sliders
                             )}
-
+                        >
                             <div className="flex items-center w-full flex-col gap-2">
                                 <HueSlider
                                     value={color.h}
@@ -163,12 +136,22 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
                                     />
                                 )}
                             </div>
+
+                            {!hidePreview && (
+                                <ColorSwatch
+                                    color={colorWithAlpha}
+                                    className={cx(
+                                        "w-9 h-7",
+                                        classNames?.swatch
+                                    )}
+                                />
+                            )}
                         </div>
                     </>
                 )}
 
                 {swatches && swatches.length > 0 && (
-                    <div className="flex gap-1 flex-wrap">
+                    <div className="flex items-center gap-1 flex-wrap">
                         {swatches.map(renderSwatch)}
                     </div>
                 )}

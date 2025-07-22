@@ -53,10 +53,7 @@ export const HueSlider = ({
     return (
         <div
             ref={sliderRef}
-            className={cx(
-                "relative h-4 rounded-md cursor-pointer overflow-hidden",
-                className
-            )}
+            className={cx("relative h-2 rounded-md cursor-pointer", className)}
             style={{
                 background: `linear-gradient(to right, #f00 0%, #ff0 16.66%, #0f0 33.33%, #0ff 50%, #00f 66.66%, #f0f 83.33%, #f00 100%)`
             }}
@@ -65,14 +62,14 @@ export const HueSlider = ({
             role="slider"
         >
             <div
-                className="absolute rounded-full shadow-lg w-3 h-3 ring-2 ring-[var(--byteform-white)] shadow-sm"
+                className="absolute rounded-full shadow-lg w-2 h-2 ring-2 ring-[var(--byteform-white)] shadow-sm"
                 style={{
-                    left: `min(max(8px, ${
+                    left: `min(max(4px, ${
                         (value / 360) * 100
-                    }%), calc(100% - 8px))`,
+                    }%), calc(100% - 4px))`,
                     transform: "translateX(-50%)",
                     top: "50%",
-                    marginTop: "-6px"
+                    marginTop: "-4px"
                 }}
             />
         </div>

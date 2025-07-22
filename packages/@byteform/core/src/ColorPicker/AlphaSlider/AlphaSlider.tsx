@@ -53,38 +53,35 @@ export const AlphaSlider = ({
     }, [isDragging, onChange]);
 
     const transparencyGridStyle = {
+        backgroundColor: "#ccc",
         backgroundImage: `
-            linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%),
-            linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%)
+            linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%),
+            linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%)
         `,
-        backgroundSize: "8px 8px",
-        backgroundPosition: "0 0, 4px 4px",
-        backgroundColor: "#ffffff"
+        backgroundSize: "4px 4px",
+        backgroundPosition: "0 0, 6px 6px"
     };
 
     return (
         <div
             ref={sliderRef}
-            className={cx(
-                "relative h-4 rounded-md cursor-pointer overflow-hidden",
-                className
-            )}
+            className={cx("relative h-2 rounded-md cursor-pointer", className)}
             style={transparencyGridStyle}
             onMouseDown={handleMouseDown}
         >
             <div
-                className="absolute inset-0"
+                className="absolute inset-0 rounded-md"
                 style={{
                     background: `linear-gradient(to right, transparent, ${color})`
                 }}
             />
             <div
-                className="absolute rounded-full shadow-lg w-3 h-3 ring-2 ring-[var(--byteform-white)] shadow-sm"
+                className="absolute rounded-full shadow-lg w-2 h-2 ring-2 ring-[var(--byteform-white)] shadow-sm"
                 style={{
-                    left: `min(max(8px, ${value * 100}%), calc(100% - 8px))`,
+                    left: `min(max(4px, ${value * 100}%), calc(100% - 4px))`,
                     transform: "translateX(-50%)",
                     top: "50%",
-                    marginTop: "-6px"
+                    marginTop: "-4px"
                 }}
             />
         </div>
