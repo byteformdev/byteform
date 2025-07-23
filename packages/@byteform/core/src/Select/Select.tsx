@@ -433,7 +433,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
                             : "text-[var(--byteform-dark-text)]"
                     )}
                 >
-                    {checkIcon || <IconCheck size={18} />}
+                    {checkIcon || <IconCheck size={16} />}
                 </div>
             );
 
@@ -577,7 +577,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
                                     )}
                                     onClick={handleClear}
                                 >
-                                    {clearIcon || <IconX size={18} />}
+                                    {clearIcon || <IconX size={16} />}
                                 </button>
                             )}
                             <button
