@@ -6,6 +6,7 @@ import { ModalOverlay } from "./ModalOverlay";
 import { ModalTitle } from "./ModalTitle";
 import { ModalContent } from "./ModalContent";
 import { ModalBody } from "./ModalBody";
+import { OptionalPortal } from "../Portal";
 
 const Modal = forwardRef<HTMLDivElement, ModalProps>(
     (
@@ -28,7 +29,9 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
             transitionDuration = 200,
             transitionTimingFunction = "ease",
             className,
-            classNames
+            classNames,
+            target,
+            withinPortal = true
         },
         ref
     ) => {
@@ -85,7 +88,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
 
         if (!mounted || !visible) return null;
 
-        return (
+        const modalContent = (
             <ModalContext.Provider
                 value={{
                     zIndex,
@@ -115,6 +118,12 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                     </ModalContent>
                 </ModalRoot>
             </ModalContext.Provider>
+        );
+
+        return (
+            <OptionalPortal withinPortal={withinPortal} target={target}>
+                {modalContent}
+            </OptionalPortal>
         );
     }
 );

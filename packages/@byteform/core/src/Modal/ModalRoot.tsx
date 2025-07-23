@@ -3,14 +3,18 @@ import { useModalContext } from "./context";
 import { cx } from "../_theme";
 
 export const ModalRoot = ({ children }: { children: ReactNode }) => {
-    const { zIndex, classNames, centered } = useModalContext();
+    const { zIndex, classNames, centered, target, withinPortal } =
+        useModalContext();
 
     const z = zIndex || 200;
+
+    const isWithinTarget = withinPortal && target;
+    const positionClass = isWithinTarget ? "absolute" : "fixed";
 
     return (
         <div
             className={cx(
-                "fixed inset-0 flex overflow-y-auto justify-center",
+                `${positionClass} inset-0 flex overflow-y-auto justify-center`,
                 centered ? "items-center justify-center" : "h-fit",
                 classNames?.root
             )}

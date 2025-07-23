@@ -33,6 +33,8 @@ export interface ModalProps {
     transitionTimingFunction?: string;
     className?: string;
     classNames?: ModalClassNames;
+    target?: HTMLElement | string;
+    withinPortal?: boolean;
 }
 
 export interface ModalContextValue extends Partial<ModalProps> {

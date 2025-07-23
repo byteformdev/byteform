@@ -14,10 +14,15 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
             fullScreen,
             animationState,
             transitionDuration = 200,
-            transitionTimingFunction = "ease"
+            transitionTimingFunction = "ease",
+            target,
+            withinPortal
         } = useModalContext();
 
         const { theme, cx } = useTheme();
+
+        // Check if we're within a target container
+        const isWithinTarget = withinPortal && target;
 
         const sizeClass = {
             xs: "w-[240px]",
@@ -63,6 +68,7 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
                         : "bg-[var(--byteform-dark-background)] text-[var(--byteform-dark-text)]",
                     !fullScreen ? sizeClass[size || "md"] : "w-full h-full",
                     fullScreen && "rounded-none border-0",
+                    isWithinTarget && "max-w-full max-h-full",
                     classNames?.content
                 )}
                 style={{
