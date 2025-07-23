@@ -28,7 +28,7 @@ export function hexToRgbColorPicker(hex: string): RGBColor {
         b = parseInt(hex.substring(4, 6), 16);
         a = parseInt(hex.substring(6, 8), 16) / 255;
     } else {
-        throw new Error("[@luminx/core] Invalid hex color format");
+        throw new Error("[@byteform/core] Invalid hex color format");
     }
 
     return { r, g, b, a };
