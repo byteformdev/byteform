@@ -30,15 +30,15 @@ export const Transition = ({
     const getEasing = () => {
         switch (timingFunction) {
             case "ease-in":
-                return [0.4, 0, 1, 1];
+                return "easeIn";
             case "ease-out":
-                return [0, 0, 0.2, 1];
+                return "easeOut";
             case "ease-in-out":
-                return [0.4, 0, 0.2, 1];
+                return "easeInOut";
             case "linear":
-                return [0, 0, 1, 1];
+                return "linear";
             default:
-                return [0.25, 0.1, 0.25, 1];
+                return "easeInOut";
         }
     };
 
