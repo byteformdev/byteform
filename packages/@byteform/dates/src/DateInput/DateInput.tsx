@@ -1,4 +1,4 @@
-import { Input, Transition, useTheme } from "@/byteform";
+import { Input, Transition, useTheme } from "@byteform/core";
 import {
     useFloating,
     autoUpdate,

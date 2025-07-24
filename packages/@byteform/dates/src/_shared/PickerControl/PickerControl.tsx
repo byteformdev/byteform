@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { PickerControlProps } from "./types";
-import { useTheme } from "../../../byteform/_theme";
+import { useTheme } from "@byteform/core";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 
 export const PickerControl = forwardRef<HTMLButtonElement, PickerControlProps>(

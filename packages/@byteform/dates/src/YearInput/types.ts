@@ -1,5 +1,5 @@
 import { Placement } from "@floating-ui/react";
-import { InputProps } from "../../byteform/Input/types";
+import { InputProps } from "@byteform/core";
 import { YearPickerProps, YearPickerValue } from "../YearPicker/types";
 
 export interface YearInputProps

@@ -1,7 +1,7 @@
 import { forwardRef, useState, useCallback, useMemo } from "react";
 import { YearPickerProps } from "./types";
 import { PickerHeader } from "../_shared/PickerHeader";
-import { useTheme } from "../../byteform/_theme";
+import { useTheme } from "@byteform/core";
 import dayjs from "dayjs";
 
 export const YearPicker = forwardRef<HTMLDivElement, YearPickerProps>(

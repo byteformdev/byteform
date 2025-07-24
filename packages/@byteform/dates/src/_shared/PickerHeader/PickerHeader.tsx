@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { PickerHeaderProps } from "./types";
 import { PickerControl } from "../PickerControl";
-import { useTheme } from "../../../byteform/_theme";
+import { useTheme } from "@byteform/core";
 
 export const PickerHeader = forwardRef<HTMLDivElement, PickerHeaderProps>(
     (

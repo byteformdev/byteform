@@ -3,7 +3,7 @@ import { DatePickerProps } from "./types";
 import { PickerHeader } from "../_shared/PickerHeader";
 import { MonthPicker } from "../MonthPicker";
 import { YearPicker } from "../YearPicker";
-import { useTheme } from "../../byteform/_theme";
+import { useTheme } from "@byteform/core";
 import { useDates } from "../DatesProvider/context";
 import dayjs from "dayjs";
 
