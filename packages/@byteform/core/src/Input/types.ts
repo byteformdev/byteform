@@ -56,7 +56,11 @@ export interface InputProps
     rightSection?: React.ReactNode;
 
     // Handlers
-    onChange?: (value: string) => void;
+    onChange?: (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => void;
     onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;

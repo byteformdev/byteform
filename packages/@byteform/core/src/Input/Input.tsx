@@ -92,16 +92,23 @@ export const Input = ({
         if (!debounce || !onChange) return;
 
         const timeout = setTimeout(() => {
-            onChange(localValue);
+            const syntheticEvent = {
+                target: { value: localValue },
+                currentTarget: { value: localValue }
+            } as React.ChangeEvent<HTMLInputElement>;
+            onChange(syntheticEvent);
         }, debounce);
 
         return () => clearTimeout(timeout);
     }, [localValue, debounce, onChange]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value;
-        setLocalValue(newValue);
-        onChange?.(newValue);
+    const handleChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => {
+        setLocalValue(e.target.value);
+        onChange?.(e);
     };
 
     const renderSection = (
@@ -183,7 +190,7 @@ export const Input = ({
         error && (
             <p
                 className={cx(
-                    "ml-1 text-sm text-[var(--byteform-error)]",
+                    "ml-1 text-xs text-[var(--byteform-error)]",
                     classNames?.error
                 )}
             >
@@ -196,7 +203,7 @@ export const Input = ({
         !error && (
             <p
                 className={cx(
-                    "ml-1 text-sm text-[var(--byteform-success)]",
+                    "ml-1 text-xs text-[var(--byteform-success)]",
                     classNames?.success
                 )}
             >
@@ -408,7 +415,15 @@ export const Input = ({
                         className={cx(
                             baseStyles,
                             "byteform-scrollbar",
-                            "resize-" + resize,
+                            resize === "vertical"
+                                ? "resize-y"
+                                : resize === "horizontal"
+                                ? "resize-x"
+                                : resize === "both"
+                                ? "resize"
+                                : resize === "none"
+                                ? "resize-none"
+                                : "resize-y",
                             theme === "light"
                                 ? "text-[var(--byteform-light-text)]"
                                 : "text-[var(--byteform-dark-text)]",
