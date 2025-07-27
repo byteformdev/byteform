@@ -35,7 +35,7 @@ export const ColorSwatch = forwardRef<HTMLDivElement, ColorSwatchProps>(
                     classNames?.root,
                     className
                 )}
-                style={backgroundGrid && transparencyGridStyle}
+                style={backgroundGrid ? transparencyGridStyle : undefined}
                 {...props}
             >
                 <div
