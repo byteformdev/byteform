@@ -12,7 +12,7 @@ import {
     useRole,
     useInteractions
 } from "@floating-ui/react";
-import { parseColor } from "../ColorPicker";
+import { parseColor, formatColor } from "../ColorPicker";
 import { ColorSwatch } from "../ColorSwatch";
 import { IconPencil } from "@tabler/icons-react";
 import { Input } from "../Input";
@@ -30,6 +30,7 @@ export const ColorInput = ({
     colorSwatchProps,
     colorPickerProps,
     withPicker = true,
+    position = "bottom-start",
     transitionProps,
     classNames,
     ...props
@@ -46,6 +47,7 @@ export const ColorInput = ({
         open: isOpen,
         onOpenChange: setIsOpen,
         middleware: [offset(5), flip(), shift()],
+        placement: position,
         whileElementsMounted: autoUpdate
     });
 
@@ -70,7 +72,12 @@ export const ColorInput = ({
         onChange?.(newColor);
     };
 
-    const handleInputChange = (inputValue: string) => {
+    const handleInputChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => {
+        const inputValue = e.target.value;
         try {
             parseColor(inputValue);
             handleColorChange(inputValue);
@@ -95,9 +102,27 @@ export const ColorInput = ({
         }
     };
 
+    const getDisplayValue = () => {
+        try {
+            const parsedColor = parseColor(currentColor);
+            return formatColor(parsedColor, format);
+        } catch (e) {
+            return currentColor;
+        }
+    };
+
+    const getPreviewColor = () => {
+        try {
+            const parsedColor = parseColor(currentColor);
+            return formatColor(parsedColor, "rgba");
+        } catch (e) {
+            return currentColor;
+        }
+    };
+
     const colorSwatch = (
         <ColorSwatch
-            color={currentColor}
+            color={getPreviewColor()}
             className={cx("rounded-md w-6 h-6", classNames?.colorSwatch)}
             backgroundGrid
             {...colorSwatchProps}
@@ -113,7 +138,7 @@ export const ColorInput = ({
     return (
         <div className="relative">
             <Input
-                value={currentColor}
+                value={getDisplayValue()}
                 onChange={handleInputChange}
                 leftSection={hidePreview ? null : colorSwatch}
                 rightSection={showEyeDropper ? eyedropperButton : null}
@@ -150,8 +175,7 @@ export const ColorInput = ({
                                 position: strategy,
                                 top: y ?? 0,
                                 left: x ?? 0,
-                                minWidth:
-                                    containerRef.current?.offsetWidth || 200
+                                minWidth: 200
                             }}
                             {...getFloatingProps()}
                         >
