@@ -1,11 +1,11 @@
 {
     "name": "@byteform/core",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "React components library focused on simplicity and ease of use",
     "repository": {
         "type": "github",
-        "url": "https://github.com/ChillWoW/luminx",
-        "directory": "packages/@luminx/core"
+        "url": "https://github.com/byteformdev/byteform",
+        "directory": "packages/@byteform/core"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
