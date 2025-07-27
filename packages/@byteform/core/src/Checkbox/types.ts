@@ -18,7 +18,6 @@ export interface CheckboxClassNames {
 export interface CheckboxProps
     extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "size"> {
     size?: CheckboxSize;
-    fullWidth?: boolean;
 
     label?: string;
     description?: string;
@@ -37,7 +36,6 @@ export interface CheckboxProps
 
     icon?: React.FC<{
         indeterminate?: boolean;
-        checked?: boolean;
         className?: string;
     }>;
 

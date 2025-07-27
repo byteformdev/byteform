@@ -87,7 +87,6 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     (
         {
             size = "md",
-            fullWidth,
             label,
             description,
             error,
@@ -232,7 +231,6 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             <div
                 className={cx(
                     "inline-flex flex-col",
-                    fullWidth && "w-full",
                     classNames?.wrapper,
                     className
                 )}
