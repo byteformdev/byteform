@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Input } from "../Input/Input";
 import { PasswordInputProps } from "./types";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
@@ -9,6 +9,7 @@ export const PasswordInput = ({
     onVisibilityChange,
     visibilityToggle = true,
     visibilityToggleIcon,
+    disabled,
     ...props
 }: PasswordInputProps) => {
     const [internalVisible, setInternalVisible] = useState(false);
@@ -17,6 +18,8 @@ export const PasswordInput = ({
         externalVisible !== undefined ? externalVisible : internalVisible;
 
     const handleToggleVisibility = useCallback(() => {
+        if (disabled) return;
+
         const newVisible = !isVisible;
         if (onVisibilityChange) {
             onVisibilityChange(newVisible);
@@ -30,7 +33,7 @@ export const PasswordInput = ({
 
     const controlButton = visibilityToggle && (
         <div className="inline-flex flex-col h-full outline-none">
-            <IconButton onClick={handleToggleVisibility}>
+            <IconButton onClick={handleToggleVisibility} disabled={disabled}>
                 {visibilityToggleIcon
                     ? visibilityToggleIcon(isVisible)
                     : eyeIcon(isVisible)}
@@ -42,7 +45,7 @@ export const PasswordInput = ({
         <Input
             type={isVisible ? "text" : "password"}
             rightSection={controlButton}
-            disabled={props.disabled}
+            disabled={disabled}
             {...props}
         />
     );
