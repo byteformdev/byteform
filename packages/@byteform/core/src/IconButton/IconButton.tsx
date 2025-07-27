@@ -80,7 +80,8 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
                 type="button"
                 disabled={disabled}
                 className={cx(
-                    "inline-flex w-fit items-center justify-center rounded-md cursor-pointer transition-all duration-150 select-none active:translate-y-0.5 outline-none",
+                    "inline-flex w-fit items-center justify-center rounded-md cursor-pointer transition-all duration-150 select-none outline-none",
+                    useAnimation && "active:translate-y-0.5",
                     getSize(size, compact),
                     getVariant(),
                     disabled &&
