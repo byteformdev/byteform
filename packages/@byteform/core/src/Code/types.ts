@@ -22,6 +22,33 @@ export type CodeTheme =
     | "vsDark"
     | "vsLight";
 
+export type CodeLanguage =
+    | "bash"
+    | "c"
+    | "cpp"
+    | "css"
+    | "diff"
+    | "go"
+    | "graphql"
+    | "java"
+    | "javascript"
+    | "js"
+    | "json"
+    | "jsx"
+    | "markdown"
+    | "objectivec"
+    | "python"
+    | "py"
+    | "reason"
+    | "rust"
+    | "scss"
+    | "sql"
+    | "tsx"
+    | "typescript"
+    | "ts"
+    | "wasm"
+    | "yaml";
+
 export interface CodeClassNames {
     wrapper?: string;
     title?: string;
@@ -33,12 +60,12 @@ export interface CodeClassNames {
 
 export interface CodeProps {
     children: string;
-    language?: string;
+    language?: CodeLanguage;
     theme?: CodeTheme;
     highlightLines?: number[];
     showCopyButton?: boolean;
     showLineNumbers?: boolean;
-    title?: string;
+    title?: string | ReactNode;
     copyIcon?: ReactNode;
     copiedIcon?: ReactNode;
     onCopy?: (code: string) => void;
