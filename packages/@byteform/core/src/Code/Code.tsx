@@ -12,11 +12,11 @@ const getTheme = (theme: CodeTheme) => {
 
 export const Code: React.FC<CodeProps> = ({
     children,
-    language = "javascript",
-    theme: themeProp = "duotoneDark",
+    language = "ts",
+    theme: themeProp = "oneDark",
     highlightLines = [],
     showCopyButton = true,
-    showLineNumbers = true,
+    showLineNumbers,
     title,
     copyIcon,
     copiedIcon,
