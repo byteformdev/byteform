@@ -138,7 +138,12 @@ export const NumberInput = ({
     );
 
     const handleChange = useCallback(
-        (valueString: string) => {
+        (
+            e: React.ChangeEvent<
+                HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+            >
+        ) => {
+            const valueString = e.target.value;
             setIsTyping(true);
             setDisplayValue(valueString);
 
