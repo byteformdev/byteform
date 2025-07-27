@@ -293,7 +293,12 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
             }
         };
 
-        const handleInputChange = (value: string) => {
+        const handleInputChange = (
+            e: React.ChangeEvent<
+                HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+            >
+        ) => {
+            const value = e.target.value;
             setSearch(value);
 
             if (searchValue === undefined) {

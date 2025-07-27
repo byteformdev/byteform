@@ -150,7 +150,12 @@ export const TagsInput = ({
     }, [isControlled, onChange]);
 
     const handleInputChange = useCallback(
-        (value: string) => {
+        (
+            e: React.ChangeEvent<
+                HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+            >
+        ) => {
+            const value = e.target.value;
             const splitCharsArray = Array.isArray(splitChars)
                 ? splitChars
                 : [splitChars];
