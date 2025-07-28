@@ -18,17 +18,16 @@
         "build:tailwind": "tailwindcss -i ./src/style.css -o ./dist/style.css",
         "copy:css": "node ../../../scripts/copy-css.js",
         "build": "tsc && npm run build:tailwind && npm run copy:css",
-        "pack": "npm run build && npm pack",
-        "publish": "npm run build && npm publish"
+        "pack": "npm run build && npm pack"
     },
     "publishConfig": {
         "access": "public"
     },
     "peerDependencies": {
-        "react": ">=18.0.0",
-        "react-dom": ">=18.0.0",
+        "@byteform/core": ">=0.1.0",
         "dayjs": ">=1.0.0",
-        "@byteform/core": ">=0.1.0"
+        "react": ">=18.0.0",
+        "react-dom": ">=18.0.0"
     },
     "dependencies": {
         "@floating-ui/react": "^0.27.13",

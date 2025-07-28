@@ -18,8 +18,7 @@
         "build:tailwind": "tailwindcss -i ./src/style.css -o ./dist/style.css",
         "copy:css": "node ../../../scripts/copy-css.js",
         "build": "tsc && npm run build:tailwind && npm run copy:css",
-        "pack": "npm run build && npm pack",
-        "publish": "npm run build && npm publish"
+        "pack": "npm run build && npm pack"
     },
     "publishConfig": {
         "access": "public"
