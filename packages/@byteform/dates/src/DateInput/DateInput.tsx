@@ -26,7 +26,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
             allowDeselect = false,
             type = "default",
             allowSingleDateInRange = false,
-            hideOutsideDates = false,
+            hideOutsideDates = true,
             showWeekNumbers = false,
             hideWeekdays = false,
             renderDay,

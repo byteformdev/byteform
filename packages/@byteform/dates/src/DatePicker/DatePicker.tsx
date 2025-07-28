@@ -16,7 +16,7 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             defaultValue,
             value,
             onChange,
-            hideOutsideDates = false,
+            hideOutsideDates = true,
             showWeekNumbers = false,
             hideWeekdays = false,
             renderDay,
@@ -313,6 +313,13 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
             return cx(
                 "flex items-center justify-center rounded-md h-8 min-w-0 transition-all duration-300 font-medium text-center",
+
+                isFirstInRange && "rounded-r-none",
+                isLastInRange && "rounded-l-none",
+                isInRange &&
+                    !isFirstInRange &&
+                    !isLastInRange &&
+                    "rounded-none",
                 {
                     [theme === "light"
                         ? "bg-transparent enabled:hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)]"
@@ -328,17 +335,11 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         ? "bg-[var(--byteform-primary-light)] text-[var(--byteform-light-text)]"
                         : "bg-[var(--byteform-primary-light)] text-[var(--byteform-dark-text)]"]:
                         isInRange,
-
-                    "rounded-none":
-                        isInRange && !isFirstInRange && !isLastInRange,
-                    "rounded-r-none": isFirstInRange,
-                    "rounded-l-none": isLastInRange,
-
-                    "opacity-60 cursor-not-allowed": isDisabled,
                     "opacity-40": isOutside && hideOutsideDates,
                     "text-[var(--byteform-red-3)]":
-                        isWeekend && !isSelected && !isInRange,
-                    hidden: hideOutsideDates && isOutside
+                        isWeekend && !isSelected && !isInRange && !isOutside,
+
+                    "opacity-60 cursor-not-allowed": isDisabled
                 }
             );
         };
@@ -406,10 +407,12 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
                 {!hideWeekdays && (
                     <div
-                        className={cx("grid gap-1 mt-2 mb-1 w-full", {
-                            "grid-cols-8": showWeekNumbers,
-                            "grid-cols-7": !showWeekNumbers
-                        })}
+                        className="grid gap-1 mt-2 mb-1 w-full"
+                        style={{
+                            gridTemplateColumns: showWeekNumbers
+                                ? `repeat(8, 1fr)`
+                                : `repeat(7, 1fr)`
+                        }}
                     >
                         {showWeekNumbers && (
                             <div className="flex items-center justify-center h-8 min-w-0 text-xs opacity-60">
@@ -433,10 +436,12 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         (_, weekIndex) => (
                             <div
                                 key={weekIndex}
-                                className={cx("grid gap-1 w-full", {
-                                    "grid-cols-8": showWeekNumbers,
-                                    "grid-cols-7": !showWeekNumbers
-                                })}
+                                className="grid gap-1 w-full"
+                                style={{
+                                    gridTemplateColumns: showWeekNumbers
+                                        ? `repeat(8, 1fr)`
+                                        : `repeat(7, 1fr)`
+                                }}
                             >
                                 {showWeekNumbers && (
                                     <div className="flex items-center justify-center h-8 min-w-0 text-xs opacity-60">
