@@ -7,12 +7,12 @@ const KEY = "byteform-theme";
 
 export const ThemeProvider = ({
     children,
-    theme,
+    theme = "dark",
     themeAutoSave,
     themeStorageKey = KEY,
     lightVariantOpacity = 0.6
 }: ThemeProviderProps) => {
-    const [currentTheme, setCurrentTheme] = useState<Theme>(theme || "light");
+    const [currentTheme, setCurrentTheme] = useState<Theme>(theme);
     const [autosaveTheme, setAutosaveTheme] = useState<boolean>(
         themeAutoSave || false
     );
