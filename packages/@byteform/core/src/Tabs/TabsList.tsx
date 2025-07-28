@@ -68,7 +68,7 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
                         ? "border-[var(--byteform-light-border)]"
                         : "border-[var(--byteform-dark-border)]",
                     orientation === "vertical"
-                        ? "flex-col min-w-fit border"
+                        ? "flex-col min-w-fit border h-fit"
                         : "flex-row border-b",
                     grow && orientation === "horizontal" && "w-full",
                     classNames?.list,
