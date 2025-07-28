@@ -1,4 +1,4 @@
-import { forwardRef, useState, useCallback, useMemo } from "react";
+import { forwardRef, useState, useCallback, useMemo, useEffect } from "react";
 import { MonthPickerProps } from "./types";
 import { PickerHeader } from "../_shared/PickerHeader";
 import { YearPicker } from "../YearPicker";
@@ -33,9 +33,20 @@ export const MonthPicker = forwardRef<HTMLDivElement, MonthPickerProps>(
         const { locale } = useDates();
 
         const [currentYear, setCurrentYear] = useState(() => {
-            const now = dayjs();
-            return now.year();
+            if (value && !Array.isArray(value)) {
+                return dayjs(value).year();
+            }
+            if (defaultValue && !Array.isArray(defaultValue)) {
+                return dayjs(defaultValue).year();
+            }
+            return dayjs().year();
         });
+
+        useEffect(() => {
+            if (value && !Array.isArray(value)) {
+                setCurrentYear(dayjs(value).year());
+            }
+        }, [value]);
 
         const [viewMode, setViewMode] = useState<"month" | "year">("month");
 
