@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --byteform-scrollbar-track: transparent;
+    --byteform-scrollbar-thumb: #4b4b4b;
+    --byteform-scrollbar-thumb-hover: #6b6b6b;
+}
+
+.byteform-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--byteform-scrollbar-thumb)
+        var(--byteform-scrollbar-track);
+}
+
+.byteform-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.byteform-scrollbar::-webkit-scrollbar-track {
+    background: var(--byteform-scrollbar-track);
+}
+
+.byteform-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--byteform-scrollbar-thumb);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.byteform-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--byteform-scrollbar-thumb-hover);
+}
+
+.byteform-scrollbar::-webkit-scrollbar-button {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scroll-snap-align-start {
+    scroll-snap-align: start;
+}
