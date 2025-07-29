@@ -24,6 +24,7 @@ export const NotificationProvider = ({
 }: NotificationProviderProps) => {
     const [notifications, setNotifications] = useState<NotificationData[]>([]);
     const [queue, setQueue] = useState<NotificationData[]>([]);
+    const [hidingIds, setHidingIds] = useState<Set<string>>(new Set());
     const [mounted, setMounted] = useState(false);
 
     const finalSettings = useMemo(
@@ -42,13 +43,16 @@ export const NotificationProvider = ({
     }, []);
 
     useEffect(() => {
+        const visibleNotifications = notifications.filter(
+            (n) => !hidingIds.has(n.id)
+        );
         if (
             queue.length > 0 &&
-            notifications.length < (finalSettings.limit || 5)
+            visibleNotifications.length < (finalSettings.limit || 5)
         ) {
             const notificationsToShow = Math.min(
                 queue.length,
-                (finalSettings.limit || 5) - notifications.length
+                (finalSettings.limit || 5) - visibleNotifications.length
             );
 
             const toShow = queue.slice(0, notificationsToShow);
@@ -65,7 +69,7 @@ export const NotificationProvider = ({
                 }
             });
         }
-    }, [notifications.length, queue.length, finalSettings.limit]);
+    }, [notifications.length, queue.length, finalSettings.limit, hidingIds]);
 
     const show = useCallback(
         (notification: Omit<NotificationData, "id">) => {
@@ -79,7 +83,10 @@ export const NotificationProvider = ({
                 position: notification.position ?? finalSettings.position
             };
 
-            if (notifications.length < (finalSettings.limit || 5)) {
+            const visibleNotifications = notifications.filter(
+                (n) => !hidingIds.has(n.id)
+            );
+            if (visibleNotifications.length < (finalSettings.limit || 5)) {
                 setNotifications((prev) => [newNotification, ...prev]);
 
                 if (newNotification.autoClose && !newNotification.persistent) {
@@ -93,7 +100,7 @@ export const NotificationProvider = ({
 
             return id;
         },
-        [finalSettings, generateId, notifications.length]
+        [finalSettings, generateId, notifications, hidingIds]
     );
 
     const update = useCallback(
@@ -121,19 +128,29 @@ export const NotificationProvider = ({
     );
 
     const hide = useCallback((id: string) => {
-        setNotifications((prev) =>
-            prev.filter((notification) => notification.id !== id)
-        );
+        setHidingIds((prev) => new Set([...Array.from(prev), id]));
 
         setQueue((prev) =>
             prev.filter((notification) => notification.id !== id)
         );
     }, []);
 
-    const hideAll = useCallback(() => {
-        setNotifications([]);
-        setQueue([]);
+    const removeNotification = useCallback((id: string) => {
+        setNotifications((prev) =>
+            prev.filter((notification) => notification.id !== id)
+        );
+        setHidingIds((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(id);
+            return newSet;
+        });
     }, []);
+
+    const hideAll = useCallback(() => {
+        const allIds = notifications.map((n) => n.id);
+        setHidingIds(new Set(allIds));
+        setQueue([]);
+    }, [notifications]);
 
     const clearQueue = useCallback(() => {
         setQueue([]);
@@ -181,6 +198,7 @@ export const NotificationProvider = ({
             {children}
             {mounted && (
                 <Portal target={settings.target ?? document.body}>
+                    {/* Group notifications by position and render separate containers */}
                     {Object.entries(
                         notifications.reduce((acc, notification) => {
                             const position =
@@ -197,7 +215,9 @@ export const NotificationProvider = ({
                             key={position}
                             notifications={positionNotifications}
                             position={position as NotificationPosition}
-                            onRemove={hide}
+                            onRemove={removeNotification}
+                            onHide={hide}
+                            hidingIds={hidingIds}
                             zIndex={finalSettings.zIndex}
                             className={finalSettings.containerClassName}
                             withinTarget={finalSettings.withinTarget}

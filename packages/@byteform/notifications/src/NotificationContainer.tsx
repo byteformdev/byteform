@@ -1,4 +1,4 @@
-import { forwardRef, useState, useEffect } from "react";
+import { forwardRef } from "react";
 import { NotificationData, NotificationPosition } from "./types";
 import { Notification, Transition, useTheme } from "@byteform/core";
 
@@ -6,6 +6,8 @@ interface NotificationContainerProps {
     notifications: NotificationData[];
     position: NotificationPosition;
     onRemove: (id: string) => void;
+    onHide: (id: string) => void;
+    hidingIds: Set<string>;
     zIndex?: number;
     className?: string;
     withinTarget?: boolean;
@@ -20,6 +22,8 @@ export const NotificationContainer = forwardRef<
             notifications,
             position,
             onRemove,
+            onHide,
+            hidingIds,
             zIndex = 9999,
             className,
             withinTarget = false
@@ -27,43 +31,6 @@ export const NotificationContainer = forwardRef<
         ref
     ) => {
         const { cx } = useTheme();
-        const [removingIds, setRemovingIds] = useState<Set<string>>(new Set());
-        const [allNotifications, setAllNotifications] = useState<
-            NotificationData[]
-        >([]);
-
-        useEffect(() => {
-            const currentIds = new Set(notifications.map((n) => n.id));
-            const previousIds = new Set(allNotifications.map((n) => n.id));
-
-            const removedIds = Array.from(previousIds).filter(
-                (id) => !currentIds.has(id)
-            );
-
-            if (removedIds.length > 0) {
-                setRemovingIds(
-                    (prev) => new Set([...Array.from(prev), ...removedIds])
-                );
-            }
-
-            setAllNotifications((prev) => {
-                const existingMap = new Map(prev.map((n) => [n.id, n]));
-                const result: NotificationData[] = [];
-
-                notifications.forEach((notification) => {
-                    result.push(notification);
-                    existingMap.delete(notification.id);
-                });
-
-                existingMap.forEach((notification, id) => {
-                    if (!removedIds.includes(id)) {
-                        result.push(notification);
-                    }
-                });
-
-                return result;
-            });
-        }, [notifications]);
 
         const getPositionStyles = (position: NotificationPosition) => {
             const positionType = withinTarget ? "absolute" : "fixed";
@@ -107,16 +74,10 @@ export const NotificationContainer = forwardRef<
         };
 
         const handleNotificationClose = (id: string) => {
-            setRemovingIds((prev) => new Set([...Array.from(prev), id]));
+            onHide(id);
         };
 
         const handleTransitionExited = (id: string) => {
-            setRemovingIds((prev) => {
-                const newSet = new Set(prev);
-                newSet.delete(id);
-                return newSet;
-            });
-            setAllNotifications((prev) => prev.filter((n) => n.id !== id));
             onRemove(id);
         };
 
@@ -126,7 +87,7 @@ export const NotificationContainer = forwardRef<
                 className={cx(getPositionStyles(position), className)}
                 style={{ zIndex }}
             >
-                {allNotifications.map((notification) => {
+                {notifications.map((notification) => {
                     const {
                         id,
                         duration,
@@ -138,15 +99,12 @@ export const NotificationContainer = forwardRef<
                         ...notificationProps
                     } = notification;
 
-                    const isRemoving = removingIds.has(id);
-                    const isStillActive = notifications.some(
-                        (n) => n.id === id
-                    );
+                    const isHiding = hidingIds.has(id);
 
                     return (
                         <Transition
                             key={id}
-                            mounted={!isRemoving}
+                            mounted={!isHiding}
                             transition={
                                 transition || getDefaultTransition(position)
                             }
