@@ -1,11 +1,11 @@
 {
-    "name": "@byteform/dates",
+    "name": "@byteform/notifications",
     "version": "0.1.1",
-    "description": "React date components library focused on simplicity and ease of use",
+    "description": "React notifications library focused on simplicity and ease of use",
     "repository": {
         "type": "github",
         "url": "https://github.com/byteformdev/byteform",
-        "directory": "packages/@byteform/dates"
+        "directory": "packages/@byteform/notifications"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -25,13 +25,10 @@
     },
     "peerDependencies": {
         "@byteform/core": ">=0.1.1",
-        "dayjs": ">=1.0.0",
         "react": ">=18.0.0",
         "react-dom": ">=18.0.0"
     },
     "dependencies": {
-        "@floating-ui/react": "^0.27.13",
-        "@tabler/icons-react": "^3.34.0",
         "clsx": "^2.1.1",
         "tailwind-merge": "^3.0.2"
     },
