@@ -1,4 +1,4 @@
-# @byteform/dates
+# @byteform/notifications
 
 ⚠️ **EARLY RELEASE WARNING - VERSION 0.1** ⚠️
 
@@ -12,14 +12,14 @@
 -   **NO DOCUMENTATION**: Limited or no documentation available
 -   **USE AT YOUR OWN RISK**: Not recommended for production applications
 
-## What is @byteform/dates?
+## What is @byteform/notifications?
 
-A React components library focused on simplicity and ease of use. This package provides a collection of reusable UI components for dates built with React, TypeScript, and Tailwind CSS.
+A React components library focused on simplicity and ease of use. This package provides a handler for notifications.
 
 ## Installation
 
 ```bash
-npm install @byteform/dates
+npm install @byteform/notifications
 ```
 
 **Note**: This package requires React 18+.
