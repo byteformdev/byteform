@@ -14,7 +14,7 @@ const defaultSettings: NotificationProviderSettings = {
     position: "top-right",
     duration: 4000,
     autoClose: true,
-    maxNotifications: 5,
+    limit: 5,
     zIndex: 9999
 };
 
@@ -23,6 +23,7 @@ export const NotificationProvider = ({
     settings = {}
 }: NotificationProviderProps) => {
     const [notifications, setNotifications] = useState<NotificationData[]>([]);
+    const [queue, setQueue] = useState<NotificationData[]>([]);
     const [mounted, setMounted] = useState(false);
 
     const finalSettings = useMemo(
@@ -40,6 +41,32 @@ export const NotificationProvider = ({
             .substr(2, 9)}`;
     }, []);
 
+    useEffect(() => {
+        if (
+            queue.length > 0 &&
+            notifications.length < (finalSettings.limit || 5)
+        ) {
+            const notificationsToShow = Math.min(
+                queue.length,
+                (finalSettings.limit || 5) - notifications.length
+            );
+
+            const toShow = queue.slice(0, notificationsToShow);
+            const remaining = queue.slice(notificationsToShow);
+
+            setQueue(remaining);
+            setNotifications((prev) => [...prev, ...toShow]);
+
+            toShow.forEach((notification) => {
+                if (notification.autoClose && !notification.persistent) {
+                    setTimeout(() => {
+                        hide(notification.id);
+                    }, notification.duration);
+                }
+            });
+        }
+    }, [notifications.length, queue.length, finalSettings.limit]);
+
     const show = useCallback(
         (notification: Omit<NotificationData, "id">) => {
             const id = generateId();
@@ -52,26 +79,21 @@ export const NotificationProvider = ({
                 position: notification.position ?? finalSettings.position
             };
 
-            setNotifications((prev) => {
-                const updated = [newNotification, ...prev];
-                if (
-                    finalSettings.maxNotifications &&
-                    updated.length > finalSettings.maxNotifications
-                ) {
-                    return updated.slice(0, finalSettings.maxNotifications);
-                }
-                return updated;
-            });
+            if (notifications.length < (finalSettings.limit || 5)) {
+                setNotifications((prev) => [newNotification, ...prev]);
 
-            if (newNotification.autoClose && !newNotification.persistent) {
-                setTimeout(() => {
-                    hide(id);
-                }, newNotification.duration);
+                if (newNotification.autoClose && !newNotification.persistent) {
+                    setTimeout(() => {
+                        hide(id);
+                    }, newNotification.duration);
+                }
+            } else {
+                setQueue((prev) => [...prev, newNotification]);
             }
 
             return id;
         },
-        [finalSettings, generateId]
+        [finalSettings, generateId, notifications.length]
     );
 
     const update = useCallback(
@@ -86,6 +108,14 @@ export const NotificationProvider = ({
                         : notification
                 )
             );
+
+            setQueue((prev) =>
+                prev.map((notification) =>
+                    notification.id === id
+                        ? { ...notification, ...updatedNotification }
+                        : notification
+                )
+            );
         },
         []
     );
@@ -94,22 +124,42 @@ export const NotificationProvider = ({
         setNotifications((prev) =>
             prev.filter((notification) => notification.id !== id)
         );
+
+        setQueue((prev) =>
+            prev.filter((notification) => notification.id !== id)
+        );
     }, []);
 
     const hideAll = useCallback(() => {
         setNotifications([]);
+        setQueue([]);
+    }, []);
+
+    const clearQueue = useCallback(() => {
+        setQueue([]);
     }, []);
 
     const contextValue = useMemo(
         () => ({
             notifications,
+            queue,
             show,
             update,
             hide,
             hideAll,
+            clearQueue,
             settings: finalSettings
         }),
-        [notifications, show, update, hide, hideAll, finalSettings]
+        [
+            notifications,
+            queue,
+            show,
+            update,
+            hide,
+            hideAll,
+            clearQueue,
+            finalSettings
+        ]
     );
 
     useEffect(() => {
@@ -117,20 +167,20 @@ export const NotificationProvider = ({
             show,
             update,
             hide,
-            hideAll
+            hideAll,
+            clearQueue
         });
 
         return () => {
             setGlobalNotificationContext(null);
         };
-    }, [show, update, hide, hideAll]);
+    }, [show, update, hide, hideAll, clearQueue]);
 
     return (
         <NotificationContext.Provider value={contextValue}>
             {children}
             {mounted && (
                 <Portal target={settings.target ?? document.body}>
-                    {/* Group notifications by position and render separate containers */}
                     {Object.entries(
                         notifications.reduce((acc, notification) => {
                             const position =

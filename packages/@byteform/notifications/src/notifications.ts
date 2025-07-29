@@ -8,6 +8,7 @@ let globalNotificationContext: {
     ) => void;
     hide: (id: string) => void;
     hideAll: () => void;
+    clearQueue: () => void;
 } | null = null;
 
 export const setGlobalNotificationContext = (
@@ -58,5 +59,15 @@ export const notifications = {
             return;
         }
         globalNotificationContext.hideAll();
+    },
+
+    clearQueue: () => {
+        if (!globalNotificationContext) {
+            console.warn(
+                "NotificationProvider is not mounted. Please wrap your app with NotificationProvider."
+            );
+            return;
+        }
+        globalNotificationContext.clearQueue();
     }
 };

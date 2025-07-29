@@ -29,7 +29,7 @@ export interface NotificationProviderSettings {
     duration?: number;
     transition?: TransitionName | TransitionStyles;
     autoClose?: boolean;
-    maxNotifications?: number;
+    limit?: number;
     zIndex?: number;
     containerClassName?: string;
     target?: HTMLElement | string | null;
@@ -38,6 +38,7 @@ export interface NotificationProviderSettings {
 
 export interface NotificationContextValue {
     notifications: NotificationData[];
+    queue: NotificationData[];
     show: (notification: Omit<NotificationData, "id">) => string;
     update: (
         id: string,
@@ -45,6 +46,7 @@ export interface NotificationContextValue {
     ) => void;
     hide: (id: string) => void;
     hideAll: () => void;
+    clearQueue: () => void;
     settings: NotificationProviderSettings;
 }
 

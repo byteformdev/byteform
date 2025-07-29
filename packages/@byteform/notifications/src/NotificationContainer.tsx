@@ -47,21 +47,14 @@ export const NotificationContainer = forwardRef<
             }
 
             setAllNotifications((prev) => {
-                // Create a map of existing notifications for efficient lookup
                 const existingMap = new Map(prev.map((n) => [n.id, n]));
-
-                // Start with current notifications, updating existing ones
                 const result: NotificationData[] = [];
 
                 notifications.forEach((notification) => {
-                    // Always use the latest version of the notification
                     result.push(notification);
-                    // Remove from existing map so we don't duplicate
                     existingMap.delete(notification.id);
                 });
 
-                // Add any remaining notifications that aren't in current notifications
-                // but haven't been marked for removal yet
                 existingMap.forEach((notification, id) => {
                     if (!removedIds.includes(id)) {
                         result.push(notification);
@@ -157,7 +150,7 @@ export const NotificationContainer = forwardRef<
                             transition={
                                 transition || getDefaultTransition(position)
                             }
-                            duration={250}
+                            duration={300}
                             onExited={() => handleTransitionExited(id)}
                         >
                             <div className="pointer-events-auto">
