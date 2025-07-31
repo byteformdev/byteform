@@ -125,6 +125,7 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
                     underline && "underline",
                     className
                 )}
+                {...props}
             >
                 {children}
             </Component>
