@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { NotificationContext } from "./context";
 import {
     NotificationProviderProps,
@@ -26,11 +26,40 @@ export const NotificationProvider = ({
     const [queue, setQueue] = useState<NotificationData[]>([]);
     const [hidingIds, setHidingIds] = useState<Set<string>>(new Set());
     const [mounted, setMounted] = useState(false);
+    const [targetElement, setTargetElement] = useState<HTMLElement | null>(
+        null
+    );
 
     const finalSettings = useMemo(
         () => ({ ...defaultSettings, ...settings }),
         [settings]
     );
+
+    useEffect(() => {
+        const resolveTarget = () => {
+            if (!settings.target) {
+                setTargetElement(document.body);
+                return;
+            }
+
+            if (typeof settings.target === "string") {
+                const element = document.querySelector(
+                    settings.target
+                ) as HTMLElement;
+                setTargetElement(element || document.body);
+            } else if (settings.target instanceof HTMLElement) {
+                setTargetElement(settings.target);
+            } else {
+                setTargetElement(document.body);
+            }
+        };
+
+        resolveTarget();
+
+        const timeoutId = setTimeout(resolveTarget, 100);
+
+        return () => clearTimeout(timeoutId);
+    }, [settings.target]);
 
     useEffect(() => {
         setMounted(true);
@@ -196,8 +225,8 @@ export const NotificationProvider = ({
     return (
         <NotificationContext.Provider value={contextValue}>
             {children}
-            {mounted && (
-                <Portal target={settings.target ?? document.body}>
+            {mounted && targetElement && (
+                <Portal target={targetElement}>
                     {/* Group notifications by position and render separate containers */}
                     {Object.entries(
                         notifications.reduce((acc, notification) => {
