@@ -85,8 +85,8 @@ const getTruncate = (truncate: TextTruncate) => {
 export const Text = forwardRef<HTMLParagraphElement, TextProps>(
     (
         {
-            size = "md",
-            weight = "normal",
+            size,
+            weight,
             align,
             lineClamp,
             truncate,
@@ -113,12 +113,11 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
                         (theme === "light"
                             ? "text-[var(--byteform-light-hint)]"
                             : "text-[var(--byteform-dark-hint)]"),
-                    !inherit && getSize(size),
-                    !inherit && getWeight(weight),
-                    !inherit && getAlign(align),
-
-                    getLineClamp(lineClamp ?? 1),
-                    getTruncate(truncate ?? false),
+                    !inherit && size && getSize(size),
+                    !inherit && weight && getWeight(weight),
+                    !inherit && align && getAlign(align),
+                    !inherit && lineClamp && getLineClamp(lineClamp),
+                    !inherit && truncate && getTruncate(truncate),
                     inline && "inline",
                     inherit && "text-inherit font-inherit",
                     italic && "italic",
