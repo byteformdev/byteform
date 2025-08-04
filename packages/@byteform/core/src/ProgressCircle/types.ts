@@ -29,6 +29,7 @@ export interface ProgressCircleSectionProps {
     thickness?: number;
     transitionDuration?: number;
     color?: string;
+    style?: React.CSSProperties;
     classNames?: ProgressCircleClassNames;
 }
 
@@ -52,6 +53,7 @@ export interface ProgressCircleProps
     thickness?: number;
     transitionDuration?: number;
     color?: string;
+    style?: React.CSSProperties;
     className?: string;
     classNames?: ProgressCircleClassNames;
 }

@@ -56,6 +56,7 @@ export const ProgressCircleSection = forwardRef<
         thickness = 6,
         transitionDuration = 300,
         color = "var(--byteform-primary)",
+        style,
         classNames,
         ...others
     } = props;
@@ -122,7 +123,8 @@ export const ProgressCircleSection = forwardRef<
                         className
                     )}
                     style={{
-                        transitionDuration: `${transitionDuration}ms`
+                        transitionDuration: `${transitionDuration}ms`,
+                        ...style
                     }}
                 />
             </svg>
@@ -171,6 +173,7 @@ const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
             thickness = 6,
             transitionDuration = 300,
             color = "var(--byteform-primary)",
+            style,
             className,
             classNames,
             ...others
@@ -196,6 +199,7 @@ const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
                         thickness={thickness}
                         transitionDuration={transitionDuration}
                         color={color}
+                        style={style}
                         classNames={classNames}
                         className={className}
                     >
