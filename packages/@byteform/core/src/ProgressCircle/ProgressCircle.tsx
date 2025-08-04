@@ -55,6 +55,7 @@ export const ProgressCircleSection = forwardRef<
         rounded,
         thickness = 6,
         transitionDuration = 300,
+        color = "var(--byteform-primary)",
         classNames,
         ...others
     } = props;
@@ -110,7 +111,7 @@ export const ProgressCircleSection = forwardRef<
                     cy="50"
                     r="45"
                     fill="transparent"
-                    stroke="var(--byteform-primary)"
+                    stroke={color}
                     strokeWidth={thickness}
                     strokeDasharray={strokeDasharray}
                     strokeDashoffset={strokeDashoffset}
@@ -169,6 +170,7 @@ const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
             rounded,
             thickness = 6,
             transitionDuration = 300,
+            color = "var(--byteform-primary)",
             className,
             classNames,
             ...others
@@ -193,6 +195,7 @@ const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
                         rounded={rounded}
                         thickness={thickness}
                         transitionDuration={transitionDuration}
+                        color={color}
                         classNames={classNames}
                         className={className}
                     >

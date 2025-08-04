@@ -28,6 +28,7 @@ export interface ProgressCircleSectionProps {
     rounded?: boolean;
     thickness?: number;
     transitionDuration?: number;
+    color?: string;
     classNames?: ProgressCircleClassNames;
 }
 
@@ -50,6 +51,7 @@ export interface ProgressCircleProps
     rounded?: boolean;
     thickness?: number;
     transitionDuration?: number;
+    color?: string;
     className?: string;
     classNames?: ProgressCircleClassNames;
 }
