@@ -1,6 +1,6 @@
 {
     "name": "@byteform/dates",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "React date components library focused on simplicity and ease of use",
     "repository": {
         "type": "github",
@@ -24,7 +24,7 @@
         "access": "public"
     },
     "peerDependencies": {
-        "@byteform/core": ">=0.1.2",
+        "@byteform/core": ">=0.1.3",
         "dayjs": ">=1.0.0",
         "react": ">=18.0.0",
         "react-dom": ">=18.0.0"
