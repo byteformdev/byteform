@@ -7,7 +7,16 @@ import { ProgressLabel } from "./ProgressLabel";
 
 const Progress = forwardRef<HTMLDivElement, ProgressProps>(
     (
-        { label, labelPosition, striped, animated, size, className, ...props },
+        {
+            label,
+            labelPosition,
+            striped,
+            animated,
+            size,
+            className,
+            color,
+            ...props
+        },
         ref
     ) => {
         return (
@@ -16,6 +25,7 @@ const Progress = forwardRef<HTMLDivElement, ProgressProps>(
                     value={props.value ?? 0}
                     striped={striped}
                     animated={animated}
+                    color={color}
                     className={className}
                 >
                     {label && (

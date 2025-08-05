@@ -15,6 +15,7 @@ export interface ProgressSectionProps {
     striped?: boolean;
     animated?: boolean;
     children?: ReactNode;
+    color?: string;
 }
 
 export interface ProgressLabelProps {
@@ -35,4 +36,5 @@ export interface ProgressProps
     labelPosition?: ProgressLabelPosition;
     striped?: boolean;
     animated?: boolean;
+    color?: string;
 }
