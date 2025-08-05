@@ -17,6 +17,7 @@ export * from "./ColorInput";
 export * from "./ColorPicker";
 export * from "./ColorSwatch";
 export * from "./Drawer";
+export * from "./HoverCard";
 export * from "./IconButton";
 export * from "./IconWrapper";
 export * from "./Input";
