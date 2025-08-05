@@ -4,10 +4,10 @@ import { useTheme } from "../_theme";
 
 const sizeClasses = {
     xs: "h-1",
-    sm: "h-3",
-    md: "h-4",
-    lg: "h-5",
-    xl: "h-7"
+    sm: "h-2",
+    md: "h-3",
+    lg: "h-4",
+    xl: "h-5"
 };
 
 const getSize = (size: ProgressSize) => {
