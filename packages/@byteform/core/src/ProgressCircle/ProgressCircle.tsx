@@ -29,11 +29,7 @@ export const ProgressCircleRoot = forwardRef<
     return (
         <div
             ref={ref}
-            className={cx(
-                "relative inline-flex items-center justify-center",
-                classNames?.wrapper,
-                className
-            )}
+            className={cx("relative", classNames?.wrapper, className)}
             style={sizeStyle}
             {...others}
         >
