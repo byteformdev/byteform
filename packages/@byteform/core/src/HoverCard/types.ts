@@ -2,7 +2,8 @@ import { ReactElement, ReactNode, RefObject } from "react";
 import {
     UseFloatingReturn,
     FloatingContext,
-    ReferenceType
+    ReferenceType,
+    Middleware
 } from "@floating-ui/react";
 
 export type HoverCardPosition =
@@ -39,6 +40,7 @@ export interface HoverCardProps {
     closeDelay?: number;
     zIndex?: number;
     classNames?: HoverCardClassNames;
+    middlewares?: Middleware[];
 }
 
 export interface HoverCardClassNames {

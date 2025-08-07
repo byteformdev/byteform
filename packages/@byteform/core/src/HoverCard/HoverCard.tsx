@@ -36,7 +36,8 @@ const defaultProps = (props: HoverCardProps) => {
         closeDelay: props.closeDelay || 0,
         zIndex: props.zIndex || 300,
         children: props.children,
-        classNames: props.classNames
+        classNames: props.classNames,
+        middlewares: props.middlewares
     };
 };
 
@@ -60,6 +61,35 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>((props, ref) => {
         return pos as Placement;
     };
 
+    const getDefaultMiddlewares = () => [
+        offset(
+            typeof props.offset === "number"
+                ? props.offset
+                : {
+                      mainAxis: props.offset?.mainAxis ?? 5,
+                      crossAxis: props.offset?.crossAxis ?? 0
+                  }
+        ),
+        flip({
+            fallbackPlacements: [
+                "top",
+                "bottom",
+                "left",
+                "right",
+                "top-start",
+                "top-end",
+                "bottom-start",
+                "bottom-end",
+                "left-start",
+                "left-end",
+                "right-start",
+                "right-end"
+            ].filter((p) => p !== props.position) as Placement[]
+        }),
+        shift({ padding: 8 }),
+        ...(props.withArrow ? [arrow({ element: arrowRef })] : [])
+    ];
+
     const { refs, floatingStyles, context, middlewareData } = useFloating({
         open: currentOpened && !props.disabled,
         onOpenChange: (open) => {
@@ -71,34 +101,7 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>((props, ref) => {
             props.onChange?.(open);
         },
         placement: convertPosition(props.position!),
-        middleware: [
-            offset(
-                typeof props.offset === "number"
-                    ? props.offset
-                    : {
-                          mainAxis: props.offset?.mainAxis ?? 5,
-                          crossAxis: props.offset?.crossAxis ?? 0
-                      }
-            ),
-            flip({
-                fallbackPlacements: [
-                    "top",
-                    "bottom",
-                    "left",
-                    "right",
-                    "top-start",
-                    "top-end",
-                    "bottom-start",
-                    "bottom-end",
-                    "left-start",
-                    "left-end",
-                    "right-start",
-                    "right-end"
-                ].filter((p) => p !== props.position) as Placement[]
-            }),
-            shift({ padding: 8 }),
-            ...(props.withArrow ? [arrow({ element: arrowRef })] : [])
-        ],
+        middleware: props.middlewares || getDefaultMiddlewares(),
         whileElementsMounted: autoUpdate
     });
 
