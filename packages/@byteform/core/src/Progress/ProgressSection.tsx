@@ -1,12 +1,15 @@
 import { forwardRef } from "react";
 import { ProgressSectionProps } from "./types";
 import { cx } from "../_theme";
+import { useProgressContext } from "./context";
 
 export const ProgressSection = forwardRef<HTMLDivElement, ProgressSectionProps>(
     (
         { children, value = 0, striped, animated, className, color, ...props },
         ref
     ) => {
+        const { classNames } = useProgressContext();
+
         const style = {
             width: `${Math.min(100, Math.max(0, value))}%`,
             transition: "width 200ms ease"
@@ -24,6 +27,7 @@ export const ProgressSection = forwardRef<HTMLDivElement, ProgressSectionProps>(
                     striped && "byteform-progress-striped",
                     animated &&
                         "byteform-progress-animated-stripes byteform-progress-striped",
+                    classNames?.section,
                     className
                 )}
                 style={{

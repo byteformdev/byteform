@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import { ProgressRootProps, ProgressSize } from "./types";
 import { useTheme } from "../_theme";
+import { ProgressContext } from "./context";
 
 const sizeClasses = {
     xs: "h-1",
@@ -15,23 +16,26 @@ const getSize = (size: ProgressSize) => {
 };
 
 export const ProgressRoot = forwardRef<HTMLDivElement, ProgressRootProps>(
-    ({ children, size = "sm", ...props }, ref) => {
+    ({ children, size = "sm", classNames, ...props }, ref) => {
         const { theme, cx } = useTheme();
 
         return (
-            <div
-                ref={ref}
-                className={cx(
-                    "relative w-full overflow-hidden rounded-md",
-                    theme === "light"
-                        ? "bg-[var(--byteform-light-background)]"
-                        : "bg-[var(--byteform-dark-background)]",
-                    getSize(size)
-                )}
-                {...props}
-            >
-                {children}
-            </div>
+            <ProgressContext.Provider value={{ classNames }}>
+                <div
+                    ref={ref}
+                    className={cx(
+                        "relative w-full overflow-hidden rounded-md",
+                        theme === "light"
+                            ? "bg-[var(--byteform-light-background)]"
+                            : "bg-[var(--byteform-dark-background)]",
+                        classNames?.track,
+                        getSize(size)
+                    )}
+                    {...props}
+                >
+                    {children}
+                </div>
+            </ProgressContext.Provider>
         );
     }
 );

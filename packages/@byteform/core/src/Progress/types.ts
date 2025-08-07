@@ -3,10 +3,17 @@ import { ReactNode } from "react";
 export type ProgressSize = "xs" | "sm" | "md" | "lg" | "xl";
 export type ProgressLabelPosition = "left" | "center" | "right";
 
+export interface ProgressClassNames {
+    track?: string;
+    section?: string;
+    label?: string;
+}
+
 export interface ProgressRootProps {
     children?: ReactNode;
     size?: ProgressSize;
     className?: string;
+    classNames?: ProgressClassNames;
 }
 
 export interface ProgressSectionProps {
@@ -37,4 +44,9 @@ export interface ProgressProps
     striped?: boolean;
     animated?: boolean;
     color?: string;
+    classNames?: ProgressClassNames;
+}
+
+export interface ProgressContextValue {
+    classNames?: ProgressClassNames;
 }

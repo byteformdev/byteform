@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import { ProgressLabelProps, ProgressSize } from "./types";
 import { useTheme } from "../_theme";
+import { useProgressContext } from "./context";
 
 const sizeClasses = {
     xs: "text-[6px] leading-none",
@@ -19,6 +20,7 @@ export const ProgressLabel = forwardRef<HTMLDivElement, ProgressLabelProps>(
         { children, position = "left", size = "sm", className, ...props },
         ref
     ) => {
+        const { classNames } = useProgressContext();
         const { theme, cx } = useTheme();
 
         return (
@@ -33,6 +35,7 @@ export const ProgressLabel = forwardRef<HTMLDivElement, ProgressLabelProps>(
                     theme === "light"
                         ? "text-[var(--byteform-light-text)]"
                         : "text-[var(--byteform-dark-text)]",
+                    classNames?.label,
                     className
                 )}
                 {...props}
