@@ -11,6 +11,7 @@ export type ButtonVariant =
 export type ButtonLoaderPosition = "left" | "right";
 export type ButtonAlign = "left" | "center" | "right";
 export type ButtonType = "button" | "submit" | "reset";
+export type ButtonAnimation = "transform" | "opacity" | "scale" | "bounce";
 
 export interface ButtonClassNames {
     wrapper?: string;
@@ -37,6 +38,7 @@ export interface ButtonProps
     href?: string;
     target?: string;
     align?: ButtonAlign;
+    animation?: ButtonAnimation;
     useAnimation?: boolean;
     compact?: boolean;
     className?: string;

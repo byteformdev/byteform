@@ -46,6 +46,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             href,
             target,
             align = "center",
+            animation,
             useAnimation = true,
             compact = false,
             className,
@@ -54,7 +55,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         },
         ref
     ) => {
-        const { theme, cx } = useTheme();
+        const { theme, cx, settings } = useTheme();
 
         const getVariant = () => {
             const isLight = theme === "light";
@@ -130,15 +131,29 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             return alignClasses[align] || alignClasses.center;
         };
 
+        const getAnimation = () => {
+            const activeAnimation =
+                animation || settings.buttonAnimation || "transform";
+
+            switch (activeAnimation) {
+                case "opacity":
+                    return "active:opacity-85";
+                case "scale":
+                    return "active:scale-[0.98]";
+                case "bounce":
+                    return "active:translate-y-0.5 active:scale-[0.98]";
+                default:
+                    return "active:translate-y-0.5";
+            }
+        };
+
         const Element = Component as ElementType;
 
         return (
             <Element
                 className={cx(
                     "inline-flex items-center gap-2 font-medium cursor-pointer relative rounded-md whitespace-nowrap select-none outline-none transition-colors duration-150",
-                    useAnimation &&
-                        (!disabled || !loading) &&
-                        "active:translate-y-0.5",
+                    useAnimation && (!disabled || !loading) && getAnimation(),
                     getSize(size, compact),
                     getVariant(),
                     fullWidth && "w-full",
