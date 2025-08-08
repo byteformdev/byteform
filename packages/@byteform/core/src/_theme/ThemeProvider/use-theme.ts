@@ -3,7 +3,8 @@ import { ThemeContext } from "./context";
 import { cx } from "../cx";
 
 export const useTheme = () => {
-    const { theme, setTheme, lightVariantOpacity } = useContext(ThemeContext);
+    const { theme, setTheme, lightVariantOpacity, settings } =
+        useContext(ThemeContext);
 
     if (!theme || !setTheme)
         throw new Error("useTheme must be used within a ThemeProvider");
@@ -12,6 +13,7 @@ export const useTheme = () => {
         theme,
         setTheme,
         cx,
-        lightVariantOpacity
+        lightVariantOpacity,
+        settings
     };
 };

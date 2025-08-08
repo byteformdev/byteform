@@ -10,7 +10,8 @@ export const ThemeProvider = ({
     theme = "dark",
     themeAutoSave,
     themeStorageKey = KEY,
-    lightVariantOpacity = 0.6
+    lightVariantOpacity = 0.6,
+    settings = {}
 }: ThemeProviderProps) => {
     const [currentTheme, setCurrentTheme] = useState<Theme>(theme);
     const [autosaveTheme, setAutosaveTheme] = useState<boolean>(
@@ -59,7 +60,8 @@ export const ThemeProvider = ({
                 setTheme: setCurrentTheme,
                 themeAutoSave: autosaveTheme,
                 setThemeAutoSave: setAutosaveTheme,
-                lightVariantOpacity
+                lightVariantOpacity,
+                settings
             }}
         >
             <div style={themeToVars()}>{children}</div>
