@@ -32,6 +32,12 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
             size = "md",
             className,
             classNames,
+
+            // Form input props
+            inputLabel,
+            description,
+            error,
+            withAsterisk,
             ...props
         },
         ref
@@ -246,13 +252,11 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
             (value: number): string => {
                 if (!label) return "";
 
-                // If label is a function, use it as before
                 if (typeof label === "function") {
                     const result = label(value);
                     return typeof result === "string" ? result : String(result);
                 }
 
-                // If label is SliderLabelProps object
                 if (typeof label === "object") {
                     const {
                         format,
@@ -279,15 +283,75 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
             [label]
         );
 
-        return (
+        const renderInputLabel = () => {
+            if (!inputLabel) return null;
+
+            return (
+                <label
+                    className={cx(
+                        "flex items-center gap-1 text-sm font-medium",
+                        theme === "light"
+                            ? "text-[var(--byteform-light-text)]"
+                            : "text-[var(--byteform-dark-text)]",
+                        disabled && "opacity-60 cursor-not-allowed",
+                        classNames?.inputLabel
+                    )}
+                >
+                    {inputLabel}
+                    {withAsterisk && (
+                        <span
+                            className={cx(
+                                "text-[var(--byteform-error)] text-xs"
+                            )}
+                        >
+                            *
+                        </span>
+                    )}
+                </label>
+            );
+        };
+
+        const renderDescription = () => {
+            if (!description || error) return null;
+
+            return (
+                <p
+                    className={cx(
+                        "text-xs",
+                        theme === "light"
+                            ? "text-[var(--byteform-light-hint)]"
+                            : "text-[var(--byteform-dark-hint)]",
+                        disabled && "opacity-60",
+                        classNames?.description
+                    )}
+                >
+                    {description}
+                </p>
+            );
+        };
+
+        const renderError = () => {
+            if (!error) return null;
+
+            return (
+                <p
+                    className={cx(
+                        "text-xs text-[var(--byteform-error)]",
+                        classNames?.error
+                    )}
+                >
+                    {error}
+                </p>
+            );
+        };
+
+        const renderSlider = () => (
             <div
                 className={cx(
                     "relative w-full py-4",
                     disabled && "opacity-60 cursor-not-allowed",
-                    className,
-                    classNames?.root
+                    classNames?.sliderContainer
                 )}
-                ref={ref}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 {...props}
@@ -436,6 +500,22 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
                         </div>
                     )}
                 </div>
+            </div>
+        );
+
+        return (
+            <div
+                className={cx(
+                    "flex flex-col items-start",
+                    className,
+                    classNames?.root
+                )}
+                ref={ref}
+            >
+                {renderInputLabel()}
+                {renderSlider()}
+                {renderDescription()}
+                {renderError()}
             </div>
         );
     }

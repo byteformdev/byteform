@@ -34,6 +34,11 @@ export interface SliderProps
     size?: SliderSize;
     className?: string;
     classNames?: SliderClassNames;
+
+    inputLabel?: string;
+    description?: string;
+    error?: string;
+    withAsterisk?: boolean;
 }
 
 export interface SliderMark {
@@ -45,6 +50,11 @@ export type SliderLabel = ((value: number) => React.ReactNode) | null;
 
 export interface SliderClassNames {
     root?: string;
+    wrapper?: string;
+    inputLabel?: string;
+    description?: string;
+    error?: string;
+    sliderContainer?: string;
     label?: string;
     thumb?: string;
     trackContainer?: string;
