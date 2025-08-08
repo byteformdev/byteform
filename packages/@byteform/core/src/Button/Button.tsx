@@ -2,6 +2,7 @@ import { ElementType, forwardRef, ReactNode } from "react";
 import { ButtonProps, ButtonSize } from "./types";
 import { useTheme } from "../_theme";
 import { Loader } from "../Loader";
+import { ButtonGroup } from "./ButtonGroup";
 
 const compactStyles = {
     xs: "text-xs px-1 py-0.5 min-h-4",
@@ -188,6 +189,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 );
 
-Button.displayName = "@byteform/core/Button";
+const ExtendedButton = Object.assign(Button, {
+    Group: ButtonGroup
+});
 
-export { Button };
+ExtendedButton.displayName = "@byteform/core/Button";
+
+export { ExtendedButton as Button };
