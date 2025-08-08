@@ -2,6 +2,7 @@ import { IconUserCircle } from "@tabler/icons-react";
 import { AvatarProps } from "./types";
 import { ElementType, forwardRef } from "react";
 import { cx, useTheme } from "../_theme";
+import { AvatarGroup } from "./AvatarGroup";
 
 const sizeClasses = {
     xs: "text-xs w-6 h-6",
@@ -82,6 +83,10 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     }
 );
 
-Avatar.displayName = "@byteform/core/Avatar";
+const ExtendedAvatar = Object.assign(Avatar, {
+    Group: AvatarGroup
+});
 
-export { Avatar };
+ExtendedAvatar.displayName = "@byteform/core/Avatar";
+
+export { ExtendedAvatar as Avatar };
