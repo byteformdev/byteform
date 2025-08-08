@@ -318,36 +318,40 @@ export const NumberInput = ({
             <button
                 type="button"
                 className={cx(
-                    "w-6 flex-1 flex items-center justify-center border-b",
+                    "w-6 h-full flex-1 flex items-center justify-center",
                     theme === "light"
-                        ? "border-[var(--byteform-light-border)] text-[var(--byteform-light-text)]"
-                        : "border-[var(--byteform-dark-border)] text-[var(--byteform-dark-text)]",
-                    isIncrementDisabled && "opacity-60 cursor-not-allowed",
-                    !isIncrementDisabled &&
-                        "hover:bg-[var(--byteform-primary-light)]",
+                        ? "text-[var(--byteform-light-text)]"
+                        : "text-[var(--byteform-dark-text)]",
+                    isDecrementDisabled
+                        ? "opacity-60 cursor-not-allowed"
+                        : theme === "light"
+                        ? "hover:bg-[var(--byteform-light-background-hover)]"
+                        : "hover:bg-[var(--byteform-dark-background-hover)]",
                     classNames?.incrementButton
                 )}
                 onClick={handleIncrementClick}
                 disabled={isIncrementDisabled}
             >
-                <IconChevronUp size={15} />
+                <IconChevronUp size={16} />
             </button>
             <button
                 type="button"
                 onClick={handleDecrementClick}
                 disabled={isDecrementDisabled}
                 className={cx(
-                    "w-6 flex-1 flex items-center justify-center",
+                    "w-6 h-full flex-1 flex items-center justify-center",
                     theme === "light"
-                        ? "border-[var(--byteform-light-border)] text-[var(--byteform-light-text)]"
-                        : "border-[var(--byteform-dark-border)] text-[var(--byteform-dark-text)]",
-                    isDecrementDisabled && "opacity-60 cursor-not-allowed",
-                    !isDecrementDisabled &&
-                        "hover:bg-[var(--byteform-primary-light)]",
+                        ? "text-[var(--byteform-light-text)]"
+                        : "text-[var(--byteform-dark-text)]",
+                    isDecrementDisabled
+                        ? "opacity-60 cursor-not-allowed"
+                        : theme === "light"
+                        ? "hover:bg-[var(--byteform-light-background-hover)]"
+                        : "hover:bg-[var(--byteform-dark-background-hover)]",
                     classNames?.decrementButton
                 )}
             >
-                <IconChevronDown size={15} />
+                <IconChevronDown size={16} />
             </button>
         </div>
     );
@@ -369,7 +373,7 @@ export const NumberInput = ({
             rightSection={hideControls ? null : controlButtons}
             disabled={disabled}
             classNames={{
-                rightSection: "p-0",
+                rightSection: "p-0 flex items-center justify-center",
                 ...classNames
             }}
             {...props}
