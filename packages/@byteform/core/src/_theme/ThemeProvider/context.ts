@@ -6,7 +6,8 @@ export const ThemeContext = createContext<ThemeContextType>({
     setTheme: () => {},
     themeAutoSave: false,
     setThemeAutoSave: () => {},
-    lightVariantOpacity: 0.6
+    lightVariantOpacity: 0.6,
+    settings: {}
 });
 
 export const useTheme = () => {
