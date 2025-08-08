@@ -1,4 +1,4 @@
-import { ButtonAnimation } from "@/byteform/Button";
+import { ButtonAnimation } from "../../Button/types";
 
 export type Theme = "light" | "dark";
 
