@@ -1,6 +1,6 @@
-# @byteform/dates
+# @byteform/colors
 
-⚠️ **EARLY RELEASE WARNING - VERSION 0.1** ⚠️
+⚠️ **EARLY RELEASE WARNING - VERSION 0.2** ⚠️
 
 **This package is in early development and is NOT production-ready. It has been released to npm solely for internal package development and testing purposes.**
 
@@ -12,21 +12,21 @@
 -   **NO DOCUMENTATION**: Limited or no documentation available
 -   **USE AT YOUR OWN RISK**: Not recommended for production applications
 
-## What is @byteform/dates?
+## What is @byteform/colors?
 
-A React components library focused on simplicity and ease of use. This package provides a collection of reusable UI components for dates built with React, TypeScript, and Tailwind CSS.
+A React components library focused on simplicity and ease of use. This package provides a easy usage generator for color palettes.
 
 ## Installation
 
 ```bash
-npm install @byteform/dates
+npm install @byteform/colors
 ```
 
 **Note**: This package requires React 18+.
 
 ## Development Status
 
-This is version **0.1.0** - the very first release. The package is being published early to enable development of other packages in the ecosystem.
+This is version **0.2.0** - the very first release. The package is being published early to enable development of other packages in the ecosystem.
 
 ### What to Expect
 

@@ -1,6 +1,6 @@
 # @byteform/dates
 
-⚠️ **EARLY RELEASE WARNING - VERSION 0.1** ⚠️
+⚠️ **EARLY RELEASE WARNING - VERSION 0.2** ⚠️
 
 **This package is in early development and is NOT production-ready. It has been released to npm solely for internal package development and testing purposes.**
 
@@ -26,7 +26,7 @@ npm install @byteform/dates
 
 ## Development Status
 
-This is version **0.1.0** - the very first release. The package is being published early to enable development of other packages in the ecosystem.
+This is version **0.2.0** - the very first release. The package is being published early to enable development of other packages in the ecosystem.
 
 ### What to Expect
 
