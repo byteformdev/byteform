@@ -1,4 +1,9 @@
-import { ComponentType, InputHTMLAttributes, ReactElement } from "react";
+import {
+    ComponentType,
+    HTMLInputTypeAttribute,
+    InputHTMLAttributes,
+    ReactElement
+} from "react";
 
 export type InputComponent =
     | "input"
@@ -33,11 +38,19 @@ export interface InputProps
     autoFocus?: boolean;
 
     // Input attributes
-    type?: string;
+    type?: HTMLInputTypeAttribute;
     minLength?: number;
     maxLength?: number;
     pattern?: string;
-    inputMode?: "text" | "numeric" | "decimal" | "email" | "tel" | "url";
+    inputMode?:
+        | "none"
+        | "text"
+        | "tel"
+        | "url"
+        | "email"
+        | "numeric"
+        | "decimal"
+        | "search";
     name?: string;
 
     // Select/Textarea specific props
