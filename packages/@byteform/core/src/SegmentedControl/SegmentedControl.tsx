@@ -94,9 +94,10 @@ export const SegmentedControl = ({
 
         return (
             <button
-                key={item.value}
+                key={item.value || index}
                 type="button"
                 data-value={item.value}
+                data-active={isActive}
                 disabled={isDisabled}
                 onClick={() => handleItemClick(item.value, item.disabled)}
                 className={cx(
