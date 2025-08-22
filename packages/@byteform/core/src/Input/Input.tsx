@@ -277,8 +277,8 @@ export const Input = ({
                 "w-full border-none bg-transparent outline-none flex items-center justify-center h-full leading-normal",
             !unstyled && getSizeClasses(size),
             !unstyled && theme === "light"
-                ? "placeholder:[color:var(--byteform-light-placeholder)]"
-                : "placeholder:[color:var(--byteform-dark-placeholder)]",
+                ? "placeholder:text-[var(--byteform-light-placeholder)]"
+                : "placeholder:text-[var(--byteform-dark-placeholder)]",
             disabled && "opacity-60 cursor-not-allowed"
         );
 
@@ -491,7 +491,7 @@ export const Input = ({
     return (
         <div
             className={cx(
-                !unstyled && "flex flex-col items-start space-y-1",
+                !unstyled && "flex flex-col items-start space-y-0.5",
                 !unstyled && theme === "light"
                     ? "text-[var(--byteform-light-text)]"
                     : "text-[var(--byteform-dark-text)]",
