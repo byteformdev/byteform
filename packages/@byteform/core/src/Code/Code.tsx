@@ -50,7 +50,7 @@ export const Code: React.FC<CodeProps> = ({
                 theme === "light"
                     ? "border-[var(--byteform-light-border)]"
                     : "border-[var(--byteform-dark-border)]",
-                "relative rounded-lg border overflow-hidden",
+                "relative group rounded-lg border overflow-hidden",
                 classNames?.wrapper
             )}
         >
@@ -73,7 +73,7 @@ export const Code: React.FC<CodeProps> = ({
                     <button
                         onClick={handleCopy}
                         className={cx(
-                            "absolute top-5 right-5 z-10 transition-all duration-200",
+                            "absolute top-4 right-4 z-10 transition-all duration-200 opacity-0 group-hover:opacity-100",
                             "text-[var(--byteform-dark-1)] hover:text-[var(--byteform-white)]"
                         )}
                     >
@@ -136,7 +136,7 @@ export const Code: React.FC<CodeProps> = ({
                                                     lineProps.className,
                                                     "flex items-center",
                                                     isHighlighted &&
-                                                        "bg-yellow-900/30 -mx-4 px-4",
+                                                        "bg-blue-900/30 -mx-4 px-4",
                                                     classNames?.lineNumberHighlight
                                                 )}
                                             >
@@ -148,7 +148,7 @@ export const Code: React.FC<CodeProps> = ({
                                                                 ? "text-[var(--byteform-light-text)]"
                                                                 : "text-[var(--byteform-dark-text)]",
                                                             isHighlighted &&
-                                                                "text-yellow-500 font-medium",
+                                                                "text-blue-500 font-medium",
                                                             classNames?.lineNumber
                                                         )}
                                                     >
