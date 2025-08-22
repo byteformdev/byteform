@@ -1,5 +1,9 @@
 import { InputClassNames, InputProps } from "../Input";
-import { TransitionName, TransitionStyles } from "../Transition";
+import {
+    TimingFunction,
+    TransitionName,
+    TransitionStyles
+} from "../Transition";
 
 export interface SelectOption {
     value: string;
@@ -30,7 +34,7 @@ export interface SelectClassNames extends InputClassNames {
 export interface SelectTransitionProps {
     transition?: TransitionName | TransitionStyles;
     duration?: number;
-    timingFunction?: string;
+    timingFunction?: TimingFunction;
     enterDelay?: number;
     exitDelay?: number;
 }

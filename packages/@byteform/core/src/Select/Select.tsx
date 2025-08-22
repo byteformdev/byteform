@@ -541,7 +541,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
                         mounted={isOpen}
                         transition="fade-down"
                         duration={200}
-                        timingFunction="ease-out"
+                        timingFunction="easeOut"
                         {...transitionProps}
                     >
                         {dropdownContent}
