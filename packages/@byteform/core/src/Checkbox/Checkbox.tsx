@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useMemo, useRef } from "react";
 import { CheckboxProps, CheckboxSize } from "./types";
 import { cx, useTheme } from "../_theme";
 import { IconCheck, IconMinus } from "@tabler/icons-react";
@@ -125,7 +125,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             onChange?.(e);
         };
 
-        const sizeStyles = getSize(size);
+        const sizeStyles = useMemo(() => getSize(size), [size]);
 
         const renderIcon = () => {
             if (Icon)
@@ -136,7 +136,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                             "transition-all duration-200 ease-in-out",
                             checked || indeterminate
                                 ? "opacity-100 scale-100 text-white"
-                                : "opacity-0 scale-75",
+                                : "opacity-0 scale-65",
                             classNames?.icon
                         )}
                     />
@@ -148,7 +148,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                         "transition-all duration-200 ease-in-out flex items-center justify-center text-white",
                         checked || indeterminate
                             ? "opacity-100 scale-100"
-                            : "opacity-0 scale-75",
+                            : "opacity-0 scale-65",
                         classNames?.icon
                     )}
                 >
