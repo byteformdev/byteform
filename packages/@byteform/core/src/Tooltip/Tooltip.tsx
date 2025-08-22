@@ -15,7 +15,8 @@ import {
     useRole,
     useInteractions,
     Placement,
-    FloatingArrow
+    FloatingArrow,
+    useClick
 } from "@floating-ui/react";
 
 export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
@@ -31,7 +32,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
             arrowSize = 4,
             arrowRadius = 0,
             multiline = false,
-            events = { hover: true, focus: false, touch: false },
+            trigger = "hover",
             inline = false,
             openDelay = 0,
             closeDelay = 0,
@@ -75,12 +76,14 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
         });
 
         const hover = useHover(context, {
-            enabled: events.hover && !disabled,
+            enabled:
+                (trigger === "hover" || trigger === "click-hover") && !disabled,
             delay: { open: openDelay, close: closeDelay }
         });
 
-        const focus = useFocus(context, {
-            enabled: events.focus && !disabled
+        const click = useClick(context, {
+            enabled:
+                (trigger === "click" || trigger === "click-hover") && !disabled
         });
 
         const dismiss = useDismiss(context);
@@ -89,7 +92,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
 
         const { getReferenceProps, getFloatingProps } = useInteractions([
             hover,
-            focus,
+            click,
             dismiss,
             role
         ]);
@@ -155,7 +158,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
                         >
                             <div
                                 className={cx(
-                                    "py-1 px-2 text-sm outline-none",
+                                    "py-1 px-3 text-sm outline-none",
                                     theme === "light"
                                         ? "text-[var(--byteform-light-text)]"
                                         : "text-[var(--byteform-dark-text)]",

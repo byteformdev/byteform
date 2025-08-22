@@ -1,11 +1,7 @@
 import { Placement } from "@floating-ui/react";
 import { HTMLAttributes, ReactNode } from "react";
 
-export type TooltipEvents = {
-    hover?: boolean;
-    focus?: boolean;
-    touch?: boolean;
-};
+export type TooltipTrigger = "hover" | "click" | "click-hover";
 
 export interface TooltipOffset {
     mainAxis?: number;
@@ -31,7 +27,7 @@ export interface TooltipProps extends HTMLAttributes<HTMLDivElement> {
     arrowRadius?: number;
     multiline?: boolean;
     inline?: boolean;
-    events?: TooltipEvents;
+    trigger?: TooltipTrigger;
     openDelay?: number;
     closeDelay?: number;
     zIndex?: number;
