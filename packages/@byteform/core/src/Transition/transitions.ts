@@ -133,5 +133,19 @@ export const TRANSITIONS: Record<string, TransitionStyles> = {
         out: { opacity: 0, transform: "scale(0)" },
         common: { transformOrigin: "top right" },
         transitionProperty: "opacity, transform"
+    },
+
+    bounce: {
+        in: { opacity: 1, transform: "scale(1) translateY(0)" },
+        out: { opacity: 0, transform: "scale(0.3) translateY(50px)" },
+        common: { transformOrigin: "center" },
+        transitionProperty: "opacity, transform"
+    },
+
+    spring: {
+        in: { opacity: 1, transform: "scale(1) translateY(0)" },
+        out: { opacity: 0, transform: "scale(0.8) translateY(20px)" },
+        common: { transformOrigin: "center" },
+        transitionProperty: "opacity, transform"
     }
 };

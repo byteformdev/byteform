@@ -21,7 +21,24 @@ export type TransitionName =
     | "pop-bottom-left"
     | "pop-bottom-right"
     | "pop-top-left"
-    | "pop-top-right";
+    | "pop-top-right"
+    | "bounce"
+    | "spring";
+
+export type TimingFunction =
+    | "ease"
+    | "ease-in"
+    | "ease-out"
+    | "ease-in-out"
+    | "linear"
+    | "easeIn"
+    | "easeOut"
+    | "easeInOut"
+    | "anticipate"
+    | "backInOut"
+    | "circIn"
+    | "circOut"
+    | "circInOut";
 
 export interface TransitionStyles {
     in: CSSProperties;
@@ -37,7 +54,7 @@ export interface TransitionProps {
     mounted: boolean;
     transition: TransitionName | TransitionStyles;
     duration?: number;
-    timingFunction?: string;
+    timingFunction?: TimingFunction;
     enterDelay?: number;
     exitDelay?: number;
     keepMounted?: boolean;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { TransitionProps } from "./types";
 import { TRANSITIONS } from "./transitions";
@@ -18,67 +18,65 @@ export const Transition = ({
 }: TransitionProps) => {
     const [visible, setVisible] = useState(mounted);
 
-    const getTransition = () => {
+    const transitionStyles = useMemo(() => {
         if (typeof transition === "string") {
             return TRANSITIONS[transition] || TRANSITIONS.fade;
         }
         return transition;
-    };
+    }, [transition]);
 
-    const transitionStyles = getTransition();
-
-    const getEasing = () => {
-        switch (timingFunction) {
-            case "ease-in":
-                return "easeIn";
-            case "ease-out":
-                return "easeOut";
-            case "ease-in-out":
-                return "easeInOut";
-            case "linear":
-                return "linear";
-            default:
-                return "easeInOut";
-        }
-    };
+    const easingValue = useMemo(() => {
+        const easingMap: Record<string, string> = {
+            ease: "easeInOut",
+            "ease-in": "easeIn",
+            "ease-out": "easeOut",
+            "ease-in-out": "easeInOut",
+            linear: "linear",
+            easeIn: "easeIn",
+            easeOut: "easeOut",
+            easeInOut: "easeInOut",
+            anticipate: "anticipate",
+            backInOut: "backInOut",
+            circIn: "circIn",
+            circOut: "circOut",
+            circInOut: "circInOut"
+        };
+        return easingMap[timingFunction] || "easeInOut";
+    }, [timingFunction]);
 
     useEffect(() => {
         if (mounted) {
             setVisible(true);
         } else if (!keepMounted) {
+            setVisible(false);
         }
     }, [mounted, keepMounted]);
 
-    const convertStyles = (styles: Record<string, any>) => {
-        const result: Record<string, any> = {};
-        for (const key in styles) {
-            result[key] = styles[key];
-        }
-        return result;
-    };
+    const variants = useMemo(
+        () => ({
+            initial: {
+                ...transitionStyles.out,
+                ...(transitionStyles.common || {})
+            },
+            animate: {
+                ...transitionStyles.in,
+                ...(transitionStyles.common || {})
+            },
+            exit: {
+                ...transitionStyles.out,
+                ...(transitionStyles.common || {})
+            }
+        }),
+        [transitionStyles]
+    );
 
-    const initialStyles = convertStyles({
-        ...transitionStyles.out,
-        ...(transitionStyles.common || {})
-    });
-
-    const animateStyles = convertStyles({
-        ...transitionStyles.in,
-        ...(transitionStyles.common || {})
-    });
-
-    const exitStyles = convertStyles({
-        ...transitionStyles.out,
-        ...(transitionStyles.common || {})
-    });
-
-    const variants: Variants = {
-        initial: initialStyles,
-        animate: animateStyles,
-        exit: exitStyles
-    };
-
-    const currentStyles = mounted ? animateStyles : initialStyles;
+    const currentStyles = useMemo(
+        () =>
+            (mounted
+                ? variants.animate
+                : variants.initial) as React.CSSProperties,
+        [mounted, variants]
+    );
 
     return (
         <AnimatePresence
@@ -92,10 +90,10 @@ export const Transition = ({
                     initial="initial"
                     animate="animate"
                     exit="exit"
-                    variants={variants}
+                    variants={variants as any}
                     transition={{
                         duration: duration / 1000,
-                        ease: getEasing(),
+                        ease: easingValue as any,
                         delay: mounted ? enterDelay / 1000 : exitDelay / 1000
                     }}
                     onAnimationComplete={() => {
