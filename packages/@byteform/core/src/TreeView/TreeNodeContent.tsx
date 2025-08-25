@@ -27,9 +27,13 @@ export const TreeNodeContent = forwardRef<HTMLDivElement, TreeNodeContentProps>(
             }
         };
 
-        const handleCheckboxChange = (checked: boolean) => {
+        const handleCheckboxChange = (
+            e: React.ChangeEvent<HTMLInputElement>
+        ) => {
+            e.stopPropagation();
             if (!node.disabled && treeView.selectable) {
                 treeView.onChange(node.id, node);
+                e.target.checked = !e.target.checked;
             }
         };
 
@@ -83,7 +87,6 @@ export const TreeNodeContent = forwardRef<HTMLDivElement, TreeNodeContentProps>(
                     )}
                 </div>
 
-                {/* Checkbox */}
                 {treeView.checkboxes && (
                     <div className="mr-2 flex-shrink-0">
                         <Checkbox

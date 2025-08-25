@@ -1,8 +1,7 @@
 import React from "react";
-import { cx } from "../_theme";
+import { cx, useTheme } from "../_theme";
 import { Loader } from "../Loader";
 import { LoadingOverlayProps } from "./types";
-import { useTheme } from "@byteform/core";
 
 export const LoadingOverlay = ({
     visible = true,
