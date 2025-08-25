@@ -63,7 +63,7 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
                 role="tablist"
                 aria-orientation={orientation}
                 className={cx(
-                    "relative flex gap-1",
+                    "relative",
                     theme === "light"
                         ? "border-[var(--byteform-light-border)]"
                         : "border-[var(--byteform-dark-border)]",
