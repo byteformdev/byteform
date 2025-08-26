@@ -2,6 +2,7 @@ import "./style.css";
 
 export * from "./_theme";
 export * from "./_hooks";
+export * from "./_utils";
 
 export * from "./Accordion";
 export * from "./Anchor";
@@ -49,6 +50,7 @@ export * from "./Select";
 export * from "./Separator";
 export * from "./SimpleGrid";
 export * from "./Slider";
+export * from "./Stack";
 export * from "./Stepper";
 export * from "./Switch";
 export * from "./Table";
@@ -58,6 +60,7 @@ export * from "./TagsInput";
 export * from "./Text";
 export * from "./Textarea";
 export * from "./Timeline";
+export * from "./Title";
 export * from "./Tooltip";
 export * from "./Transition";
 export * from "./TreeView";
