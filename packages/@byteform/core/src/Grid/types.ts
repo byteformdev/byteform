@@ -35,7 +35,7 @@ export type GridItemAlign =
 
 export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
     children: ReactNode;
-    columns?: GridColumns;
+    cols?: GridColumns;
     gap?: GridGap;
     gapY?: GridGap;
     gapX?: GridGap;
@@ -48,7 +48,7 @@ export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
     alignItems?: GridAlignItems;
     component?: ElementType;
     className?: string;
-    responsive?: {
+    breakpoints?: {
         xs?: GridColumns;
         sm?: GridColumns;
         md?: GridColumns;
@@ -67,7 +67,7 @@ export interface GridColProps extends React.HTMLAttributes<HTMLDivElement> {
     align?: GridItemAlign;
     component?: ElementType;
     className?: string;
-    responsive?: {
+    breakpoints?: {
         xs?: GridColumns;
         sm?: GridColumns;
         md?: GridColumns;

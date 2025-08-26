@@ -154,7 +154,7 @@ export const GridCol = forwardRef<HTMLDivElement, GridColProps>(
             align,
             className,
             component: Component,
-            responsive,
+            breakpoints,
             ...props
         },
         ref
@@ -163,8 +163,8 @@ export const GridCol = forwardRef<HTMLDivElement, GridColProps>(
 
         const Element = Component || "div";
 
-        const responsiveClasses = responsive
-            ? Object.entries(responsive)
+        const responsiveClasses = breakpoints
+            ? Object.entries(breakpoints)
                   .map(([breakpoint, spanValue]) => {
                       if (
                           spanValue &&

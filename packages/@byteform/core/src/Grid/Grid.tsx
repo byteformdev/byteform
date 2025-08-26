@@ -153,7 +153,7 @@ const GridComponent = forwardRef<HTMLDivElement, GridProps>(
     (
         {
             children,
-            columns = 1,
+            cols = 1,
             gap,
             gapX,
             gapY,
@@ -166,7 +166,7 @@ const GridComponent = forwardRef<HTMLDivElement, GridProps>(
             alignItems,
             className,
             component: Component,
-            responsive,
+            breakpoints,
             style,
             ...props
         },
@@ -176,8 +176,8 @@ const GridComponent = forwardRef<HTMLDivElement, GridProps>(
 
         const Element = Component || "div";
 
-        const responsiveClasses = responsive
-            ? Object.entries(responsive)
+        const responsiveClasses = breakpoints
+            ? Object.entries(breakpoints)
                   .map(([breakpoint, cols]) => {
                       if (
                           cols &&
@@ -206,7 +206,7 @@ const GridComponent = forwardRef<HTMLDivElement, GridProps>(
                 ref={ref}
                 className={cx(
                     "grid",
-                    !autoFit && columnStyles[columns],
+                    !autoFit && columnStyles[cols],
                     gap && gapStyles[gap],
                     gapX && `gap-x-${gapStyles[gapX].split("-")[1]}`,
                     gapY && `gap-y-${gapStyles[gapY].split("-")[1]}`,
