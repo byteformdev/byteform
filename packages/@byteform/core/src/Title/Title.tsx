@@ -111,10 +111,10 @@ export const Title = forwardRef<HTMLHeadingElement, TitleProps>(
         ref
     ) => {
         const { theme, cx } = useTheme();
-        const Component = `h${order}` as keyof JSX.IntrinsicElements;
+        const Element = `h${order}` as any;
 
         return (
-            <Component
+            <Element
                 ref={ref}
                 className={cx(
                     dimmed &&
@@ -133,7 +133,7 @@ export const Title = forwardRef<HTMLHeadingElement, TitleProps>(
                 {...props}
             >
                 {children}
-            </Component>
+            </Element>
         );
     }
 );
