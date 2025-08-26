@@ -4,7 +4,14 @@ import { useTheme } from "../_theme";
 
 export const Center = forwardRef<HTMLDivElement, CenterProps>(
     (
-        { children, inline = false, className, component: Component, ...props },
+        {
+            children,
+            inline = false,
+            component: Component,
+            absolute = false,
+            className,
+            ...props
+        },
         ref
     ) => {
         const { cx } = useTheme();
@@ -17,6 +24,8 @@ export const Center = forwardRef<HTMLDivElement, CenterProps>(
                 className={cx(
                     "flex justify-center items-center",
                     inline && "inline-flex",
+                    absolute &&
+                        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
                     className
                 )}
                 {...props}
