@@ -28,7 +28,7 @@ export interface GroupProps extends React.HTMLAttributes<HTMLDivElement> {
     preventGrowOverflow?: boolean;
     component?: ElementType;
     className?: string;
-    responsive?: {
+    breakpoints?: {
         xs?: Partial<
             Pick<GroupProps, "direction" | "justify" | "align" | "gap" | "wrap">
         >;

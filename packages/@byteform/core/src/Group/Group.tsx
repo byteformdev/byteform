@@ -246,7 +246,7 @@ export const Group = forwardRef<HTMLDivElement, GroupProps>(
             preventGrowOverflow = false,
             className,
             component: Component,
-            responsive,
+            breakpoints,
             style,
             ...props
         },
@@ -265,10 +265,10 @@ export const Group = forwardRef<HTMLDivElement, GroupProps>(
 
         const responsiveClasses: string[] = [];
 
-        if (responsive) {
-            Object.entries(responsive).forEach(
+        if (breakpoints) {
+            Object.entries(breakpoints).forEach(
                 ([breakpoint, breakpointProps]) => {
-                    const bp = breakpoint as keyof typeof responsive;
+                    const bp = breakpoint as keyof typeof breakpoints;
 
                     if (breakpointProps?.direction) {
                         responsiveClasses.push(
