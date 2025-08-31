@@ -2,7 +2,6 @@ import { forwardRef } from "react";
 import { TagProps, TagSize } from "./types";
 import { useTheme } from "../_theme";
 import { IconX } from "@tabler/icons-react";
-import { IconButton } from "../IconButton";
 
 const sizeClasses = {
     xs: "text-xs px-1.5 py-0.5",
