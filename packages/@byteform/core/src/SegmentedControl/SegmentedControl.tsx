@@ -1,13 +1,34 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, {
+    useState,
+    useCallback,
+    useRef,
+    useEffect,
+    useMemo
+} from "react";
 import { SegmentedControlProps, SegmentedControlSize } from "./types";
 import { useTheme } from "../_theme";
 
 const sizeStyles = {
-    xs: "text-xs px-1 py-0.5 h-4",
-    sm: "text-xs px-2 py-1 h-5",
-    md: "text-sm px-3 py-1.5 h-6",
-    lg: "text-base px-4 py-2 h-8",
-    xl: "text-lg px-5 py-2.5 h-10"
+    xs: {
+        container: "p-0.5 gap-0.5",
+        item: "text-xs px-2 py-1 min-h-6"
+    },
+    sm: {
+        container: "p-1 gap-1",
+        item: "text-xs px-2.5 py-1 min-h-6"
+    },
+    md: {
+        container: "p-1 gap-1",
+        item: "text-sm px-2.5 py-1.5 min-h-7"
+    },
+    lg: {
+        container: "p-1 gap-1.5",
+        item: "text-base px-3 py-2 min-h-8"
+    },
+    xl: {
+        container: "p-1 gap-2",
+        item: "text-lg px-4 py-2.5 min-h-10"
+    }
 };
 
 const getSize = (size: SegmentedControlSize) => {
@@ -23,11 +44,12 @@ export const SegmentedControl = ({
     orientation = "horizontal",
     disabled,
     fullWidth,
+    withAnimation = true,
     className,
     classNames,
     ...props
 }: SegmentedControlProps) => {
-    const { theme, cx } = useTheme();
+    const { theme, cx, settings } = useTheme();
     const containerRef = useRef<HTMLDivElement>(null);
     const indicatorRef = useRef<HTMLDivElement>(null);
 
@@ -40,6 +62,8 @@ export const SegmentedControl = ({
     );
 
     const currentValue = value !== undefined ? value : internalValue;
+    const sizeConfig = useMemo(() => getSize(size), [size]);
+    const useAnimations = withAnimation;
 
     const updateIndicator = useCallback(() => {
         if (!containerRef.current || !indicatorRef.current) return;
@@ -53,21 +77,20 @@ export const SegmentedControl = ({
             const activeRect = activeButton.getBoundingClientRect();
 
             const newStyle: React.CSSProperties = {
-                "--indicator-left": `${activeRect.left - containerRect.left}px`,
-                "--indicator-top":
-                    orientation === "horizontal"
-                        ? "4px"
-                        : `${activeRect.top - containerRect.top}px`,
-                "--indicator-width": `${activeRect.width}px`,
-                "--indicator-height": `${activeRect.height}px`
-            } as React.CSSProperties;
+                left: `${activeRect.left - containerRect.left}px`,
+                top: `${activeRect.top - containerRect.top}px`,
+                width: `${activeRect.width}px`,
+                height: `${activeRect.height}px`,
+                opacity: 1
+            };
 
             setIndicatorStyle(newStyle);
         }
-    }, [currentValue, orientation]);
+    }, [currentValue]);
 
     useEffect(() => {
-        updateIndicator();
+        const timeoutId = setTimeout(updateIndicator, 50);
+        return () => clearTimeout(timeoutId);
     }, [updateIndicator]);
 
     useEffect(() => {
@@ -88,9 +111,60 @@ export const SegmentedControl = ({
         [disabled, value, onChange]
     );
 
+    const getItemStyles = (isActive: boolean, isDisabled: boolean) => {
+        const baseStyles = [
+            "relative flex items-center justify-center gap-2 font-medium outline-none z-10 select-none rounded-md",
+            sizeConfig.item,
+            useAnimations && "transition-all duration-200 ease-in-out",
+            fullWidth && "flex-1", // Apply flex-1 to all items when fullWidth is true
+            theme === "light"
+                ? "text-[var(--byteform-light-text)]"
+                : "text-[var(--byteform-dark-text)]"
+        ];
+
+        if (isDisabled) {
+            return cx([...baseStyles, "opacity-60 cursor-not-allowed"]);
+        }
+
+        if (isActive) {
+            return cx([
+                ...baseStyles,
+                "cursor-pointer",
+                theme === "light"
+                    ? "text-[var(--byteform-light-text)]"
+                    : "text-white",
+                !useAnimations &&
+                    (theme === "light"
+                        ? "bg-[var(--byteform-light-background-hover)]"
+                        : "bg-[var(--byteform-dark-background-hover)]")
+            ]);
+        }
+
+        return cx([
+            ...baseStyles,
+            "cursor-pointer",
+            theme === "light"
+                ? "text-[var(--byteform-light-hint)] hover:text-[var(--byteform-light-text)]"
+                : "text-[var(--byteform-dark-hint)] hover:text-[var(--byteform-dark-text)]",
+            useAnimations &&
+                (theme === "light"
+                    ? "hover:bg-[var(--byteform-light-background-hover)]"
+                    : "hover:bg-[var(--byteform-dark-background-hover)]")
+        ]);
+    };
+
     const renderItem = (item: (typeof data)[0], index: number) => {
         const isActive = currentValue === item.value;
-        const isDisabled = disabled || item.disabled;
+        const isDisabled = disabled || item.disabled || false;
+
+        const handleKeyDown = (
+            event: React.KeyboardEvent<HTMLButtonElement>
+        ) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                handleItemClick(item.value, item.disabled);
+            }
+        };
 
         return (
             <button
@@ -100,21 +174,11 @@ export const SegmentedControl = ({
                 data-active={isActive}
                 disabled={isDisabled}
                 onClick={() => handleItemClick(item.value, item.disabled)}
+                onKeyDown={handleKeyDown}
+                aria-pressed={isActive}
+                role="button"
                 className={cx(
-                    "relative flex items-center justify-center gap-2 font-medium transition-all duration-200 ease-in-out outline-none z-10",
-                    getSize(size),
-                    !isDisabled && "cursor-pointer",
-                    isDisabled && "opacity-60 cursor-not-allowed",
-                    theme === "light"
-                        ? "text-[var(--byteform-light-hint)]"
-                        : "text-[var(--byteform-dark-hint)]",
-                    !isActive &&
-                        !isDisabled &&
-                        (theme === "light"
-                            ? "hover:text-[var(--byteform-light-text)]"
-                            : "hover:text-[var(--byteform-dark-text)]"),
-                    isActive && "text-white",
-                    fullWidth && "flex-1",
+                    getItemStyles(isActive, isDisabled),
                     classNames?.item,
                     isActive && classNames?.itemActive,
                     isDisabled && classNames?.itemDisabled
@@ -123,7 +187,7 @@ export const SegmentedControl = ({
                 {item.icon && (
                     <span
                         className={cx(
-                            "flex items-center",
+                            "flex items-center shrink-0",
                             classNames?.itemIcon
                         )}
                     >
@@ -133,7 +197,7 @@ export const SegmentedControl = ({
                 {item.label && (
                     <span
                         className={cx(
-                            "flex items-center",
+                            "flex items-center truncate",
                             classNames?.itemLabel
                         )}
                     >
@@ -144,39 +208,67 @@ export const SegmentedControl = ({
         );
     };
 
+    const getContainerStyles = () => {
+        const baseStyles = [
+            "relative overflow-hidden rounded-md",
+            sizeConfig.container,
+            fullWidth ? "flex w-full" : "inline-flex w-fit",
+            orientation === "horizontal" ? "flex-row" : "flex-col"
+        ];
+
+        const themeStyles =
+            theme === "light"
+                ? [
+                      "bg-[var(--byteform-light-background)]",
+                      "border border-[var(--byteform-light-border)]"
+                  ]
+                : [
+                      "bg-[var(--byteform-dark-background)]",
+                      "border border-[var(--byteform-dark-border)]"
+                  ];
+
+        const stateStyles = disabled ? ["opacity-60"] : [];
+
+        return cx([...baseStyles, ...themeStyles, ...stateStyles]);
+    };
+
+    const getIndicatorStyles = () => {
+        const baseStyles = ["absolute z-0 rounded-md pointer-events-none"];
+
+        const animationStyles = useAnimations
+            ? ["transition-all duration-200 ease-out"]
+            : [];
+
+        const themeStyles =
+            theme === "light"
+                ? ["bg-[var(--byteform-light-background-hover)]"]
+                : ["bg-[var(--byteform-dark-background-hover)]"];
+
+        return cx([...baseStyles, ...animationStyles, ...themeStyles]);
+    };
+
     return (
         <div
-            className={cx(
-                "relative rounded-md overflow-hidden p-1",
-                fullWidth ? "flex w-full" : "inline-flex w-fit",
-                theme === "light"
-                    ? "bg-[var(--byteform-light-background)] border border-[var(--byteform-light-border)]"
-                    : "bg-[var(--byteform-dark-background)] border border-[var(--byteform-dark-border)]",
-                orientation === "horizontal" ? "flex-row" : "flex-col",
-                disabled && "opacity-60",
-                classNames?.root,
-                className
-            )}
+            role="radiogroup"
+            aria-orientation={orientation}
+            className={cx(getContainerStyles(), classNames?.root, className)}
             ref={containerRef}
-            style={indicatorStyle}
             {...props}
         >
             <div
                 ref={indicatorRef}
-                className={cx(
-                    "absolute rounded transition-all duration-200 ease-in-out z-0",
-                    "left-[var(--indicator-left,0)] top-[var(--indicator-top,0)]",
-                    "w-[var(--indicator-width,0)] h-[var(--indicator-height,0)]",
-                    theme === "light"
-                        ? "bg-[var(--byteform-light-background-hover)]"
-                        : "bg-[var(--byteform-dark-background-hover)]",
-                    classNames?.indicator
-                )}
+                className={cx(getIndicatorStyles(), classNames?.indicator)}
+                style={{
+                    ...indicatorStyle,
+                    opacity: currentValue ? indicatorStyle.opacity || 1 : 0
+                }}
+                aria-hidden="true"
             />
 
             <div
                 className={cx(
-                    "relative flex z-10",
+                    "relative flex",
+                    sizeConfig.container,
                     orientation === "horizontal" ? "flex-row" : "flex-col",
                     fullWidth ? "w-full" : "w-fit",
                     classNames?.container

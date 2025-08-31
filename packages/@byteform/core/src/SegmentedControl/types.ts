@@ -31,6 +31,7 @@ export interface SegmentedControlProps
     orientation?: SegmentedControlOrientation;
     disabled?: boolean;
     fullWidth?: boolean;
+    withAnimation?: boolean;
     className?: string;
     classNames?: SegmentedControlClassNames;
 }
