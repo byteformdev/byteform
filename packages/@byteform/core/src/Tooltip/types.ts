@@ -27,6 +27,7 @@ export interface TooltipProps extends HTMLAttributes<HTMLDivElement> {
     arrowRadius?: number;
     multiline?: boolean;
     inline?: boolean;
+    compact?: boolean;
     trigger?: TooltipTrigger;
     openDelay?: number;
     closeDelay?: number;

@@ -34,6 +34,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
             multiline = false,
             trigger = "hover",
             inline = false,
+            compact = false,
             openDelay = 0,
             closeDelay = 0,
             zIndex = 1000,
@@ -159,6 +160,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
                             <div
                                 className={cx(
                                     "py-1 px-3 text-sm outline-none",
+                                    compact && "py-0.5 px-2 text-xs",
                                     theme === "light"
                                         ? "text-[var(--byteform-light-text)]"
                                         : "text-[var(--byteform-dark-text)]",
