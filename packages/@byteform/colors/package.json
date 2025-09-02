@@ -1,6 +1,6 @@
 {
     "name": "@byteform/colors",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "Library to easily generate 10 shades of given color",
     "repository": {
         "type": "github",
@@ -21,7 +21,7 @@
         "access": "public"
     },
     "peerDependencies": {
-        "@byteform/core": ">=0.5.1",
+        "@byteform/core": ">=0.5.2",
         "chroma-js": ">=3.1.2",
         "react": ">=18.0.0",
         "react-dom": ">=18.0.0"
