@@ -77,8 +77,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
         const getSwitchStyles = () => {
             const baseStyles = [
-                "relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out cursor-pointer border outline-none",
-                !disabled && "hover:border-[var(--byteform-primary-hover)]"
+                "relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out cursor-pointer border outline-none"
             ];
 
             const themeStyles =
@@ -97,8 +96,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             const checkedStyles = checked
                 ? [
                       "bg-[var(--byteform-primary)] border-[var(--byteform-primary)]",
-                      !disabled &&
-                          "hover:bg-[var(--byteform-primary-hover)] hover:border-[var(--byteform-primary-hover)]"
+                      !disabled && "hover:bg-[var(--byteform-primary-hover)]"
                   ]
                 : [];
 

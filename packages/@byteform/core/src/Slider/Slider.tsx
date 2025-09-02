@@ -234,11 +234,11 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
         const sizeClass = () => {
             const styles = {
-                xs: { track: "h-1", thumb: "h-3 w-3" },
-                sm: { track: "h-1.5", thumb: "h-4 w-4" },
-                md: { track: "h-2", thumb: "h-5 w-5" },
-                lg: { track: "h-3", thumb: "h-6 w-6" },
-                xl: { track: "h-4", thumb: "h-7 w-7" }
+                xs: { track: "h-0.5", thumb: "h-2 w-1" },
+                sm: { track: "h-1", thumb: "h-3 w-1" },
+                md: { track: "h-2", thumb: "h-4 w-1" },
+                lg: { track: "h-3", thumb: "h-5 w-1.5" },
+                xl: { track: "h-4", thumb: "h-6 w-2" }
             };
             return styles[size];
         };
@@ -450,14 +450,8 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
                         ref={thumbRef}
                         className={cx(
                             "absolute top-1/2 -translate-x-1/2 -translate-y-1/2",
-                            "rounded-full",
-                            theme === "light"
-                                ? "bg-[var(--byteform-white)] ring-[var(--byteform-primary)]"
-                                : "bg-[var(--byteform-primary)] ring-[var(--byteform-white)]",
-                            "ring-2 ring-inset",
+                            "rounded-full bg-[var(--byteform-white)]",
                             thumbChildren && "flex items-center justify-center",
-                            "cursor-grab active:cursor-grabbing",
-                            "transition-shadow duration-200",
                             !disabled && "hover:shadow-md focus:shadow-md",
                             disabled && "cursor-not-allowed",
                             "z-10",
@@ -467,8 +461,6 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
                         )}
                         style={{
                             left: `${position}%`,
-                            width: `${thumbSize}px`,
-                            height: `${thumbSize}px`,
                             touchAction: "none"
                         }}
                         onMouseDown={handleMouseDown}

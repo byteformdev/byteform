@@ -5,32 +5,32 @@ import { IconCheck, IconMinus } from "@tabler/icons-react";
 
 const sizeClasses = {
     xs: {
-        checkbox: "w-3.5 h-3.5",
-        icon: 12,
+        checkbox: "w-3 h-3",
+        icon: 9,
         text: "text-xs",
         gap: "gap-2"
     },
     sm: {
         checkbox: "w-4 h-4",
-        icon: 14,
+        icon: 12,
         text: "text-sm",
         gap: "gap-2"
     },
     md: {
         checkbox: "w-5 h-5",
-        icon: 16,
+        icon: 14,
         text: "text-sm",
         gap: "gap-3"
     },
     lg: {
         checkbox: "w-6 h-6",
-        icon: 18,
+        icon: 16,
         text: "text-base",
         gap: "gap-3"
     },
     xl: {
         checkbox: "w-7 h-7",
-        icon: 20,
+        icon: 18,
         text: "text-lg",
         gap: "gap-4"
     }
@@ -47,8 +47,7 @@ const getStyles = (
     theme: "light" | "dark"
 ) => {
     const baseStyles = [
-        "relative inline-flex items-center justify-center rounded-md border transition-all duration-200 ease-in-out cursor-pointer outline-none",
-        !disabled && "hover:border-[var(--byteform-primary-hover)]"
+        "relative inline-flex items-center justify-center rounded-md border transition-all duration-200 ease-in-out cursor-pointer outline-none"
     ];
 
     const themeStyles =
@@ -68,8 +67,7 @@ const getStyles = (
         checked || indeterminate
             ? [
                   "bg-[var(--byteform-primary)] border-[var(--byteform-primary)]",
-                  !disabled &&
-                      "hover:bg-[var(--byteform-primary-hover)] hover:border-[var(--byteform-primary-hover)]"
+                  !disabled && "hover:bg-[var(--byteform-primary-hover)]"
               ]
             : [];
 
