@@ -62,14 +62,14 @@ export const HueSlider = ({
             role="slider"
         >
             <div
-                className="absolute rounded-full shadow-lg w-2 h-2 ring-2 ring-[var(--byteform-white)] shadow-sm"
+                className="absolute rounded-full shadow-lg w-1 h-3 bg-[var(--byteform-white)] shadow-sm"
                 style={{
                     left: `min(max(4px, ${
                         (value / 360) * 100
                     }%), calc(100% - 4px))`,
                     transform: "translateX(-50%)",
                     top: "50%",
-                    marginTop: "-4px"
+                    marginTop: "-6px"
                 }}
             />
         </div>

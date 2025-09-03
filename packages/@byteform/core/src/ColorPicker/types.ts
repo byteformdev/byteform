@@ -9,6 +9,7 @@ export type ColorPickerFormat =
     | "hsla"
     | "hsv"
     | "hsva";
+type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 export interface ColorPickerClassNames {
     root?: string;
@@ -33,6 +34,7 @@ export interface ColorPickerProps
     hideAlpha?: boolean;
     hidePreview?: boolean;
     swatches?: string[];
+    swatchesGridColumns?: GridColumns;
     className?: string;
     classNames?: ColorPickerClassNames;
 }

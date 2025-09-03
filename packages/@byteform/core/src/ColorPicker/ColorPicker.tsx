@@ -6,6 +6,7 @@ import { ColorSwatch } from "../ColorSwatch";
 import { Saturation } from "./Saturation/index";
 import { HueSlider } from "./HueSlider/index";
 import { AlphaSlider } from "./AlphaSlider/index";
+import { SimpleGrid } from "../SimpleGrid";
 
 const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
     const {
@@ -18,6 +19,7 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
         hideAlpha,
         hidePreview,
         swatches,
+        swatchesGridColumns = 8,
         className,
         classNames,
         ...rest
@@ -79,7 +81,7 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
                 color={swatch}
                 onClick={() => handleSwatchClick(swatch)}
                 className={cx(
-                    "cursor-pointer rounded-md hover:scale-110 transition-transform w-5 h-5 border border-[var(--byteform-light-border)]",
+                    "cursor-pointer rounded-md hover:scale-110 transition-transform",
                     classNames?.swatch
                 )}
             />
@@ -151,9 +153,9 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
                 )}
 
                 {swatches && swatches.length > 0 && (
-                    <div className="flex items-center gap-1 flex-wrap">
+                    <SimpleGrid cols={swatchesGridColumns}>
                         {swatches.map(renderSwatch)}
-                    </div>
+                    </SimpleGrid>
                 )}
             </div>
         </div>

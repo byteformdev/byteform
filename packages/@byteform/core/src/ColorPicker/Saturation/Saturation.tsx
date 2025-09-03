@@ -75,7 +75,7 @@ export const Saturation = ({
                 }}
             />
             <div
-                className="absolute w-3 h-3 ring-2 ring-[var(--byteform-white)] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg"
+                className="absolute w-2 h-2 ring-2 ring-[var(--byteform-white)] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg"
                 style={{
                     left: `${value.s * 100}%`,
                     top: `${(1 - value.v) * 100}%`
