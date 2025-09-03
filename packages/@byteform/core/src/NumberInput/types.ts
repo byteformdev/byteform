@@ -6,6 +6,8 @@ export interface NumberInputClassNames extends InputClassNames {
     controlButtons?: string;
 }
 
+export type NumberInputControlsPosition = "left" | "right";
+
 export interface NumberInputProps
     extends Omit<InputProps, "type" | "onChange" | "classNames" | "value"> {
     min?: number;
@@ -16,6 +18,7 @@ export interface NumberInputProps
     onChange?: (value: number) => void;
     defaultValue?: number;
     hideControls?: boolean;
+    controlsPosition?: NumberInputControlsPosition;
     allowDecimal?: boolean;
     allowNegative?: boolean;
     decimalScale?: number;

@@ -12,6 +12,7 @@ export const NumberInput = ({
     value,
     defaultValue = 0,
     hideControls,
+    controlsPosition = "right",
     onChange,
     disabled,
     classNames,
@@ -308,7 +309,9 @@ export const NumberInput = ({
     const controlButtons = (
         <div
             className={cx(
-                "inline-flex flex-col max-h-full h-full border-l",
+                "inline-flex flex-col max-h-full h-full",
+                controlsPosition === "right" && "border-l",
+                controlsPosition === "left" && "border-r",
                 theme === "light"
                     ? "border-[var(--byteform-light-border)]"
                     : "border-[var(--byteform-dark-border)]",
@@ -322,7 +325,7 @@ export const NumberInput = ({
                     theme === "light"
                         ? "text-[var(--byteform-light-text)]"
                         : "text-[var(--byteform-dark-text)]",
-                    isDecrementDisabled
+                    isIncrementDisabled
                         ? "opacity-60 cursor-not-allowed"
                         : theme === "light"
                         ? "hover:bg-[var(--byteform-light-background-hover)]"
@@ -370,10 +373,30 @@ export const NumberInput = ({
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             onWheel={handleWheel}
-            rightSection={hideControls ? null : controlButtons}
+            rightSection={
+                hideControls
+                    ? null
+                    : controlsPosition === "right"
+                    ? controlButtons
+                    : null
+            }
+            leftSection={
+                hideControls
+                    ? null
+                    : controlsPosition === "left"
+                    ? controlButtons
+                    : null
+            }
             disabled={disabled}
             classNames={{
-                rightSection: "p-0 flex items-center justify-center",
+                leftSection:
+                    controlsPosition === "left"
+                        ? "p-0 flex items-center justify-center"
+                        : undefined,
+                rightSection:
+                    controlsPosition === "right"
+                        ? "p-0 flex items-center justify-center"
+                        : undefined,
                 ...classNames
             }}
             {...props}
