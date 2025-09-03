@@ -1,6 +1,6 @@
 {
     "name": "@byteform/core",
-    "version": "0.5.2",
+    "version": "0.6.1",
     "description": "React components library focused on simplicity and ease of use",
     "repository": {
         "type": "github",
