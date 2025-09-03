@@ -82,7 +82,14 @@ const getTruncate = (truncate: TextTruncate) => {
     return truncate === "start" ? "truncate rtl text-left" : "truncate";
 };
 
-export const Text = forwardRef<HTMLParagraphElement, TextProps>(
+export const Text = forwardRef<
+    | HTMLParagraphElement
+    | HTMLSpanElement
+    | HTMLAnchorElement
+    | HTMLHeadingElement
+    | HTMLDivElement,
+    TextProps
+>(
     (
         {
             size,
@@ -94,7 +101,7 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
             inherit,
             italic,
             underline,
-            span,
+            component,
             dimmed,
             className,
             children,
@@ -103,7 +110,7 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
         ref
     ) => {
         const { theme, cx } = useTheme();
-        const Component = span ? "span" : "p";
+        const Component = component ? component : ("p" as any);
 
         return (
             <Component
