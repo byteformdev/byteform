@@ -240,7 +240,7 @@ export const Group = forwardRef<HTMLDivElement, GroupProps>(
             direction = "row",
             wrap = "nowrap",
             justify = "start",
-            align = "center",
+            align = "stretch",
             gap = "md",
             grow = false,
             preventGrowOverflow = false,
@@ -323,7 +323,7 @@ export const Group = forwardRef<HTMLDivElement, GroupProps>(
             <Element
                 ref={ref}
                 className={cx(
-                    "flex w-full",
+                    "flex",
                     directionStyles[direction],
                     wrapStyles[wrap],
                     justifyStyles[justify],
