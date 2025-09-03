@@ -11,7 +11,8 @@
         "version:patch": "node scripts/versions.js patch",
         "version:minor": "node scripts/versions.js minor",
         "version:major": "node scripts/versions.js major",
-        "version:pre": "node scripts/versions.js prerelease"
+        "version:pre": "node scripts/versions.js prerelease",
+        "publish": "node scripts/publish.js"
     },
     "devDependencies": {
         "@types/node": "^20",
