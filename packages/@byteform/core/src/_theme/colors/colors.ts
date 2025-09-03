@@ -21,14 +21,14 @@ export const colors = {
     light: [
         "#ffffff",
         "#fafafa",
-        "#f4f4f5",
-        "#e5e7eb",
-        "#d4d4d8",
-        "#a1a1aa",
-        "#71717a",
-        "#52525b",
-        "#3f3f46",
-        "#27272a"
+        "#f5f5f5",
+        "#eeeeee",
+        "#e0e0e0",
+        "#d6d6d6",
+        "#c2c2c2",
+        "#adadad",
+        "#9a9a9a",
+        "#858585"
     ],
 
     gray: [
