@@ -130,7 +130,7 @@ export const ColorInput = ({
     );
 
     const eyedropperButton = (
-        <IconButton onClick={activateEyedropper}>
+        <IconButton onClick={activateEyedropper} useAnimation={false}>
             <IconPencil size={18} />
         </IconButton>
     );

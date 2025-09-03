@@ -50,7 +50,7 @@ export const Code: React.FC<CodeProps> = ({
                 theme === "light"
                     ? "border-[var(--byteform-light-border)]"
                     : "border-[var(--byteform-dark-border)]",
-                "relative group rounded-lg border overflow-hidden",
+                "relative group rounded-md border overflow-hidden",
                 classNames?.wrapper
             )}
         >

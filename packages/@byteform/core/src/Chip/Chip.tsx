@@ -40,11 +40,11 @@ const chipStylesConfig = {
     light: {
         filled: {
             checked: {
-                base: "bg-[var(--byteform-primary)] border-[var(--byteform-primary)] text-white",
+                base: "bg-[var(--byteform-primary)] text-white",
                 hover: "hover:bg-[var(--byteform-primary-hover)] hover:border-[var(--byteform-primary-hover)]"
             },
             unchecked: {
-                base: "bg-[var(--byteform-light-background)] border-[var(--byteform-light-border)] text-[var(--byteform-light-text)]",
+                base: "bg-[var(--byteform-light-background)] text-[var(--byteform-light-text)]",
                 hover: "hover:bg-[var(--byteform-light-background-hover)] hover:border-[var(--byteform-light-border-hover)]"
             }
         },
@@ -62,12 +62,12 @@ const chipStylesConfig = {
     dark: {
         filled: {
             checked: {
-                base: "bg-[var(--byteform-primary)] border-[var(--byteform-primary)] text-white",
+                base: "bg-[var(--byteform-primary)] text-white",
                 hover: "hover:bg-[var(--byteform-primary-hover)] hover:border-[var(--byteform-primary-hover)]"
             },
             unchecked: {
-                base: "bg-[var(--byteform-dark-background)] border-[var(--byteform-dark-border)] text-[var(--byteform-dark-text)]",
-                hover: "hover:bg-[var(--byteform-dark-background-hover)] hover:border-[var(--byteform-dark-border-hover)]"
+                base: "bg-[var(--byteform-dark-background)] text-[var(--byteform-dark-text)]",
+                hover: "hover:bg-[var(--byteform-dark-background-hover)]"
             }
         },
         outline: {
@@ -90,7 +90,8 @@ const getStyles = (
     theme: "light" | "dark"
 ) => {
     const baseStyles = [
-        "inline-flex items-center justify-center rounded-full border transition-all duration-200 ease-in-out cursor-pointer outline-none select-none font-medium"
+        "inline-flex items-center justify-center rounded-full transition-all duration-200 ease-in-out cursor-pointer outline-none select-none font-medium",
+        variant === "outline" && "border"
     ];
 
     const themeConfig = chipStylesConfig[theme];

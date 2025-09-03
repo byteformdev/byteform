@@ -94,15 +94,13 @@ export const TabsTab = forwardRef<HTMLButtonElement, TabsTabProps>(
                 onClick={handleClick}
                 onKeyDown={handleKeyDown}
                 className={cx(
-                    "relative inline-flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-150 ease-in-out outline-none focus:outline-none",
+                    "relative inline-flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 outline-none focus:outline-none",
                     grow && orientation === "horizontal" && "flex-1",
-                    orientation === "horizontal" && "rounded-t-md",
                     orientation === "vertical" && "justify-start w-full",
                     theme === "light"
-                        ? "text-[var(--byteform-light-text)] hover:bg-[var(--byteform-light-background-hover)]"
-                        : "text-[var(--byteform-dark-text)] hover:bg-[var(--byteform-dark-background-hover)]",
-                    disabled &&
-                        "opacity-60 cursor-not-allowed hover:bg-transparent",
+                        ? "text-[var(--byteform-light-text)]"
+                        : "text-[var(--byteform-dark-text)]",
+                    disabled && "opacity-60 cursor-not-allowed",
                     classNames?.tab,
                     className
                 )}

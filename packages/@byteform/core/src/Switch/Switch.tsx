@@ -5,36 +5,41 @@ import { useTheme } from "../_theme";
 const sizeClasses = {
     xs: {
         track: "w-8 h-4",
-        thumb: "w-3 h-3",
+        thumb: "w-2.5 h-2.5",
         thumbTranslate: "translate-x-4",
+        thumbOffset: "top-0.5 left-0.5",
         trackLabel: "text-[8px]",
         label: "text-xs"
     },
     sm: {
         track: "w-9 h-5",
-        thumb: "w-4 h-4",
+        thumb: "w-3 h-3",
         thumbTranslate: "translate-x-4",
+        thumbOffset: "left-1",
         trackLabel: "text-[9px]",
         label: "text-xs"
     },
     md: {
         track: "w-11 h-6",
-        thumb: "w-5 h-5",
+        thumb: "w-4 h-4",
         thumbTranslate: "translate-x-5",
+        thumbOffset: "left-1",
         trackLabel: "text-xs",
         label: "text-sm"
     },
     lg: {
         track: "w-12 h-7",
-        thumb: "w-6 h-6",
+        thumb: "w-5 h-5",
         thumbTranslate: "translate-x-5",
+        thumbOffset: "left-1",
         trackLabel: "text-sm",
         label: "text-base"
     },
     xl: {
         track: "w-14 h-8",
-        thumb: "w-7 h-7",
-        thumbTranslate: "translate-x-6",
+        thumb: "w-6 h-6",
+        thumbTranslate: "translate-x-5",
+        thumbOffset: "left-1.5",
         trackLabel: "text-base",
         label: "text-lg"
     }
@@ -245,7 +250,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                                         ? "bg-[var(--byteform-white)] text-[var(--byteform-black)] ring-0"
                                         : "ring-[var(--byteform-white)]",
                                     currentSize.thumb,
-                                    "top-[1px] left-[1px]",
+                                    currentSize.thumbOffset,
                                     checked && currentSize.thumbTranslate,
                                     classNames?.thumb,
                                     checked && classNames?.activeThumb

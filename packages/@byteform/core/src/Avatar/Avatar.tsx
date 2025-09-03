@@ -6,10 +6,10 @@ import { AvatarGroup } from "./AvatarGroup";
 
 const sizeClasses = {
     xs: "text-xs w-6 h-6",
-    sm: "text-sm w-8 h-8",
-    md: "text-base w-10 h-10",
-    lg: "text-lg w-12 h-12",
-    xl: "text-xl w-14 h-14"
+    sm: "text-sm w-7 h-7",
+    md: "text-base w-9 h-9",
+    lg: "text-lg w-10 h-10",
+    xl: "text-xl w-12 h-12"
 };
 
 const getSize = (size: keyof typeof sizeClasses) =>
@@ -17,9 +17,9 @@ const getSize = (size: keyof typeof sizeClasses) =>
 
 const iconSizes: Record<keyof typeof sizeClasses, string> = {
     xs: "w-4 h-4",
-    sm: "w-6 h-6",
-    md: "w-8 h-8",
-    lg: "w-9 h-9",
+    sm: "w-5 h-5",
+    md: "w-7 h-7",
+    lg: "w-8 h-8",
     xl: "w-10 h-10"
 };
 

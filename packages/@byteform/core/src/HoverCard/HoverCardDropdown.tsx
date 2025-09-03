@@ -34,7 +34,7 @@ export const HoverCardDropdown = forwardRef<
                         role="dialog"
                         aria-labelledby={ctx.targetId}
                         className={cx(
-                            "relative rounded-md border shadow-md p-3 transition-opacity duration-200",
+                            "relative rounded-md border shadow-md p-1 transition-opacity duration-200",
                             ctx.opened ? "opacity-100" : "opacity-0",
                             theme === "light"
                                 ? "bg-[var(--byteform-light-background)] border-[var(--byteform-light-border)] text-[var(--byteform-light-text)]"

@@ -88,26 +88,37 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             );
         };
 
+        const getGrid = () =>
+            align === "center"
+                ? "grid-cols-[1fr_auto_1fr]"
+                : "grid-cols-[auto_1fr_auto]";
+
         const renderSection = (
             content: ReactNode,
             position: "left" | "right"
         ) => {
             if (!content) return null;
 
-            const baseClass = "flex items-center justify-center h-full";
+            const baseClass =
+                "row-start-1 flex items-center justify-center h-full";
             const sectionClass =
                 position === "left"
                     ? classNames?.leftSection
                     : classNames?.rightSection;
+            const gridPos =
+                position === "left"
+                    ? "col-start-1 justify-self-start"
+                    : "col-start-3 justify-self-end";
 
             return (
                 <div
                     className={cx(
                         baseClass,
+                        gridPos,
                         theme === "light"
                             ? "text-[var(--byteform-light-section)]"
                             : "text-[var(--byteform-dark-section)]",
-                        disabled && "cursor-not-allowed",
+                        (disabled || loading) && "cursor-not-allowed",
                         sectionClass
                     )}
                 >
@@ -122,14 +133,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             return <Loader {...loaderProps} />;
         };
 
-        const getAlign = () => {
-            const alignClasses = {
-                left: "justify-start",
-                center: "justify-center",
-                right: "justify-end"
-            };
-
-            return alignClasses[align] || alignClasses.center;
+        const getLabelJustify = () => {
+            switch (align) {
+                case "left":
+                    return "justify-start";
+                case "right":
+                    return "justify-end";
+                default:
+                    return "justify-center";
+            }
         };
 
         const getAnimation = () => {
@@ -153,10 +165,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         return (
             <Element
                 className={cx(
-                    "inline-flex items-center gap-2 font-medium cursor-pointer relative rounded-md whitespace-nowrap select-none outline-none transition-colors duration-150",
+                    "inline-grid items-center gap-2 font-medium cursor-pointer relative rounded-md whitespace-nowrap select-none outline-none transition-colors duration-150",
                     useAnimation && (!disabled || !loading) && getAnimation(),
                     getSize(size, compact),
                     getVariant(),
+                    getGrid(),
                     fullWidth && "w-full",
                     (disabled || loading) &&
                         "opacity-60 cursor-not-allowed active:translate-y-0",
@@ -175,9 +188,16 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                         : leftSection,
                     "left"
                 )}
-                <div className={cx("flex-1 flex items-center", getAlign())}>
+
+                <div
+                    className={cx(
+                        "row-start-1 col-start-2 flex items-center",
+                        getLabelJustify()
+                    )}
+                >
                     {children}
                 </div>
+
                 {renderSection(
                     loading && loaderPosition === "right"
                         ? renderLoader()

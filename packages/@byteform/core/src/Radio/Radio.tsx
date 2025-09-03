@@ -46,8 +46,7 @@ const getStyles = (
     theme: "light" | "dark"
 ) => {
     const baseStyles = [
-        "relative inline-flex items-center justify-center rounded-full border transition-all duration-200 ease-in-out cursor-pointer outline-none",
-        !disabled && "hover:border-[var(--byteform-primary-hover)]"
+        "relative inline-flex items-center justify-center rounded-full border transition-all duration-200 ease-in-out cursor-pointer outline-none"
     ];
 
     const themeStyles =
@@ -66,8 +65,7 @@ const getStyles = (
     const checkedStyles = checked
         ? [
               "bg-[var(--byteform-primary)] border-[var(--byteform-primary)]",
-              !disabled &&
-                  "hover:bg-[var(--byteform-primary-hover)] hover:border-[var(--byteform-primary-hover)]"
+              !disabled && "hover:bg-[var(--byteform-primary-hover)]"
           ]
         : [];
 

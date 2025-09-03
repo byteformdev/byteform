@@ -20,9 +20,9 @@ export const ColorSwatch = forwardRef<HTMLDivElement, ColorSwatchProps>(
         const transparencyGridStyle = {
             backgroundColor: "#ccc",
             backgroundImage: `
-                linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%),
-                linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%)
-            `,
+        linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%),
+        linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%)
+      `,
             backgroundSize: "12px 12px",
             backgroundPosition: "0 0, 6px 6px"
         };
@@ -35,11 +35,29 @@ export const ColorSwatch = forwardRef<HTMLDivElement, ColorSwatchProps>(
                     classNames?.root,
                     className
                 )}
-                style={backgroundGrid ? transparencyGridStyle : undefined}
                 {...props}
             >
+                {backgroundGrid && (
+                    <div
+                        className="absolute inset-0"
+                        style={{
+                            ...transparencyGridStyle,
+                            WebkitMaskImage:
+                                "radial-gradient(circle, #000 99%, transparent 100%)",
+                            WebkitMaskComposite: "destination-in",
+                            maskImage:
+                                "radial-gradient(circle, #000 99%, transparent 100%)",
+                            maskComposite: "intersect",
+                            borderRadius: "inherit"
+                        }}
+                    />
+                )}
+
                 <div
-                    className={cx("absolute inset-0", classNames?.colorOverlay)}
+                    className={cx(
+                        "absolute inset-0 rounded-inherit",
+                        classNames?.colorOverlay
+                    )}
                     style={{ backgroundColor: color }}
                 />
 

@@ -9,6 +9,7 @@ export const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
                 <div
                     style={{ paddingBottom: `${(1 / ratio) * 100}%` }}
                     className="block w-full"
+                    {...props}
                 />
                 <div className="absolute inset-0 w-full h-full">{children}</div>
             </div>

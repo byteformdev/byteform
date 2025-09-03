@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTheme } from "../_theme";
 import { PaginationProps } from "./types";
 import {
@@ -49,7 +49,7 @@ export const Pagination = ({
         return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     };
 
-    const getPageNumbers = () => {
+    const getPageNumbers = useMemo(() => {
         const totalNumbers = siblings * 2 + 3;
         const totalBlocks = totalNumbers + 2;
 
@@ -97,7 +97,7 @@ export const Pagination = ({
         }
 
         return getRange(1, total);
-    };
+    }, [siblings, boundaries, currentPage, total]);
 
     const getSize = () => {
         const styles = {
@@ -131,7 +131,7 @@ export const Pagination = ({
         return styles[size] || styles.md;
     };
 
-    const currentSize = getSize();
+    const currentSize = useMemo(() => getSize(), [size]);
 
     const paginationClass = "flex items-center gap-2";
     const paginationButtonClass = cx(
@@ -185,7 +185,7 @@ export const Pagination = ({
             )}
 
             {withPages ? (
-                getPageNumbers().map((pageNumber, i) => (
+                getPageNumbers.map((pageNumber, i: number) => (
                     <button
                         key={i}
                         className={cx(

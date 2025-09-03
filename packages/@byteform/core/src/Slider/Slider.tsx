@@ -450,7 +450,10 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
                         ref={thumbRef}
                         className={cx(
                             "absolute top-1/2 -translate-x-1/2 -translate-y-1/2",
-                            "rounded-full bg-[var(--byteform-white)]",
+                            "rounded-full",
+                            theme === "light"
+                                ? "bg-[var(--byteform-black)]"
+                                : "bg-[var(--byteform-white)]",
                             thumbChildren && "flex items-center justify-center",
                             !disabled && "hover:shadow-md focus:shadow-md",
                             disabled && "cursor-not-allowed",

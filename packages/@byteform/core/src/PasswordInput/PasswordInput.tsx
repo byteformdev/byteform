@@ -33,7 +33,11 @@ export const PasswordInput = ({
 
     const controlButton = visibilityToggle && (
         <div className="inline-flex items-center justify-center flex-col h-full outline-none">
-            <IconButton onClick={handleToggleVisibility} disabled={disabled}>
+            <IconButton
+                onClick={handleToggleVisibility}
+                disabled={disabled}
+                useAnimation={false}
+            >
                 {visibilityToggleIcon
                     ? visibilityToggleIcon(isVisible)
                     : eyeIcon(isVisible)}

@@ -1,13 +1,13 @@
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
 import { BadgeProps, BadgeVariant } from "./types";
 import { useTheme } from "../_theme";
 
 const sizeClasses = {
-    xs: "text-[10px] px-1.5 py-0.5 min-h-[16px]",
-    sm: "text-xs px-2 py-0.5 min-h-[20px]",
-    md: "text-sm px-2.5 py-1 min-h-[24px]",
-    lg: "text-sm px-3 py-1.5 min-h-[28px]",
-    xl: "text-base px-3.5 py-2 min-h-[32px]"
+    xs: "text-[11px] px-1 py-0.5 min-h-[16px]",
+    sm: "text-xs px-2 py-1 min-h-[20px]",
+    md: "text-sm px-2.5 py-1.5 min-h-[24px]",
+    lg: "text-sm px-3 py-2 min-h-[28px]",
+    xl: "text-base px-3.5 py-2.5 min-h-[32px]"
 };
 
 const getSize = (size: keyof typeof sizeClasses) =>
@@ -45,20 +45,20 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
         ) => {
             if (!content) return null;
 
-            const getPosition = () => {
+            const getPosition = useMemo(() => {
                 switch (position) {
                     case "right":
                         return "ml-2";
                     default:
                         return "mr-2";
                 }
-            };
+            }, [position]);
 
             return (
                 <div
                     className={cx(
                         "inline-flex items-center",
-                        getPosition(),
+                        getPosition,
                         classNames?.section
                     )}
                 >
