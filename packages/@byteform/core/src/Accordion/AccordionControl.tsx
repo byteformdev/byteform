@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { AccordionControlProps } from "./types";
 import { useAccordion, useAccordionItem } from "./context";
 import { useTheme } from "../_theme";
-import { IconChevronDown } from "@tabler/icons-react";
+import { IconChevronRight } from "@tabler/icons-react";
 
 export const AccordionControl = forwardRef<
     HTMLButtonElement,
@@ -21,12 +21,12 @@ export const AccordionControl = forwardRef<
     };
 
     const chevronElement = accordion.chevronIcon || (
-        <IconChevronDown size={16} />
+        <IconChevronRight size={16} />
     );
 
     const chevronRotation =
         item.isActive && !accordion.disableChevronRotation
-            ? "rotate-180"
+            ? "rotate-90"
             : "rotate-0";
 
     return (
