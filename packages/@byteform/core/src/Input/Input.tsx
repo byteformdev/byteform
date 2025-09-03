@@ -432,7 +432,6 @@ export const Input = ({
                     />
                 );
 
-            case "input":
             default:
                 return (
                     <input
