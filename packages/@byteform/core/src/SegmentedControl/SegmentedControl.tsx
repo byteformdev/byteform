@@ -11,23 +11,23 @@ import { useTheme } from "../_theme";
 const sizeStyles = {
     xs: {
         container: "p-0.5 gap-0.5",
-        item: "text-xs px-2 py-1 min-h-6"
+        item: "text-xs px-1 py-0.5 min-h-6"
     },
     sm: {
         container: "p-1 gap-1",
-        item: "text-xs px-2.5 py-1 min-h-6"
+        item: "text-xs px-2 py-1 min-h-7"
     },
     md: {
         container: "p-1 gap-1",
-        item: "text-sm px-2.5 py-1.5 min-h-7"
+        item: "text-sm px-3 py-1.5 min-h-8"
     },
     lg: {
         container: "p-1 gap-1.5",
-        item: "text-base px-3 py-2 min-h-8"
+        item: "text-base px-4 py-2 min-h-9"
     },
     xl: {
         container: "p-1 gap-2",
-        item: "text-lg px-4 py-2.5 min-h-10"
+        item: "text-lg px-5 py-3 min-h-10"
     }
 };
 
@@ -113,10 +113,10 @@ export const SegmentedControl = ({
 
     const getItemStyles = (isActive: boolean, isDisabled: boolean) => {
         const baseStyles = [
-            "relative flex items-center justify-center gap-2 font-medium outline-none z-10 select-none rounded-md",
+            "relative flex items-center justify-center gap-2 font-medium outline-none select-none rounded-md",
             sizeConfig.item,
             useAnimations && "transition-all duration-200 ease-in-out",
-            fullWidth && "flex-1", // Apply flex-1 to all items when fullWidth is true
+            fullWidth && "flex-1",
             theme === "light"
                 ? "text-[var(--byteform-light-text)]"
                 : "text-[var(--byteform-dark-text)]"
@@ -210,22 +210,15 @@ export const SegmentedControl = ({
 
     const getContainerStyles = () => {
         const baseStyles = [
-            "relative overflow-hidden rounded-md",
-            sizeConfig.container,
+            "relative overflow-hidden rounded-md p-1",
             fullWidth ? "flex w-full" : "inline-flex w-fit",
             orientation === "horizontal" ? "flex-row" : "flex-col"
         ];
 
         const themeStyles =
             theme === "light"
-                ? [
-                      "bg-[var(--byteform-light-background)]",
-                      "border border-[var(--byteform-light-border)]"
-                  ]
-                : [
-                      "bg-[var(--byteform-dark-background)]",
-                      "border border-[var(--byteform-dark-border)]"
-                  ];
+                ? ["bg-[var(--byteform-light-background)]"]
+                : ["bg-[var(--byteform-dark-background)]"];
 
         const stateStyles = disabled ? ["opacity-60"] : [];
 
