@@ -44,7 +44,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
         },
         ref
     ) => {
-        const { theme, cx } = useTheme();
+        const { theme, cx, settings } = useTheme();
 
         const [open, setOpen] = useState(opened || false);
         const arrowRef = useRef<SVGSVGElement>(null);
@@ -118,6 +118,8 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
             } as any
         );
 
+        const isCompact = compact || settings.compact?.tooltip;
+
         const tooltipElement = open && (
             <div
                 style={{
@@ -160,7 +162,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
                             <div
                                 className={cx(
                                     "py-1 px-3 text-sm outline-none",
-                                    compact && "py-0.5 px-2 text-xs",
+                                    isCompact && "py-0.5 px-2 text-xs",
                                     theme === "light"
                                         ? "text-[var(--byteform-light-text)]"
                                         : "text-[var(--byteform-dark-text)]",
