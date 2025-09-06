@@ -1,28 +1,91 @@
-import { ElementType, forwardRef, ReactNode } from "react";
+import { ElementType, forwardRef, ReactNode, useMemo } from "react";
 import { ButtonProps, ButtonSize } from "./types";
 import { useTheme } from "../_theme";
 import { Loader } from "../Loader";
 import { ButtonGroup } from "./ButtonGroup";
 
 const compactStyles = {
-    xs: "text-xs px-1 py-0.5 min-h-4",
-    sm: "text-sm px-2 py-1 min-h-6",
-    md: "text-base px-3 py-1.5 min-h-8",
-    lg: "text-lg px-4 py-2 min-h-10",
-    xl: "text-xl px-5 py-2.5 min-h-12"
+    xs: "text-xs px-2 py-0.5 min-h-6",
+    sm: "text-sm px-2.5 py-1 min-h-7",
+    md: "text-sm px-3 py-1.5 min-h-8",
+    lg: "text-base px-3.5 py-2 min-h-9",
+    xl: "text-lg px-4 py-2.5 min-h-10"
 };
 
 const styles = {
-    xs: "text-xs px-2 py-1 min-h-6",
+    xs: "text-xs px-2 py-1 min-h-7",
     sm: "text-sm px-3 py-1.5 min-h-8",
-    md: "text-base px-4 py-2 min-h-10",
-    lg: "text-lg px-5 py-2.5 min-h-12",
-    xl: "text-xl px-6 py-3 min-h-14"
+    md: "text-base px-3 py-2 min-h-10",
+    lg: "text-lg px-4 py-2.5 min-h-12",
+    xl: "text-xl px-5 py-3 min-h-14"
 };
 
 const getSize = (size: ButtonSize, compact?: boolean) => {
-    if (compact) return compactStyles[size] || compactStyles.sm;
-    return styles[size] || styles.sm;
+    if (compact) return compactStyles[size] ?? compactStyles.sm;
+    return styles[size] ?? styles.sm;
+};
+
+const getVariant = (theme: "light" | "dark", variant: string) => {
+    const isLight = theme === "light";
+
+    const lightVariants = {
+        filled: "bg-[var(--byteform-light-background)] hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)]",
+        outline:
+            "border border-[var(--byteform-light-border)] hover:border-[var(--byteform-light-border-hover)] text-[var(--byteform-light-text)]",
+        dashed: "border border-dashed border-[var(--byteform-light-border)] hover:border-[var(--byteform-light-border-hover)] text-[var(--byteform-light-text)]",
+        danger: "bg-[var(--byteform-red-light-5)] hover:bg-[var(--byteform-red-light-6)] text-[var(--byteform-red-light-text)]",
+        ghost: "hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)]"
+    };
+
+    const darkVariants = {
+        filled: "bg-[var(--byteform-dark-background)] hover:bg-[var(--byteform-dark-background-hover)] text-[var(--byteform-dark-text)]",
+        outline:
+            "border border-[var(--byteform-dark-border)] hover:border-[var(--byteform-dark-border-hover)] text-[var(--byteform-dark-text)]",
+        dashed: "border border-dashed border-[var(--byteform-dark-border)] hover:border-[var(--byteform-dark-border-hover)] text-[var(--byteform-dark-text)]",
+        danger: "bg-[var(--byteform-red-light-5)] hover:bg-[var(--byteform-red-light-6)] text-[var(--byteform-red-2)]",
+        ghost: "hover:bg-[var(--byteform-dark-background-hover)] text-[var(--byteform-dark-text)]"
+    };
+
+    const palette = isLight ? lightVariants : darkVariants;
+    const variantClasses = palette[variant as keyof typeof palette];
+
+    return (
+        variantClasses || (isLight ? lightVariants.filled : darkVariants.filled)
+    );
+};
+
+const getGrid = (align: "left" | "center" | "right") =>
+    align === "center"
+        ? "grid-cols-[1fr_auto_1fr]"
+        : "grid-cols-[auto_1fr_auto]";
+
+const getLabelJustify = (align: "left" | "center" | "right") => {
+    switch (align) {
+        case "left":
+            return "justify-start";
+        case "right":
+            return "justify-end";
+        default:
+            return "justify-center";
+    }
+};
+
+const getAnimation = (
+    animation: string | undefined,
+    buttonAnimation: string | undefined
+) => {
+    const activeAnimation = animation || buttonAnimation || "transform";
+
+    switch (activeAnimation) {
+        case "opacity":
+            return "active:opacity-85";
+        case "scale":
+            return "active:scale-[0.98]";
+        case "bounce":
+            return "active:translate-y-0.5 active:scale-[0.98]";
+        default:
+            return "active:translate-y-0.5";
+    }
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -57,41 +120,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref
     ) => {
         const { theme, cx, settings } = useTheme();
-
-        const getVariant = () => {
-            const isLight = theme === "light";
-
-            const lightVariants = {
-                filled: "bg-[var(--byteform-light-background)] hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)]",
-                outline:
-                    "border border-[var(--byteform-light-border)] hover:border-[var(--byteform-light-border-hover)] text-[var(--byteform-light-text)]",
-                dashed: "border border-dashed border-[var(--byteform-light-border)] hover:border-[var(--byteform-light-border-hover)] text-[var(--byteform-light-text)]",
-                danger: "bg-[var(--byteform-red-light-5)] hover:bg-[var(--byteform-red-light-6)] text-[var(--byteform-red-light-text)]",
-                ghost: "hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)]"
-            };
-
-            const darkVariants = {
-                filled: "bg-[var(--byteform-dark-background)] hover:bg-[var(--byteform-dark-background-hover)] text-[var(--byteform-dark-text)]",
-                outline:
-                    "border border-[var(--byteform-dark-border)] hover:border-[var(--byteform-dark-border-hover)] text-[var(--byteform-dark-text)]",
-                dashed: "border border-dashed border-[var(--byteform-dark-border)] hover:border-[var(--byteform-dark-border-hover)] text-[var(--byteform-dark-text)]",
-                danger: "bg-[var(--byteform-red-light-5)] hover:bg-[var(--byteform-red-light-6)] text-[var(--byteform-red-2)]",
-                ghost: "hover:bg-[var(--byteform-dark-background-hover)] text-[var(--byteform-dark-text)]"
-            };
-
-            const palette = isLight ? lightVariants : darkVariants;
-            const variantClasses = palette[variant];
-
-            return (
-                variantClasses ||
-                (isLight ? lightVariants.filled : darkVariants.filled)
-            );
-        };
-
-        const getGrid = () =>
-            align === "center"
-                ? "grid-cols-[1fr_auto_1fr]"
-                : "grid-cols-[auto_1fr_auto]";
 
         const renderSection = (
             content: ReactNode,
@@ -133,32 +161,21 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             return <Loader {...loaderProps} />;
         };
 
-        const getLabelJustify = () => {
-            switch (align) {
-                case "left":
-                    return "justify-start";
-                case "right":
-                    return "justify-end";
-                default:
-                    return "justify-center";
-            }
-        };
+        const gridClasses = useMemo(() => getGrid(align), [align]);
+        const isCompact = compact || settings.compact?.button;
 
-        const getAnimation = () => {
-            const activeAnimation =
-                animation || settings.buttonAnimation || "transform";
-
-            switch (activeAnimation) {
-                case "opacity":
-                    return "active:opacity-85";
-                case "scale":
-                    return "active:scale-[0.98]";
-                case "bounce":
-                    return "active:translate-y-0.5 active:scale-[0.98]";
-                default:
-                    return "active:translate-y-0.5";
-            }
-        };
+        const sizeClasses = useMemo(
+            () => getSize(size, isCompact),
+            [size, isCompact]
+        );
+        const variantClasses = useMemo(
+            () => getVariant(theme, variant),
+            [theme, variant]
+        );
+        const animationClasses = useMemo(
+            () => getAnimation(animation, settings.buttonAnimation),
+            [animation, settings.buttonAnimation]
+        );
 
         const Element = Component as ElementType;
 
@@ -166,10 +183,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             <Element
                 className={cx(
                     "inline-grid items-center gap-2 font-medium cursor-pointer relative rounded-md whitespace-nowrap select-none outline-none transition-colors duration-150",
-                    useAnimation && (!disabled || !loading) && getAnimation(),
-                    getSize(size, compact),
-                    getVariant(),
-                    getGrid(),
+                    useAnimation && (!disabled || !loading) && animationClasses,
+                    sizeClasses,
+                    variantClasses,
+                    gridClasses,
                     fullWidth && "w-full",
                     (disabled || loading) &&
                         "opacity-60 cursor-not-allowed active:translate-y-0",
@@ -192,7 +209,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                 <div
                     className={cx(
                         "row-start-1 col-start-2 flex items-center",
-                        getLabelJustify()
+                        getLabelJustify(align)
                     )}
                 >
                     {children}
