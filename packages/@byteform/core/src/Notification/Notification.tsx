@@ -1,15 +1,84 @@
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
 import { NotificationProps } from "./types";
 import { useTheme } from "../_theme";
 import { Loader } from "../Loader";
 import { IconButton } from "../IconButton";
 import { IconX } from "@tabler/icons-react";
 
+const getIconPosition = (
+    iconPosition: NotificationProps["iconPosition"]
+): string => {
+    switch (iconPosition) {
+        case "top":
+            return "self-start";
+        case "bottom":
+            return "self-end";
+        default:
+            return "self-center";
+    }
+};
+
+const getCloseButtonPosition = (
+    closeButtonPosition: NotificationProps["closeButtonPosition"]
+): string => {
+    switch (closeButtonPosition) {
+        case "top":
+            return "self-start";
+        case "bottom":
+            return "self-end";
+        default:
+            return "self-center";
+    }
+};
+
+const getVariant = (
+    variant: NotificationProps["variant"]
+): { container: string; closeButton: string } => {
+    const variants = {
+        default: {
+            container: "",
+            closeButton: ""
+        },
+        success: {
+            container: "bg-[var(--byteform-green-6)]",
+            closeButton: "hover:bg-[var(--byteform-green-5)]"
+        },
+        error: {
+            container: "bg-[var(--byteform-red-6)]",
+            closeButton: "hover:bg-[var(--byteform-red-5)]"
+        },
+        warning: {
+            container: "bg-[var(--byteform-yellow-6)]",
+            closeButton: "hover:bg-[var(--byteform-yellow-5)]"
+        },
+        info: {
+            container: "bg-[var(--byteform-blue-6)]",
+            closeButton: "hover:bg-[var(--byteform-blue-5)]"
+        }
+    };
+
+    return variants[variant as keyof typeof variants] || variants.default;
+};
+
+const getSize = (size: NotificationProps["size"]): string => {
+    const sizes = {
+        xs: "text-xs px-2 py-1 gap-2",
+        sm: "text-sm px-3 py-1.5 gap-2.5",
+        md: "text-base px-4 py-2 gap-3",
+        lg: "text-lg px-5 py-2.5 gap-3.5",
+        xl: "text-xl px-6 py-3 gap-4"
+    };
+
+    return sizes[size as keyof typeof sizes] || sizes.md;
+};
+
 export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
     (
         {
             children,
             icon,
+            variant = "default",
+            size = "md",
             iconPosition = "center",
             loading,
             loaderProps = {
@@ -18,6 +87,7 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
             },
             onClose,
             title,
+            actions,
             hideCloseButton,
             closeButton,
             closeButtonPosition = "center",
@@ -34,37 +104,30 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
             onClose();
         };
 
-        const getIconPosition = () => {
-            switch (iconPosition) {
-                case "top":
-                    return "self-start";
-                case "bottom":
-                    return "self-end";
-                default:
-                    return "self-center";
-            }
-        };
+        const iconPositionClass = useMemo(
+            () => getIconPosition(iconPosition),
+            [iconPosition]
+        );
 
-        const getCloseButtonPosition = () => {
-            switch (closeButtonPosition) {
-                case "top":
-                    return "self-start";
-                case "bottom":
-                    return "self-end";
-                default:
-                    return "self-center";
-            }
-        };
+        const closeButtonPositionClass = useMemo(
+            () => getCloseButtonPosition(closeButtonPosition),
+            [closeButtonPosition]
+        );
+
+        const variantClass = useMemo(() => getVariant(variant), [variant]);
+        const sizeClass = useMemo(() => getSize(size), [size]);
 
         return (
             <div
                 ref={ref}
                 role="alert"
                 className={cx(
-                    "flex gap-3 p-3 rounded-md shadow-md border",
+                    "flex rounded-md shadow-md",
+                    sizeClass,
                     theme === "light"
-                        ? "bg-[var(--byteform-light-background)] text-[var(--byteform-light-text)] border-[var(--byteform-light-border)]"
-                        : "bg-[var(--byteform-dark-background)] text-[var(--byteform-dark-text)] border-[var(--byteform-dark-border)]",
+                        ? "bg-[var(--byteform-light-background)] text-[var(--byteform-light-text)]"
+                        : "bg-[var(--byteform-dark-background)] text-[var(--byteform-dark-text)]",
+                    variantClass.container,
                     className
                 )}
                 {...props}
@@ -73,7 +136,7 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
                     <div
                         className={cx(
                             "flex-shrink-0",
-                            getIconPosition(),
+                            iconPositionClass,
                             classNames?.icon
                         )}
                     >
@@ -101,19 +164,29 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
                     <div className={cx("text-sm", classNames?.content)}>
                         {children}
                     </div>
+
+                    {actions && (
+                        <div className={cx("text-sm", classNames?.actions)}>
+                            {actions}
+                        </div>
+                    )}
                 </div>
 
                 {!hideCloseButton && (
                     <div
                         className={cx(
                             "flex-shrink-0",
-                            getCloseButtonPosition()
+                            closeButtonPositionClass
                         )}
                     >
                         {closeButton || (
                             <IconButton
                                 onClick={handleClose}
-                                className={cx("h-fit", classNames?.closeButton)}
+                                className={cx(
+                                    "h-fit",
+                                    variantClass.closeButton,
+                                    classNames?.closeButton
+                                )}
                             >
                                 <IconX size={16} />
                             </IconButton>
