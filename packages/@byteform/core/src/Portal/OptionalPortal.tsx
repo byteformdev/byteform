@@ -4,11 +4,16 @@ import { OptionalPortalProps } from "./types";
 
 export const OptionalPortal = ({
     children,
-    withinPortal = false,
+    withinPortal = true,
+    target,
     ...others
 }: OptionalPortalProps) => {
     if (withinPortal) {
-        return <Portal {...others}>{children}</Portal>;
+        return (
+            <Portal target={target} {...others}>
+                {children}
+            </Portal>
+        );
     }
 
     return <>{children}</>;
