@@ -2,7 +2,9 @@ import {
     ComponentType,
     HTMLInputTypeAttribute,
     InputHTMLAttributes,
-    ReactElement
+    ReactElement,
+    TextareaHTMLAttributes,
+    SelectHTMLAttributes
 } from "react";
 
 export type InputComponent =
@@ -13,17 +15,13 @@ export type InputComponent =
     | ReactElement;
 export type InputSize = "xs" | "sm" | "md" | "lg" | "xl";
 
-export interface InputProps
-    extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "size"> {
-    // Component type
+interface BaseInputProps {
     component?: InputComponent;
 
-    // Appearance
     size?: InputSize;
     fullWidth?: boolean;
     unstyled?: boolean;
 
-    // Content
     label?: string;
     description?: string;
     error?: string;
@@ -31,17 +29,72 @@ export interface InputProps
     placeholder?: string;
     withAsterisk?: boolean;
 
-    // State
     required?: boolean;
     readOnly?: boolean;
     disabled?: boolean;
     autoFocus?: boolean;
 
-    // Input attributes
     type?: HTMLInputTypeAttribute;
     minLength?: number;
     maxLength?: number;
     pattern?: string;
+
+    options?: Array<{ value: string; label: string }>;
+    rows?: number;
+    cols?: number;
+    resize?: "none" | "both" | "horizontal" | "vertical";
+
+    leftSection?: React.ReactNode;
+    rightSection?: React.ReactNode;
+
+    containerRef?: React.Ref<HTMLDivElement>;
+    inputWrapperOrder?: string[];
+    debounce?: number;
+
+    ariaLabel?: string;
+    ariaDescribedBy?: string;
+    ariaControls?: string;
+
+    className?: string;
+    classNames?: InputClassNames;
+}
+
+interface InputHandlers {
+    onChange?: (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => void;
+    onFocus?: (
+        e: React.FocusEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => void;
+    onBlur?: (
+        e: React.FocusEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => void;
+    onKeyDown?: (
+        e: React.KeyboardEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => void;
+    onEnterPress?: (
+        e: React.KeyboardEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => void;
+    onWheel?: (
+        e: React.WheelEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => void;
+}
+
+export interface InputProps extends BaseInputProps, InputHandlers {
+    component?: InputComponent;
+
     inputMode?:
         | "none"
         | "text"
@@ -51,49 +104,40 @@ export interface InputProps
         | "numeric"
         | "decimal"
         | "search";
-    name?: string;
 
-    // Select/Textarea specific props
-    options?: Array<{ value: string; label: string }>;
-    rows?: number;
-    cols?: number;
-    resize?: "none" | "both" | "horizontal" | "vertical";
+    value?: string | number;
 
-    // Textarea autosize props
+    defaultValue?: string | number;
+
+    inputRef?: React.Ref<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >;
+
+    min?: number;
+    max?: number;
+    step?: number;
+
     autoSize?: boolean;
     minRows?: number;
     maxRows?: number;
 
-    // Custom sections
-    leftSection?: React.ReactNode;
-    rightSection?: React.ReactNode;
-
-    // Handlers
-    onChange?: (
-        e: React.ChangeEvent<
-            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-        >
-    ) => void;
-    onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
-    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-    onEnterPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-
-    // Refs and styling
-    value?: string;
-    containerRef?: React.Ref<HTMLDivElement>;
-    inputRef?: React.Ref<HTMLInputElement>;
-    inputWrapperOrder?: string[];
-    debounce?: number;
-
-    // Accessibility
-    ariaLabel?: string;
-    ariaDescribedBy?: string;
-    ariaControls?: string;
-
-    // Styling classnames
-    className?: string;
-    classNames?: InputClassNames;
+    accept?: string;
+    alt?: string;
+    autoComplete?: string;
+    capture?: boolean | "user" | "environment";
+    checked?: boolean;
+    crossOrigin?: string;
+    form?: string;
+    formAction?: string;
+    formEncType?: string;
+    formMethod?: string;
+    formNoValidate?: boolean;
+    formTarget?: string;
+    height?: number | string;
+    list?: string;
+    multiple?: boolean;
+    src?: string;
+    width?: number | string;
 }
 
 export interface InputClassNames {
