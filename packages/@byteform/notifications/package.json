@@ -1,6 +1,6 @@
 {
     "name": "@byteform/notifications",
-    "version": "0.6.3",
+    "version": "0.7.0",
     "description": "React notifications library focused on simplicity and ease of use",
     "repository": {
         "type": "github",
@@ -24,7 +24,7 @@
         "access": "public"
     },
     "peerDependencies": {
-        "@byteform/core": ">=0.6.3",
+        "@byteform/core": ">=0.7.0",
         "react": ">=18.0.0",
         "react-dom": ">=18.0.0"
     },
