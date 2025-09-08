@@ -47,6 +47,13 @@
     display: none;
 }
 
-.scroll-snap-align-start {
-    scroll-snap-align: start;
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+input[type="time"] {
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
 }
