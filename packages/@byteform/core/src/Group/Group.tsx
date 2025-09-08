@@ -41,6 +41,7 @@ const alignStyles: Record<GroupAlign, string> = {
 };
 
 const gapStyles: Record<string, string> = {
+    none: "gap-0",
     xs: "gap-1",
     sm: "gap-2",
     md: "gap-4",
@@ -197,6 +198,7 @@ const responsiveWrapStyles = {
 
 const responsiveGapStyles = {
     xs: {
+        none: "xs:gap-0",
         xs: "xs:gap-1",
         sm: "xs:gap-2",
         md: "xs:gap-4",
@@ -204,6 +206,7 @@ const responsiveGapStyles = {
         xl: "xs:gap-8"
     },
     sm: {
+        none: "sm:gap-0",
         xs: "sm:gap-1",
         sm: "sm:gap-2",
         md: "sm:gap-4",
@@ -211,6 +214,7 @@ const responsiveGapStyles = {
         xl: "sm:gap-8"
     },
     md: {
+        none: "md:gap-0",
         xs: "md:gap-1",
         sm: "md:gap-2",
         md: "md:gap-4",
@@ -218,6 +222,7 @@ const responsiveGapStyles = {
         xl: "md:gap-8"
     },
     lg: {
+        none: "lg:gap-0",
         xs: "lg:gap-1",
         sm: "lg:gap-2",
         md: "lg:gap-4",
@@ -225,6 +230,7 @@ const responsiveGapStyles = {
         xl: "lg:gap-8"
     },
     xl: {
+        none: "xl:gap-0",
         xs: "xl:gap-1",
         sm: "xl:gap-2",
         md: "xl:gap-4",

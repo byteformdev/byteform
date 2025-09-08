@@ -13,7 +13,7 @@ export type SimpleGridColumns =
     | 10
     | 11
     | 12;
-export type SimpleGridGap = "xs" | "sm" | "md" | "lg" | "xl";
+export type SimpleGridGap = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 
 export interface SimpleGridProps extends React.HTMLAttributes<HTMLDivElement> {
     children: ReactNode;

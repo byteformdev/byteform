@@ -13,6 +13,7 @@ import { useTheme } from "../_theme";
 import { GridCol } from "./GridCol";
 
 const gapStyles: Record<GridGap, string> = {
+    none: "gap-0",
     xs: "gap-1",
     sm: "gap-2",
     md: "gap-4",

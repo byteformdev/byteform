@@ -15,7 +15,7 @@ export type GroupJustify =
     | "evenly"
     | "stretch";
 export type GroupAlign = "start" | "end" | "center" | "baseline" | "stretch";
-export type GroupGap = "xs" | "sm" | "md" | "lg" | "xl" | number;
+export type GroupGap = "none" | "xs" | "sm" | "md" | "lg" | "xl" | number;
 
 export interface GroupProps extends React.HTMLAttributes<HTMLDivElement> {
     children: ReactNode;

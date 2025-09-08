@@ -1,7 +1,7 @@
 import { ElementType, ReactNode } from "react";
 
 export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-export type GridGap = "xs" | "sm" | "md" | "lg" | "xl";
+export type GridGap = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 export type GridFlow = "row" | "col" | "dense" | "row-dense" | "col-dense";
 export type GridJustify =
     | "start"

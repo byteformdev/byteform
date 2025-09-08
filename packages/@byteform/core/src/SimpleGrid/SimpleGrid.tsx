@@ -3,6 +3,7 @@ import { SimpleGridProps, SimpleGridColumns, SimpleGridGap } from "./types";
 import { cx } from "../_theme";
 
 const gapStyles: Record<SimpleGridGap, string> = {
+    none: "gap-0",
     xs: "gap-1",
     sm: "gap-2",
     md: "gap-4",
