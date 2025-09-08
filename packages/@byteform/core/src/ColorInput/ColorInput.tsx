@@ -142,10 +142,10 @@ export const ColorInput = ({
                 onChange={handleInputChange}
                 leftSection={hidePreview ? null : colorSwatch}
                 rightSection={showEyeDropper ? eyedropperButton : null}
-                inputRef={(node) => {
+                inputRef={(node: HTMLInputElement) => {
                     inputRef.current = node as HTMLInputElement;
                 }}
-                containerRef={(node) => {
+                containerRef={(node: HTMLDivElement) => {
                     containerRef.current = node;
                     refs.setReference(node);
                 }}

@@ -353,7 +353,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
             }
 
             if (multiple) {
-                return ""; // For multiple selection, we'll show pills instead
+                return "";
             }
 
             const currentValue = Array.isArray(selectedValue)
@@ -422,7 +422,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
             );
         };
 
-        const renderOption = (option: SelectOption, index: number) => {
+        const renderOption = (option: SelectOption) => {
             const isSelected = multiple
                 ? Array.isArray(selectedValue) &&
                   selectedValue.includes(option.value)
@@ -505,8 +505,8 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
                     )
                 ) : (
                     <div className="flex flex-col gap-1">
-                        {groupedOptions.noGroup.map((option, index) =>
-                            renderOption(option, index)
+                        {groupedOptions.noGroup.map((option) =>
+                            renderOption(option)
                         )}
 
                         {Object.entries(groupedOptions.groups).map(
@@ -523,8 +523,8 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
                                     >
                                         {groupName}
                                     </div>
-                                    {options.map((option, index) =>
-                                        renderOption(option, index)
+                                    {options.map((option) =>
+                                        renderOption(option)
                                     )}
                                 </div>
                             )

@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, {
+    useState,
+    useCallback,
+    useRef,
+    useEffect,
+    useMemo
+} from "react";
 import { Input } from "../Input/Input";
 import { NumberInputProps } from "./types";
 import { useTheme } from "../_theme";
@@ -30,6 +36,16 @@ export const NumberInput = ({
     const { theme, cx } = useTheme();
 
     const inputRef = useRef<HTMLInputElement>(null);
+
+    // Calculate the effective step based on precision
+    const effectiveStep = useMemo(() => {
+        if (precision > 0) {
+            // If precision is set, ensure step allows the precision level
+            const precisionStep = Math.pow(10, -precision);
+            return Math.min(step, precisionStep);
+        }
+        return step;
+    }, [step, precision]);
 
     const [internalValue, setInternalValue] = useState<number>(
         value !== undefined ? value : defaultValue
@@ -153,47 +169,27 @@ export const NumberInput = ({
                 return;
             }
 
-            const isValidChar = new RegExp(
-                `^[0-9${allowNegative ? "\\-" : ""}${
-                    allowDecimal ? "\\" + decimalSeparator : ""
-                }${thousandSeparator ? "\\" + thousandSeparator : ""}${
-                    prefix ? prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") : ""
-                }${
-                    suffix ? suffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") : ""
-                }]*$`
-            );
-
-            if (!isValidChar.test(valueString)) {
-                return;
-            }
-
-            if (allowDecimal && valueString === decimalSeparator) {
-                updateValue(0);
-                return;
-            }
-
+            // For type="number", the browser already handles validation
+            // so we can directly parse the numeric value
             if (allowNegative && valueString === "-") {
                 updateValue(0);
                 return;
             }
 
-            const newValue = parseValue(valueString);
-            updateValue(newValue);
+            const newValue = Number(valueString);
+            if (!isNaN(newValue)) {
+                updateValue(newValue);
+            }
         },
-        [
-            allowDecimal,
-            allowNegative,
-            decimalSeparator,
-            thousandSeparator,
-            prefix,
-            suffix,
-            parseValue,
-            updateValue
-        ]
+        [allowNegative, updateValue]
     );
 
     const handleBlur = useCallback(
-        (event: React.FocusEvent<HTMLInputElement>) => {
+        (
+            event: React.FocusEvent<
+                HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+            >
+        ) => {
             setIsTyping(false);
             setDisplayValue("");
             props.onBlur?.(event);
@@ -202,11 +198,15 @@ export const NumberInput = ({
     );
 
     const handleKeyDown = useCallback(
-        (event: React.KeyboardEvent<HTMLInputElement>) => {
+        (
+            event: React.KeyboardEvent<
+                HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+            >
+        ) => {
             if (allowKeyboard && !disabled) {
                 if (event.key === "ArrowUp") {
                     event.preventDefault();
-                    const newValue = currentValue + step;
+                    const newValue = currentValue + effectiveStep;
                     if (!allowNegative && newValue < 0) return;
                     updateValue(newValue);
                     return;
@@ -214,7 +214,7 @@ export const NumberInput = ({
 
                 if (event.key === "ArrowDown") {
                     event.preventDefault();
-                    const newValue = currentValue - step;
+                    const newValue = currentValue - effectiveStep;
                     if (!allowNegative && newValue < 0) return;
                     updateValue(newValue);
                     return;
@@ -233,7 +233,7 @@ export const NumberInput = ({
             allowKeyboard,
             disabled,
             currentValue,
-            step,
+            effectiveStep,
             allowNegative,
             updateValue,
             props.onKeyDown
@@ -241,16 +241,16 @@ export const NumberInput = ({
     );
 
     const increment = useCallback(() => {
-        const newValue = currentValue + step;
+        const newValue = currentValue + effectiveStep;
         if (!allowNegative && newValue < 0) return;
         updateValue(newValue);
-    }, [currentValue, step, allowNegative, updateValue]);
+    }, [currentValue, effectiveStep, allowNegative, updateValue]);
 
     const decrement = useCallback(() => {
-        const newValue = currentValue - step;
+        const newValue = currentValue - effectiveStep;
         if (!allowNegative && newValue < 0) return;
         updateValue(newValue);
-    }, [currentValue, step, allowNegative, updateValue]);
+    }, [currentValue, effectiveStep, allowNegative, updateValue]);
 
     const handleIncrementClick = useCallback(
         (event: React.MouseEvent) => {
@@ -271,7 +271,11 @@ export const NumberInput = ({
     );
 
     const handleWheel = useCallback(
-        (event: React.WheelEvent<HTMLInputElement>) => {
+        (
+            event: React.WheelEvent<
+                HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+            >
+        ) => {
             if (
                 !allowScrollWheel ||
                 document.activeElement !== inputRef.current ||
@@ -304,70 +308,81 @@ export const NumberInput = ({
     const isDecrementDisabled =
         disabled ||
         (min !== undefined && currentValue <= min) ||
-        (!allowNegative && currentValue - step < 0);
+        (!allowNegative && currentValue - effectiveStep < 0);
 
-    const controlButtons = (
-        <div
-            className={cx(
-                "inline-flex flex-col max-h-full h-full",
-                controlsPosition === "right" && "border-l",
-                controlsPosition === "left" && "border-r",
-                theme === "light"
-                    ? "border-[var(--byteform-light-border)]"
-                    : "border-[var(--byteform-dark-border)]",
-                classNames?.controlButtons
-            )}
-        >
-            <button
-                type="button"
+    const controlButtons = useMemo(
+        () => (
+            <div
                 className={cx(
-                    "w-6 h-full flex-1 flex items-center justify-center",
+                    "inline-flex flex-col max-h-full h-full",
+                    controlsPosition === "right" && "border-l",
+                    controlsPosition === "left" && "border-r",
                     theme === "light"
-                        ? "text-[var(--byteform-light-text)]"
-                        : "text-[var(--byteform-dark-text)]",
-                    isIncrementDisabled
-                        ? "opacity-60 cursor-not-allowed"
-                        : theme === "light"
-                        ? "hover:bg-[var(--byteform-light-background-hover)]"
-                        : "hover:bg-[var(--byteform-dark-background-hover)]",
-                    classNames?.incrementButton
-                )}
-                onClick={handleIncrementClick}
-                disabled={isIncrementDisabled}
-            >
-                <IconChevronUp size={16} />
-            </button>
-            <button
-                type="button"
-                onClick={handleDecrementClick}
-                disabled={isDecrementDisabled}
-                className={cx(
-                    "w-6 h-full flex-1 flex items-center justify-center",
-                    theme === "light"
-                        ? "text-[var(--byteform-light-text)]"
-                        : "text-[var(--byteform-dark-text)]",
-                    isDecrementDisabled
-                        ? "opacity-60 cursor-not-allowed"
-                        : theme === "light"
-                        ? "hover:bg-[var(--byteform-light-background-hover)]"
-                        : "hover:bg-[var(--byteform-dark-background-hover)]",
-                    classNames?.decrementButton
+                        ? "border-[var(--byteform-light-border)]"
+                        : "border-[var(--byteform-dark-border)]",
+                    classNames?.controlButtons
                 )}
             >
-                <IconChevronDown size={16} />
-            </button>
-        </div>
+                <button
+                    type="button"
+                    className={cx(
+                        "w-6 h-full flex-1 flex items-center justify-center",
+                        theme === "light"
+                            ? "text-[var(--byteform-light-text)]"
+                            : "text-[var(--byteform-dark-text)]",
+                        isIncrementDisabled
+                            ? "opacity-60 cursor-not-allowed"
+                            : theme === "light"
+                            ? "hover:bg-[var(--byteform-light-background-hover)]"
+                            : "hover:bg-[var(--byteform-dark-background-hover)]",
+                        classNames?.incrementButton
+                    )}
+                    onClick={handleIncrementClick}
+                    disabled={isIncrementDisabled}
+                >
+                    <IconChevronUp size={16} />
+                </button>
+                <button
+                    type="button"
+                    onClick={handleDecrementClick}
+                    disabled={isDecrementDisabled}
+                    className={cx(
+                        "w-6 h-full flex-1 flex items-center justify-center",
+                        theme === "light"
+                            ? "text-[var(--byteform-light-text)]"
+                            : "text-[var(--byteform-dark-text)]",
+                        isDecrementDisabled
+                            ? "opacity-60 cursor-not-allowed"
+                            : theme === "light"
+                            ? "hover:bg-[var(--byteform-light-background-hover)]"
+                            : "hover:bg-[var(--byteform-dark-background-hover)]",
+                        classNames?.decrementButton
+                    )}
+                >
+                    <IconChevronDown size={16} />
+                </button>
+            </div>
+        ),
+        [
+            theme,
+            isIncrementDisabled,
+            isDecrementDisabled,
+            classNames?.incrementButton,
+            classNames?.decrementButton,
+            controlsPosition
+        ]
     );
 
     return (
         <Input
             inputRef={inputRef}
-            type="text"
+            type="number"
             inputMode={allowDecimal ? "decimal" : "numeric"}
+            step={effectiveStep}
+            min={min}
+            max={max}
             value={
-                isTyping && displayValue !== ""
-                    ? displayValue
-                    : formatValue(currentValue)
+                isTyping && displayValue !== "" ? displayValue : currentValue
             }
             onChange={handleChange}
             onBlur={handleBlur}

@@ -181,7 +181,11 @@ export const TagsInput = ({
     );
 
     const handleKeyDown = useCallback(
-        (e: KeyboardEvent<HTMLInputElement>) => {
+        (
+            e: KeyboardEvent<
+                HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+            >
+        ) => {
             const splitCharsArray = Array.isArray(splitChars)
                 ? splitChars
                 : [splitChars];
@@ -212,7 +216,11 @@ export const TagsInput = ({
     );
 
     const handleBlur = useCallback(
-        (e: FocusEvent<HTMLInputElement>) => {
+        (
+            e: FocusEvent<
+                HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+            >
+        ) => {
             if (acceptValueOnBlur && inputValue.trim()) {
                 addTag(inputValue);
             }
