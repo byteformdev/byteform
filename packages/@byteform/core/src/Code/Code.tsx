@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 import { CodeProps, CodeTheme } from "./types";
 import { useTheme } from "../_theme";
@@ -40,42 +40,72 @@ export const Code: React.FC<CodeProps> = ({
         }
     }, [children, onCopy]);
 
-    const isLineHighlighted = (lineNumber: number) => {
-        return highlightLines.includes(lineNumber);
-    };
+    const isLineHighlighted = useCallback(
+        (lineNumber: number) => {
+            return highlightLines.includes(lineNumber);
+        },
+        [highlightLines]
+    );
 
-    return (
-        <div
-            className={cx(
+    const highlightTheme = useMemo(() => getTheme(themeProp), [themeProp]);
+
+    const wrapperClassName = useMemo(
+        () =>
+            cx(
                 theme === "light"
                     ? "border-[var(--byteform-light-border)]"
                     : "border-[var(--byteform-dark-border)]",
                 "relative group rounded-md border overflow-hidden",
                 classNames?.wrapper
-            )}
-        >
-            {title && (
-                <div
-                    className={cx(
-                        theme === "light"
-                            ? "bg-[var(--byteform-light-background)] border-[var(--byteform-light-border)] text-[var(--byteform-light-text)]"
-                            : "bg-[var(--byteform-dark-background)] border-[var(--byteform-dark-border)] text-[var(--byteform-dark-text)]",
-                        "flex items-center justify-between px-4 py-2 border-b text-sm font-medium",
-                        classNames?.title
-                    )}
-                >
-                    {title}
-                </div>
-            )}
+            ),
+        [theme, cx, classNames?.wrapper]
+    );
+
+    const titleClassName = useMemo(
+        () =>
+            cx(
+                theme === "light"
+                    ? "bg-[var(--byteform-light-background)] border-[var(--byteform-light-border)] text-[var(--byteform-light-text)]"
+                    : "bg-[var(--byteform-dark-background)] border-[var(--byteform-dark-border)] text-[var(--byteform-dark-text)]",
+                "flex items-center justify-between px-4 py-2 border-b text-sm font-medium",
+                classNames?.title
+            ),
+        [theme, cx, classNames?.title]
+    );
+
+    const copyButtonClassName = useMemo(
+        () =>
+            cx(
+                "absolute top-4 right-4 z-10 transition-all duration-200 opacity-0 group-hover:opacity-100",
+                theme === "light"
+                    ? "text-[var(--byteform-light-text)] hover:text-[var(--byteform-dark-5)]"
+                    : "text-[var(--byteform-dark-1)] hover:text-[var(--byteform-light-1)]",
+                classNames?.copyButton
+            ),
+        [cx, theme, classNames?.copyButton]
+    );
+
+    const containerClassName = useMemo(
+        () =>
+            cx(
+                "overflow-auto byteform-scrollbar max-h-96",
+                theme === "light"
+                    ? "bg-[var(--byteform-light-background)]"
+                    : "bg-[var(--byteform-dark-background)]",
+                classNames?.container
+            ),
+        [theme, cx, classNames?.container]
+    );
+
+    return (
+        <div className={wrapperClassName}>
+            {title && <div className={titleClassName}>{title}</div>}
 
             <div className="relative">
                 {showCopyButton && (
                     <button
                         onClick={handleCopy}
-                        className={cx(
-                            "absolute top-4 right-4 z-10 transition-all duration-200 opacity-0 group-hover:opacity-100",
-                            "text-[var(--byteform-dark-1)] hover:text-[var(--byteform-white)]"
-                        )}
+                        className={copyButtonClassName}
                     >
                         {copied
                             ? copiedIcon || <IconCheck className="w-4 h-4" />
@@ -83,17 +113,9 @@ export const Code: React.FC<CodeProps> = ({
                     </button>
                 )}
 
-                <div
-                    className={cx(
-                        "overflow-auto byteform-scrollbar max-h-96",
-                        theme === "light"
-                            ? "bg-[var(--byteform-light-background)]"
-                            : "bg-[var(--byteform-dark-background)]",
-                        classNames?.container
-                    )}
-                >
+                <div className={containerClassName}>
                     <Highlight
-                        theme={getTheme(themeProp)}
+                        theme={highlightTheme}
                         code={children.trim()}
                         language={language}
                     >
@@ -110,14 +132,46 @@ export const Code: React.FC<CodeProps> = ({
                                 ...cleanStyle
                             } = style;
 
-                            return (
-                                <pre
-                                    className={cx(
+                            const preClassName = useMemo(
+                                () =>
+                                    cx(
                                         highlightClassName,
                                         "p-4 text-sm leading-6 min-w-full",
                                         classNames?.code,
                                         className
-                                    )}
+                                    ),
+                                [
+                                    cx,
+                                    highlightClassName,
+                                    classNames?.code,
+                                    className
+                                ]
+                            );
+
+                            const lineNumberClassName = useMemo(
+                                () =>
+                                    cx(
+                                        "inline-block mr-4 text-right select-none text-xs",
+                                        theme === "light"
+                                            ? "text-[var(--byteform-light-text)]"
+                                            : "text-[var(--byteform-dark-text)]",
+                                        classNames?.lineNumber
+                                    ),
+                                [cx, theme, classNames?.lineNumber]
+                            );
+
+                            const highlightedLineNumberClassName = useMemo(
+                                () =>
+                                    cx(
+                                        lineNumberClassName,
+                                        "text-blue-500 font-medium"
+                                    ),
+                                [cx, lineNumberClassName]
+                            );
+
+                            return (
+                                <pre
+                                    className={preClassName}
                                     style={cleanStyle}
                                 >
                                     {tokens.map((line, i) => {
@@ -142,15 +196,11 @@ export const Code: React.FC<CodeProps> = ({
                                             >
                                                 {showLineNumbers && (
                                                     <span
-                                                        className={cx(
-                                                            "inline-block w-8 mr-4 text-right select-none text-xs",
-                                                            theme === "light"
-                                                                ? "text-[var(--byteform-light-text)]"
-                                                                : "text-[var(--byteform-dark-text)]",
-                                                            isHighlighted &&
-                                                                "text-blue-500 font-medium",
-                                                            classNames?.lineNumber
-                                                        )}
+                                                        className={
+                                                            isHighlighted
+                                                                ? highlightedLineNumberClassName
+                                                                : lineNumberClassName
+                                                        }
                                                     >
                                                         {lineNumber}
                                                     </span>
@@ -178,3 +228,5 @@ export const Code: React.FC<CodeProps> = ({
         </div>
     );
 };
+
+export default memo(Code);

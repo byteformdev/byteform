@@ -56,6 +56,7 @@ export interface CodeClassNames {
     code?: string;
     lineNumber?: string;
     lineNumberHighlight?: string;
+    copyButton?: string;
 }
 
 export interface CodeProps {
