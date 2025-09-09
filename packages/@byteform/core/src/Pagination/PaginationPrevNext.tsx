@@ -29,26 +29,50 @@ const getIconSize = (size: PaginationSize) => {
 
 const getVariantStyles = (
     theme: "light" | "dark",
-    variant: PaginationVariant
+    variant: PaginationVariant,
+    isDisabled: boolean
 ) => {
     const isLight = theme === "light";
 
     const lightVariants = {
-        filled: "bg-[var(--byteform-light-background)] hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)] border border-[var(--byteform-light-border)]",
-        outline:
-            "border border-[var(--byteform-light-border)] hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)]",
-        ghost: "hover:bg-[var(--byteform-light-background-hover)] text-[var(--byteform-light-text)]"
+        filled: [
+            "bg-[var(--byteform-light-background)]",
+            "text-[var(--byteform-light-text)]",
+            "border border-[var(--byteform-light-border)]",
+            !isDisabled && "hover:bg-[var(--byteform-light-background-hover)]"
+        ],
+        outline: [
+            "border border-[var(--byteform-light-border)]",
+            "text-[var(--byteform-light-text)]",
+            !isDisabled && "hover:bg-[var(--byteform-light-background-hover)]"
+        ],
+        ghost: [
+            "text-[var(--byteform-light-text)]",
+            !isDisabled && "hover:bg-[var(--byteform-light-background-hover)]"
+        ]
     };
 
     const darkVariants = {
-        filled: "bg-[var(--byteform-dark-background)] hover:bg-[var(--byteform-dark-background-hover)] text-[var(--byteform-dark-text)] border border-[var(--byteform-dark-border)]",
-        outline:
-            "border border-[var(--byteform-dark-border)] hover:bg-[var(--byteform-dark-background-hover)] text-[var(--byteform-dark-text)]",
-        ghost: "hover:bg-[var(--byteform-dark-background-hover)] text-[var(--byteform-dark-text)]"
+        filled: [
+            "bg-[var(--byteform-dark-background)]",
+            "text-[var(--byteform-dark-text)]",
+            "border border-[var(--byteform-dark-border)]",
+            !isDisabled && "hover:bg-[var(--byteform-dark-background-hover)]"
+        ],
+        outline: [
+            "border border-[var(--byteform-dark-border)]",
+            "text-[var(--byteform-dark-text)]",
+            !isDisabled && "hover:bg-[var(--byteform-dark-background-hover)]"
+        ],
+        ghost: [
+            "text-[var(--byteform-dark-text)]",
+            !isDisabled && "hover:bg-[var(--byteform-dark-background-hover)]"
+        ]
     };
 
     const palette = isLight ? lightVariants : darkVariants;
-    return palette[variant] || palette.filled;
+
+    return (palette[variant] || palette.filled).filter(Boolean).join(" ");
 };
 
 export const PaginationPrevNext = forwardRef<
@@ -97,8 +121,8 @@ export const PaginationPrevNext = forwardRef<
             [size]
         );
         const variantClasses = useMemo(
-            () => getVariantStyles(theme, variant),
-            [theme, variant]
+            () => getVariantStyles(theme, variant, isDisabled),
+            [theme, variant, isDisabled]
         );
         const iconSize = useMemo(() => getIconSize(size), [size]);
 
@@ -114,13 +138,13 @@ export const PaginationPrevNext = forwardRef<
                     "flex items-center justify-center cursor-pointer select-none rounded-md font-medium transition-colors duration-150",
                     sizeClasses,
                     variantClasses,
-                    isDisabled &&
-                        "opacity-60 cursor-not-allowed pointer-events-none",
-                    classNames?.control,
+                    isDisabled && "opacity-60 cursor-not-allowed",
+                    classNames?.prevNext,
                     className
                 )}
                 disabled={isDisabled}
                 onClick={handleClick}
+                data-disabled={isDisabled}
                 {...props}
             >
                 {children ??

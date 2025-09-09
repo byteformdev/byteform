@@ -21,7 +21,7 @@ const getVariantStyles = (
     active: boolean
 ) => {
     if (active) {
-        return "bg-[var(--byteform-primary-light)] text-white border-[var(--byteform-primary-light)] hover:bg-[var(--byteform-primary-light)]";
+        return "bg-[var(--byteform-primary-light)] text-white border border-[var(--byteform-primary-light)]";
     }
 
     const isLight = theme === "light";
@@ -100,14 +100,14 @@ export const PaginationControl = forwardRef<
                     "flex items-center justify-center cursor-pointer select-none rounded-md font-medium transition-colors duration-150",
                     sizeClasses,
                     variantClasses,
-                    isDisabled &&
-                        "opacity-60 cursor-not-allowed pointer-events-none",
+                    isDisabled && "opacity-60 cursor-not-allowed",
                     classNames?.control,
                     className
                 )}
                 disabled={isDisabled}
                 onClick={handleClick}
                 aria-current={isActive ? "page" : undefined}
+                data-active={isActive}
                 {...props}
             >
                 {children ?? page}

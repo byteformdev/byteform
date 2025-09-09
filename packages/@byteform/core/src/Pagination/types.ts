@@ -6,6 +6,8 @@ export type PaginationVariant = "filled" | "outline" | "ghost";
 export interface PaginationClassNames {
     root?: string;
     control?: string;
+    edge?: string;
+    prevNext?: string;
     dots?: string;
     label?: string;
 }
