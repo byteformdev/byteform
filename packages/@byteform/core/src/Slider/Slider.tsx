@@ -401,10 +401,14 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
                         if (isAtStart) {
                             translateClass = "translate-x-0";
-                            leftPosition = "1px";
+                            leftPosition =
+                                size === "lg" || size === "xl" ? "2px" : "0px";
                         } else if (isAtEnd) {
                             translateClass = "-translate-x-full";
-                            leftPosition = "calc(100% - 1px)";
+                            leftPosition =
+                                size === "lg" || size === "xl"
+                                    ? "calc(100% - 2px)"
+                                    : "calc(100% - 0px)";
                         }
 
                         return (
@@ -419,8 +423,10 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
                             >
                                 <div
                                     className={cx(
-                                        "w-1.5 h-1.5 rounded-full bg-[var(--byteform-white)]",
-                                        "shadow-sm z-5",
+                                        "rounded-full bg-[var(--byteform-white)] shadow-sm z-1",
+                                        size === "lg" || size === "xl"
+                                            ? "h-2 w-1"
+                                            : "h-1.5 w-0.5",
                                         classNames?.mark
                                     )}
                                 />
@@ -457,8 +463,6 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
                             thumbChildren && "flex items-center justify-center",
                             !disabled && "hover:shadow-md focus:shadow-md",
                             disabled && "cursor-not-allowed",
-                            "z-10",
-                            isDragging && "z-20",
                             currentSize.thumb,
                             classNames?.thumb
                         )}
