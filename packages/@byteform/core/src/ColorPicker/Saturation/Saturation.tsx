@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SaturationProps } from "./types";
 import { getPosition } from "./get-position";
-import { cx } from "../../_theme";
+import { cx, useTheme } from "../../_theme";
 
 export const Saturation = ({
     value,
@@ -9,6 +9,7 @@ export const Saturation = ({
     className,
     ...rest
 }: SaturationProps) => {
+    const { theme } = useTheme();
     const saturationRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
 
@@ -75,7 +76,12 @@ export const Saturation = ({
                 }}
             />
             <div
-                className="absolute w-2 h-2 ring-2 ring-[var(--byteform-white)] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg"
+                className={cx(
+                    "absolute w-2 h-2 ring-2 rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg",
+                    theme === "light"
+                        ? "ring-[var(--byteform-black)]"
+                        : "ring-[var(--byteform-white)]"
+                )}
                 style={{
                     left: `${value.s * 100}%`,
                     top: `${(1 - value.v) * 100}%`

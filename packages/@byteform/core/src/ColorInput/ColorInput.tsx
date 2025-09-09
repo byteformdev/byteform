@@ -123,7 +123,7 @@ export const ColorInput = ({
     const colorSwatch = (
         <ColorSwatch
             color={getPreviewColor()}
-            className={cx("rounded-md w-6 h-6", classNames?.colorSwatch)}
+            className={cx("w-5 h-5 rounded-full", classNames?.colorSwatch)}
             backgroundGrid
             {...colorSwatchProps}
         />

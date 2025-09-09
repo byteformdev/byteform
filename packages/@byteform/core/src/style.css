@@ -47,6 +47,46 @@
     display: none;
 }
 
+.color-transparency-grid-dark {
+    background-color: var(--byteform-dark-8);
+    background-image: linear-gradient(
+            45deg,
+            var(--byteform-dark-5) 25%,
+            transparent 25%,
+            transparent 75%,
+            var(--byteform-dark-5) 75%
+        ),
+        linear-gradient(
+            45deg,
+            var(--byteform-dark-5) 25%,
+            transparent 25%,
+            transparent 75%,
+            var(--byteform-dark-5) 75%
+        );
+    background-size: 12px 12px;
+    background-position: 0 0, 6px 6px;
+}
+
+.color-transparency-grid-light {
+    background-color: var(--byteform-light-8);
+    background-image: linear-gradient(
+            45deg,
+            var(--byteform-light-5) 25%,
+            transparent 25%,
+            transparent 75%,
+            var(--byteform-light-5) 75%
+        ),
+        linear-gradient(
+            45deg,
+            var(--byteform-light-5) 25%,
+            transparent 25%,
+            transparent 75%,
+            var(--byteform-light-5) 75%
+        );
+    background-size: 12px 12px;
+    background-position: 0 0, 6px 6px;
+}
+
 input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { AlphaSliderProps } from "./types";
-import { cx } from "../../_theme";
+import { cx, useTheme } from "../../_theme";
 
 export const AlphaSlider = ({
     value,
@@ -10,6 +10,7 @@ export const AlphaSlider = ({
     className,
     ...rest
 }: AlphaSliderProps) => {
+    const { theme } = useTheme();
     const sliderRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
 
@@ -52,21 +53,20 @@ export const AlphaSlider = ({
         };
     }, [isDragging, onChange]);
 
-    const transparencyGridStyle = {
-        backgroundColor: "#ccc",
-        backgroundImage: `
-            linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%),
-            linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%)
-        `,
-        backgroundSize: "4px 4px",
-        backgroundPosition: "0 0, 6px 6px"
-    };
-
     return (
         <div
             ref={sliderRef}
-            className={cx("relative h-2 rounded-md cursor-pointer", className)}
-            style={transparencyGridStyle}
+            className={cx(
+                "relative h-2 rounded-md cursor-pointer",
+                theme === "light"
+                    ? "color-transparency-grid-light"
+                    : "color-transparency-grid-dark",
+                className
+            )}
+            style={{
+                backgroundSize: "4px 4px",
+                backgroundPosition: "0 0, 6px 6px"
+            }}
             onMouseDown={handleMouseDown}
         >
             <div
@@ -76,9 +76,14 @@ export const AlphaSlider = ({
                 }}
             />
             <div
-                className="absolute rounded-full shadow-lg w-1 h-3 bg-[var(--byteform-white)] shadow-sm"
+                className={cx(
+                    "absolute rounded-full shadow-lg w-1 h-3 shadow-sm",
+                    theme === "light"
+                        ? "bg-[var(--byteform-black)]"
+                        : "bg-[var(--byteform-white)]"
+                )}
                 style={{
-                    left: `min(max(4px, ${value * 100}%), calc(100% - 4px))`,
+                    left: `min(max(2px, ${value * 100}%), calc(100% - 2px))`,
                     transform: "translateX(-50%)",
                     top: "50%",
                     marginTop: "-6px"

@@ -1,4 +1,4 @@
-import { RGBColor, HSVColor } from "./types";
+import { RGBColor, HSVColor, ColorPickerFormat } from "./types";
 
 // Converts hex to RGB
 export function hexToRgbColorPicker(hex: string): RGBColor {
@@ -229,4 +229,9 @@ export function formatColor(hsv: HSVColor, format: string): string {
         default:
             return rgbToHex(rgb, false);
     }
+}
+
+// Determines if alpha channel is needed for the given color format
+export function requiresAlpha(format: ColorPickerFormat): boolean {
+    return ["hexa", "rgba", "hsla", "hsva"].includes(format);
 }

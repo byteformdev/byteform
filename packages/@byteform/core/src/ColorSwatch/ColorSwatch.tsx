@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { ColorSwatchProps } from "./types";
-import { cx } from "../_theme";
+import { cx, useTheme } from "../_theme";
 
 export const ColorSwatch = forwardRef<HTMLDivElement, ColorSwatchProps>(
     (
@@ -15,17 +15,9 @@ export const ColorSwatch = forwardRef<HTMLDivElement, ColorSwatchProps>(
         },
         ref
     ) => {
-        const Element = Component as React.ElementType;
+        const { theme } = useTheme();
 
-        const transparencyGridStyle = {
-            backgroundColor: "#ccc",
-            backgroundImage: `
-        linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%),
-        linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%)
-      `,
-            backgroundSize: "12px 12px",
-            backgroundPosition: "0 0, 6px 6px"
-        };
+        const Element = Component as React.ElementType;
 
         return (
             <Element
@@ -39,17 +31,12 @@ export const ColorSwatch = forwardRef<HTMLDivElement, ColorSwatchProps>(
             >
                 {backgroundGrid && (
                     <div
-                        className="absolute inset-0"
-                        style={{
-                            ...transparencyGridStyle,
-                            WebkitMaskImage:
-                                "radial-gradient(circle, #000 99%, transparent 100%)",
-                            WebkitMaskComposite: "destination-in",
-                            maskImage:
-                                "radial-gradient(circle, #000 99%, transparent 100%)",
-                            maskComposite: "intersect",
-                            borderRadius: "inherit"
-                        }}
+                        className={cx(
+                            "absolute inset-0",
+                            theme === "light"
+                                ? "color-transparency-grid-light"
+                                : "color-transparency-grid-dark"
+                        )}
                     />
                 )}
 

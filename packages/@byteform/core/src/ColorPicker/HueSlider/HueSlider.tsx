@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { HueSliderProps } from "./types";
-import { cx } from "../../_theme";
+import { cx, useTheme } from "../../_theme";
 
 export const HueSlider = ({
     value,
@@ -8,6 +8,7 @@ export const HueSlider = ({
     className,
     ...rest
 }: HueSliderProps) => {
+    const { theme } = useTheme();
     const sliderRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
 
@@ -62,11 +63,16 @@ export const HueSlider = ({
             role="slider"
         >
             <div
-                className="absolute rounded-full shadow-lg w-1 h-3 bg-[var(--byteform-white)] shadow-sm"
+                className={cx(
+                    "absolute rounded-full shadow-lg w-1 h-3 shadow-sm",
+                    theme === "light"
+                        ? "bg-[var(--byteform-black)]"
+                        : "bg-[var(--byteform-white)]"
+                )}
                 style={{
-                    left: `min(max(4px, ${
+                    left: `min(max(2px, ${
                         (value / 360) * 100
-                    }%), calc(100% - 4px))`,
+                    }%), calc(100% - 2px))`,
                     transform: "translateX(-50%)",
                     top: "50%",
                     marginTop: "-6px"

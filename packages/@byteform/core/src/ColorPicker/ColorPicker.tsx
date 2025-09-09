@@ -1,7 +1,13 @@
 import { forwardRef, Ref, useEffect, useState } from "react";
 import { ColorPickerProps, HSVColor } from "./types";
 import { cx } from "../_theme";
-import { formatColor, hsvToRgb, parseColor, rgbToHex } from "./utils";
+import {
+    formatColor,
+    hsvToRgb,
+    parseColor,
+    rgbToHex,
+    requiresAlpha
+} from "./utils";
 import { ColorSwatch } from "../ColorSwatch";
 import { Saturation } from "./Saturation/index";
 import { HueSlider } from "./HueSlider/index";
@@ -19,7 +25,7 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
         hideAlpha,
         hidePreview,
         swatches,
-        swatchesGridColumns = 8,
+        swatchesGridColumns = 7,
         className,
         classNames,
         ...rest
@@ -74,6 +80,8 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
     const hexColor = rgbToHex(rgbColor, false);
     const colorWithAlpha = formatColor(color, "rgba");
 
+    const shouldShowAlpha = requiresAlpha(format) && !hideAlpha;
+
     const renderSwatch = (swatch: string, index: number) => {
         return (
             <ColorSwatch
@@ -112,7 +120,7 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
 
                         <div
                             className={cx(
-                                "flex items-center gap-3",
+                                "flex items-center gap-2",
                                 classNames?.sliders
                             )}
                         >
@@ -126,7 +134,7 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
                                     )}
                                 />
 
-                                {!hideAlpha && (
+                                {shouldShowAlpha && (
                                     <AlphaSlider
                                         value={color.a}
                                         onChange={handleAlphaChange}
@@ -139,7 +147,7 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
                                 )}
                             </div>
 
-                            {!hidePreview && (
+                            {!hidePreview && shouldShowAlpha && (
                                 <ColorSwatch
                                     color={colorWithAlpha}
                                     className={cx(
@@ -153,7 +161,7 @@ const ColorPickerBase = (props: ColorPickerProps, ref: Ref<HTMLDivElement>) => {
                 )}
 
                 {swatches && swatches.length > 0 && (
-                    <SimpleGrid cols={swatchesGridColumns}>
+                    <SimpleGrid cols={swatchesGridColumns} gap="sm">
                         {swatches.map(renderSwatch)}
                     </SimpleGrid>
                 )}
