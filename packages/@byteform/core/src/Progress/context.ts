@@ -3,5 +3,5 @@ import { createSafeContext } from "../_utils/createContext";
 
 export const [ProgressProvider, useProgressContext] =
     createSafeContext<ProgressContextValue>(
-        "Progress was not found in the tree"
+        "Progress component was not found in tree."
     );

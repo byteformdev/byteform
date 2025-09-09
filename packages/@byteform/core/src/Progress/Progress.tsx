@@ -12,24 +12,35 @@ const Progress = forwardRef<HTMLDivElement, ProgressProps>(
             labelPosition,
             striped,
             animated,
-            size,
-            className,
             color,
+            value = 0,
+            size = "sm",
+            orientation = "horizontal",
+            transitionDuration = 200,
+            classNames,
+            className,
             ...props
         },
         ref
     ) => {
         return (
-            <ProgressRoot size={size} {...props} ref={ref}>
+            <ProgressRoot
+                size={size}
+                orientation={orientation}
+                transitionDuration={transitionDuration}
+                classNames={classNames}
+                className={className}
+                ref={ref}
+                {...props}
+            >
                 <ProgressSection
-                    value={props.value ?? 0}
+                    value={value}
                     striped={striped}
                     animated={animated}
                     color={color}
-                    className={className}
                 >
                     {label && (
-                        <ProgressLabel position={labelPosition} size={size}>
+                        <ProgressLabel position={labelPosition}>
                             {label}
                         </ProgressLabel>
                     )}
