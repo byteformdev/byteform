@@ -55,6 +55,7 @@ interface BaseInputProps {
     ariaDescribedBy?: string;
     ariaControls?: string;
 
+    style?: React.CSSProperties;
     className?: string;
     classNames?: InputClassNames;
 }
