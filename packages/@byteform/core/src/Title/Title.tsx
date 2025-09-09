@@ -6,7 +6,6 @@ import { TextSize, TextAlign, TextWeight } from "../Text/types";
 const getSize = (size: TextSize, order?: TitleOrder) => {
     if (typeof size === "number") return `text-[${size}px]`;
 
-    // If no size is provided, use default sizes based on order
     if (!size && order) {
         const orderSizeMap = {
             1: "text-4xl",
@@ -42,7 +41,6 @@ const getSize = (size: TextSize, order?: TitleOrder) => {
 const getWeight = (weight: TextWeight, order?: TitleOrder) => {
     if (typeof weight === "number") return `font-[${weight}]`;
 
-    // If no weight is provided, use default weights based on order
     if (!weight && order) {
         const orderWeightMap = {
             1: "font-bold",
