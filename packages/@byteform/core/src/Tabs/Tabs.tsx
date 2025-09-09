@@ -7,7 +7,7 @@ import {
     RefObject
 } from "react";
 import { TabsProps } from "./types";
-import { TabsContext } from "./context";
+import { TabsProvider } from "./context";
 import { useTheme } from "../_theme";
 import { TabsList } from "./TabsList";
 import { TabsTab } from "./TabsTab";
@@ -83,7 +83,7 @@ const Tabs = forwardRef<HTMLDivElement, TabsProps>(
         };
 
         return (
-            <TabsContext.Provider value={contextValue}>
+            <TabsProvider value={contextValue}>
                 <div
                     ref={ref}
                     className={cx(
@@ -97,7 +97,7 @@ const Tabs = forwardRef<HTMLDivElement, TabsProps>(
                 >
                     {children}
                 </div>
-            </TabsContext.Provider>
+            </TabsProvider>
         );
     }
 );

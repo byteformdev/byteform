@@ -129,71 +129,66 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
                 }}
             >
                 <Transition mounted={open} transition="fade">
-                    {(transitionStyles) => (
+                    <div
+                        ref={(node) => {
+                            refs.setFloating(node);
+                            if (typeof ref === "function") {
+                                ref(node);
+                            } else if (ref) {
+                                ref.current = node;
+                            }
+                        }}
+                        role="tooltip"
+                        id="tooltip"
+                        className={cx(
+                            "pointer-events-none rounded-md",
+                            "transition-opacity duration-200",
+                            open ? "opacity-100" : "opacity-0",
+                            theme === "light"
+                                ? "bg-[var(--byteform-light-background)]"
+                                : "bg-[var(--byteform-dark-background)]",
+                            classNames?.root
+                        )}
+                        style={{
+                            position: strategy,
+                            top: y ?? 0,
+                            left: x ?? 0,
+                            zIndex
+                        }}
+                        {...getFloatingProps(others)}
+                    >
                         <div
-                            ref={(node) => {
-                                refs.setFloating(node);
-                                if (typeof ref === "function") {
-                                    ref(node);
-                                } else if (ref) {
-                                    ref.current = node;
-                                }
-                            }}
-                            role="tooltip"
-                            id="tooltip"
                             className={cx(
-                                "pointer-events-none rounded-md",
-                                "transition-opacity duration-200",
-                                open ? "opacity-100" : "opacity-0",
+                                "py-1 px-3 text-sm outline-none",
+                                isCompact && "py-0.5 px-2 text-xs",
                                 theme === "light"
-                                    ? "bg-[var(--byteform-light-background)]"
-                                    : "bg-[var(--byteform-dark-background)]",
-                                classNames?.root
+                                    ? "text-[var(--byteform-light-text)]"
+                                    : "text-[var(--byteform-dark-text)]",
+                                multiline
+                                    ? "text-left max-w-xs"
+                                    : "text-center whitespace-nowrap",
+                                classNames?.tooltip,
+                                className
                             )}
-                            style={{
-                                position: strategy,
-                                top: y ?? 0,
-                                left: x ?? 0,
-                                zIndex,
-                                ...transitionStyles
-                            }}
-                            {...getFloatingProps(others)}
                         >
-                            <div
-                                className={cx(
-                                    "py-1 px-3 text-sm outline-none",
-                                    isCompact && "py-0.5 px-2 text-xs",
-                                    theme === "light"
-                                        ? "text-[var(--byteform-light-text)]"
-                                        : "text-[var(--byteform-dark-text)]",
-                                    multiline
-                                        ? "text-left max-w-xs"
-                                        : "text-center whitespace-nowrap",
-                                    classNames?.tooltip,
-                                    className
-                                )}
-                            >
-                                {withArrow && (
-                                    <FloatingArrow
-                                        ref={arrowRef}
-                                        context={context}
-                                        className={classNames?.arrow}
-                                        fill={
-                                            theme === "light"
-                                                ? "var(--byteform-light-background)"
-                                                : "var(--byteform-dark-background)"
-                                        }
-                                        width={arrowSize * 2}
-                                        height={arrowSize}
-                                        tipRadius={arrowRadius}
-                                    />
-                                )}
-                                <div className={classNames?.content}>
-                                    {label}
-                                </div>
-                            </div>
+                            {withArrow && (
+                                <FloatingArrow
+                                    ref={arrowRef}
+                                    context={context}
+                                    className={classNames?.arrow}
+                                    fill={
+                                        theme === "light"
+                                            ? "var(--byteform-light-background)"
+                                            : "var(--byteform-dark-background)"
+                                    }
+                                    width={arrowSize * 2}
+                                    height={arrowSize}
+                                    tipRadius={arrowRadius}
+                                />
+                            )}
+                            <div className={classNames?.content}>{label}</div>
                         </div>
-                    )}
+                    </div>
                 </Transition>
             </div>
         );

@@ -1,6 +1,6 @@
 import { forwardRef, useId, useEffect, useRef, useState } from "react";
 import { MenuProps } from "./types";
-import { MenuContext } from "./context";
+import { MenuProvider } from "./context";
 import { MenuTarget } from "./MenuTarget";
 import { MenuDropdown } from "./MenuDropdown";
 import { MenuLabel } from "./MenuLabel";
@@ -192,7 +192,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>((props, ref) => {
     };
 
     return (
-        <MenuContext.Provider value={contextValue}>
+        <MenuProvider value={contextValue}>
             <div
                 className={cx("relative inline-block", props.classNames?.root)}
                 data-menu-opened={currentOpened || undefined}
@@ -207,7 +207,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>((props, ref) => {
             >
                 {props.children}
             </div>
-        </MenuContext.Provider>
+        </MenuProvider>
     );
 });
 

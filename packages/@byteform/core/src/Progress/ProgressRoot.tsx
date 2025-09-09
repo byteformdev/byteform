@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { ProgressRootProps, ProgressSize } from "./types";
 import { useTheme } from "../_theme";
-import { ProgressContext } from "./context";
+import { ProgressProvider } from "./context";
 
 const sizeClasses = {
     xs: "h-1",
@@ -20,7 +20,7 @@ export const ProgressRoot = forwardRef<HTMLDivElement, ProgressRootProps>(
         const { theme, cx } = useTheme();
 
         return (
-            <ProgressContext.Provider value={{ classNames }}>
+            <ProgressProvider value={{ classNames }}>
                 <div
                     ref={ref}
                     className={cx(
@@ -35,7 +35,7 @@ export const ProgressRoot = forwardRef<HTMLDivElement, ProgressRootProps>(
                 >
                     {children}
                 </div>
-            </ProgressContext.Provider>
+            </ProgressProvider>
         );
     }
 );

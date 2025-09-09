@@ -1,11 +1,11 @@
 import React from "react";
 import { useTheme } from "../_theme";
 import { MenuDividerProps } from "./types";
-import { useMenu } from "./context";
+import { useMenuContext } from "./context";
 
 export const MenuDivider = ({ className }: MenuDividerProps) => {
     const { theme, cx } = useTheme();
-    const { classNames } = useMenu();
+    const { classNames } = useMenuContext();
 
     return (
         <div

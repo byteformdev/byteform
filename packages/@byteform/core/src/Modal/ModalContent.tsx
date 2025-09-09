@@ -21,7 +21,6 @@ export const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
 
         const { theme, cx } = useTheme();
 
-        // Check if we're within a target container
         const isWithinTarget = withinPortal && target;
 
         const sizeClass = {

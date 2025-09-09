@@ -1,12 +1,5 @@
-import { createContext, useContext } from "react";
 import { MenuContextType } from "./types";
+import { createSafeContext } from "../_utils/createContext";
 
-export const MenuContext = createContext<MenuContextType | null>(null);
-
-export const useMenu = () => {
-    const context = useContext(MenuContext);
-    if (!context) {
-        throw new Error("Menu components must be used within a Menu component");
-    }
-    return context;
-};
+export const [MenuProvider, useMenuContext] =
+    createSafeContext<MenuContextType>("Menu was not found in the tree");

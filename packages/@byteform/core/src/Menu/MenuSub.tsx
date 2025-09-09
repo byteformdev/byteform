@@ -1,6 +1,6 @@
 import { forwardRef, useId, useRef, useState, useEffect } from "react";
 import { MenuSubmenuProps } from "./types";
-import { useMenu } from "./context";
+import { useMenuContext } from "./context";
 import { useTheme } from "../_theme";
 import { Transition } from "../Transition";
 import { createContext, useContext } from "react";
@@ -37,7 +37,7 @@ export const useMenuSubmenu = () => {
 export const MenuSub = forwardRef<HTMLButtonElement, MenuSubmenuProps>(
     (props, ref) => {
         const { theme, cx } = useTheme();
-        const parentMenu = useMenu();
+        const parentMenu = useMenuContext();
 
         const {
             label,
@@ -156,39 +156,32 @@ export const MenuSub = forwardRef<HTMLButtonElement, MenuSubmenuProps>(
             <Portal>
                 <div style={{ position: "fixed", zIndex: 60 }}>
                     <Transition mounted={isOpened} transition="fade">
-                        {(transitionStyles) => (
-                            <div style={transitionStyles}>
-                                <FloatingFocusManager
-                                    context={context}
-                                    modal={false}
+                        <FloatingFocusManager context={context} modal={false}>
+                            <div
+                                ref={refs.setFloating}
+                                id={dropdownId}
+                                role="menu"
+                                aria-labelledby={targetId}
+                                className={cx(
+                                    "p-1 overflow-hidden rounded-md shadow-lg min-w-[180px]",
+                                    theme === "light"
+                                        ? "bg-[var(--byteform-light-background)]"
+                                        : "bg-[var(--byteform-dark-background)]",
+                                    parentMenu.classNames?.dropdown
+                                )}
+                                style={{
+                                    position: "absolute",
+                                    ...floatingStyles
+                                }}
+                                {...getFloatingProps()}
+                            >
+                                <MenuSubContext.Provider
+                                    value={submenuContextValue}
                                 >
-                                    <div
-                                        ref={refs.setFloating}
-                                        id={dropdownId}
-                                        role="menu"
-                                        aria-labelledby={targetId}
-                                        className={cx(
-                                            "p-1 overflow-hidden rounded-md shadow-lg min-w-[180px]",
-                                            theme === "light"
-                                                ? "bg-[var(--byteform-light-background)]"
-                                                : "bg-[var(--byteform-dark-background)]",
-                                            parentMenu.classNames?.dropdown
-                                        )}
-                                        style={{
-                                            position: "absolute",
-                                            ...floatingStyles
-                                        }}
-                                        {...getFloatingProps()}
-                                    >
-                                        <MenuSubContext.Provider
-                                            value={submenuContextValue}
-                                        >
-                                            {children}
-                                        </MenuSubContext.Provider>
-                                    </div>
-                                </FloatingFocusManager>
+                                    {children}
+                                </MenuSubContext.Provider>
                             </div>
-                        )}
+                        </FloatingFocusManager>
                     </Transition>
                 </div>
             </Portal>

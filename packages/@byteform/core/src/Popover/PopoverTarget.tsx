@@ -1,10 +1,10 @@
 import { cloneElement, forwardRef, ReactElement } from "react";
 import { PopoverTargetProps } from "./types";
-import { usePopover } from "./context";
+import { usePopoverContext } from "./context";
 
 export const PopoverTarget = forwardRef<HTMLElement, PopoverTargetProps>(
     ({ children, refProp = "ref", ...others }, ref) => {
-        const ctx = usePopover();
+        const ctx = usePopoverContext();
 
         if (!children || typeof children !== "object") {
             throw new Error(

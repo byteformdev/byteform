@@ -1,4 +1,4 @@
-import { useMenu } from "./context";
+import { useMenuContext } from "./context";
 import { MenuDropdownProps } from "./types";
 import { useTheme } from "../_theme";
 import { Portal } from "../Portal";
@@ -20,48 +20,39 @@ export const MenuDropdown = ({ children, className }: MenuDropdownProps) => {
         trapFocus,
         classNames,
         context
-    } = useMenu();
+    } = useMenuContext();
 
     if (!opened) return null;
 
     const dropdownComponent = (
         <div style={{ position: "fixed", zIndex: 50 }}>
             <Transition mounted={opened} transition="fade">
-                {(transitionStyles) => (
-                    <div
-                        style={{
-                            ...transitionStyles
-                        }}
-                    >
-                        <FloatingFocusManager
-                            context={context}
-                            modal={trapFocus}
+                <div>
+                    <FloatingFocusManager context={context} modal={trapFocus}>
+                        <div
+                            ref={refs.setFloating}
+                            id={dropdownId}
+                            role="menu"
+                            aria-labelledby={targetId}
+                            className={cx(
+                                "p-1 overflow-hidden rounded-md outline-none",
+                                "z-50 min-w-[180px]",
+                                theme === "light"
+                                    ? "bg-[var(--byteform-light-background)]"
+                                    : "bg-[var(--byteform-dark-background)]",
+                                classNames?.dropdown,
+                                className
+                            )}
+                            style={{
+                                position: "absolute",
+                                ...floatingStyles
+                            }}
+                            {...getFloatingProps()}
                         >
-                            <div
-                                ref={refs.setFloating}
-                                id={dropdownId}
-                                role="menu"
-                                aria-labelledby={targetId}
-                                className={cx(
-                                    "p-1 overflow-hidden rounded-md outline-none",
-                                    "z-50 min-w-[180px]",
-                                    theme === "light"
-                                        ? "bg-[var(--byteform-light-background)]"
-                                        : "bg-[var(--byteform-dark-background)]",
-                                    classNames?.dropdown,
-                                    className
-                                )}
-                                style={{
-                                    position: "absolute",
-                                    ...floatingStyles
-                                }}
-                                {...getFloatingProps()}
-                            >
-                                {children}
-                            </div>
-                        </FloatingFocusManager>
-                    </div>
-                )}
+                            {children}
+                        </div>
+                    </FloatingFocusManager>
+                </div>
             </Transition>
         </div>
     );

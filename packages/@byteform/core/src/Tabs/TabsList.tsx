@@ -1,11 +1,12 @@
 import { forwardRef, useEffect, useState, useRef } from "react";
 import { TabsListProps } from "./types";
-import { useTabs } from "./context";
+import { useTabsContext } from "./context";
 import { useTheme } from "../_theme";
 
 export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
     ({ children, className, ...props }, ref) => {
-        const { orientation, grow, classNames, value, tabRefs } = useTabs();
+        const { orientation, grow, classNames, value, tabRefs } =
+            useTabsContext();
         const { theme, cx } = useTheme();
         const listRef = useRef<HTMLDivElement>(null);
         const [indicatorStyle, setIndicatorStyle] =

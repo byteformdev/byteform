@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { MenuItemProps } from "./types";
-import { useMenu } from "./context";
+import { useMenuContext } from "./context";
 import { useTheme } from "../_theme";
 
 export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
@@ -8,7 +8,7 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
         const { theme, cx } = useTheme();
 
         const Component = props.component || "button";
-        const { itemTabIndex, setOpened, classNames } = useMenu();
+        const { itemTabIndex, setOpened, classNames } = useMenuContext();
 
         const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
             if (props.disabled) {

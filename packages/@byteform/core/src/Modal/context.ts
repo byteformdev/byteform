@@ -1,12 +1,5 @@
-import { createContext, useContext } from "react";
 import { ModalContextValue } from "./types";
+import { createSafeContext } from "../_utils/createContext";
 
-export const ModalContext = createContext<ModalContextValue | null>(null);
-
-export const useModalContext = () => {
-    const context = useContext(ModalContext);
-    if (!context) {
-        throw new Error("Modal components must be used within a Modal");
-    }
-    return context;
-};
+export const [ModalProvider, useModalContext] =
+    createSafeContext<ModalContextValue>("Modal was not found in the tree");

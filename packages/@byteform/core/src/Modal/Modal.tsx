@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useState } from "react";
 import { AnimationState, ModalProps } from "./types";
-import { ModalContext } from "./context";
+import { ModalProvider } from "./context";
 import { ModalRoot } from "./ModalRoot";
 import { ModalOverlay } from "./ModalOverlay";
 import { ModalTitle } from "./ModalTitle";
@@ -89,7 +89,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
         if (!mounted || !visible) return null;
 
         const modalContent = (
-            <ModalContext.Provider
+            <ModalProvider
                 value={{
                     zIndex,
                     classNames,
@@ -117,7 +117,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                         <ModalBody>{children}</ModalBody>
                     </ModalContent>
                 </ModalRoot>
-            </ModalContext.Provider>
+            </ModalProvider>
         );
 
         return (

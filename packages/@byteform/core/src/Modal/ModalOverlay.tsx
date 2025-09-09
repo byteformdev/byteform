@@ -3,7 +3,6 @@ import { useModalContext } from "./context";
 
 export const ModalOverlay = () => {
     const {
-        zIndex,
         classNames,
         overlayOpacity,
         withOverlay,

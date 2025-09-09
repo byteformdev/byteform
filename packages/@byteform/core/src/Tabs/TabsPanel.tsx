@@ -1,11 +1,11 @@
 import { forwardRef } from "react";
 import { TabsPanelProps } from "./types";
-import { useTabs } from "./context";
+import { useTabsContext } from "./context";
 import { useTheme } from "../_theme";
 
 export const TabsPanel = forwardRef<HTMLDivElement, TabsPanelProps>(
     ({ children, value, className, ...props }, ref) => {
-        const { value: activeValue, classNames } = useTabs();
+        const { value: activeValue, classNames } = useTabsContext();
         const { cx } = useTheme();
 
         const isActive = activeValue === value;

@@ -1,6 +1,6 @@
 import { forwardRef, useRef, useEffect } from "react";
 import { TabsTabProps } from "./types";
-import { useTabs } from "./context";
+import { useTabsContext } from "./context";
 import { useTheme } from "../_theme";
 
 export const TabsTab = forwardRef<HTMLButtonElement, TabsTabProps>(
@@ -25,7 +25,7 @@ export const TabsTab = forwardRef<HTMLButtonElement, TabsTabProps>(
             classNames,
             registerTab,
             unregisterTab
-        } = useTabs();
+        } = useTabsContext();
         const { theme, cx } = useTheme();
         const internalRef = useRef<HTMLButtonElement>(null);
 

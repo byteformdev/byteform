@@ -1,14 +1,7 @@
-import { createContext, useContext } from "react";
 import { ProgressContextValue } from "./types";
+import { createSafeContext } from "../_utils/createContext";
 
-export const ProgressContext = createContext<ProgressContextValue | null>(null);
-
-export const useProgressContext = () => {
-    const context = useContext(ProgressContext);
-    if (!context) {
-        throw new Error(
-            "Progress components must be used within a Progress.Root"
-        );
-    }
-    return context;
-};
+export const [ProgressProvider, useProgressContext] =
+    createSafeContext<ProgressContextValue>(
+        "Progress was not found in the tree"
+    );

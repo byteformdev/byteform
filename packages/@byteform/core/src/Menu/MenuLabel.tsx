@@ -1,5 +1,5 @@
 import { useTheme } from "../_theme";
-import { useMenu } from "./context";
+import { useMenuContext } from "./context";
 import { MenuLabelProps } from "./types";
 
 const getPosition = (position: MenuLabelProps["position"]) => {
@@ -19,7 +19,7 @@ export const MenuLabel = ({
     position = "left"
 }: MenuLabelProps) => {
     const { theme, cx } = useTheme();
-    const { classNames } = useMenu();
+    const { classNames } = useMenuContext();
 
     return (
         <div

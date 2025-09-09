@@ -1,14 +1,14 @@
 import { forwardRef } from "react";
 import { MenuItemProps } from "./types";
 import { useMenuSubmenu } from "./MenuSub";
-import { useMenu } from "./context";
+import { useMenuContext } from "./context";
 import { useTheme } from "../_theme";
 
 export const MenuSubItem = forwardRef<HTMLButtonElement, MenuItemProps>(
     (props, ref) => {
         const { theme, cx } = useTheme();
         const submenu = useMenuSubmenu();
-        const parentMenu = useMenu();
+        const parentMenu = useMenuContext();
 
         const Component = props.component || "button";
 

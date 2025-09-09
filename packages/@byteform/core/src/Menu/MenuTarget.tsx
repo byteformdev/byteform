@@ -1,9 +1,10 @@
 import { MenuTargetProps } from "./types";
-import { useMenu } from "./context";
+import { useMenuContext } from "./context";
 import { cloneElement, isValidElement } from "react";
 
 export const MenuTarget = ({ children }: MenuTargetProps) => {
-    const { refs, getReferenceProps, targetId, dropdownId, opened } = useMenu();
+    const { refs, getReferenceProps, targetId, dropdownId, opened } =
+        useMenuContext();
 
     if (!isValidElement(children)) {
         throw new Error(

@@ -1,6 +1,6 @@
 import { forwardRef, useId, useEffect, useRef, useState } from "react";
 import { PopoverProps } from "./types";
-import { PopoverContext } from "./context";
+import { PopoverProvider } from "./context";
 import { PopoverTarget } from "./PopoverTarget";
 import { PopoverDropdown } from "./PopoverDropdown";
 import { cx } from "../_theme";
@@ -227,7 +227,7 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>((props, ref) => {
     };
 
     return (
-        <PopoverContext.Provider value={contextValue}>
+        <PopoverProvider value={contextValue}>
             <div
                 ref={ref}
                 className={cx("relative inline-block", props.classNames?.root)}
@@ -240,7 +240,7 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>((props, ref) => {
             >
                 {props.children}
             </div>
-        </PopoverContext.Provider>
+        </PopoverProvider>
     );
 });
 
