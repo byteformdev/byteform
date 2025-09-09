@@ -1,23 +1,9 @@
-import React, { cloneElement, useRef, useState } from "react";
+import React, { cloneElement } from "react";
 import { TooltipProps } from "./types";
 import { useTheme } from "../_theme";
 import { Transition } from "../Transition";
-import {
-    useFloating,
-    autoUpdate,
-    offset,
-    flip,
-    shift,
-    arrow,
-    useHover,
-    useFocus,
-    useDismiss,
-    useRole,
-    useInteractions,
-    Placement,
-    FloatingArrow,
-    useClick
-} from "@floating-ui/react";
+import { FloatingArrow } from "@floating-ui/react";
+import { useTooltip } from "./use-tooltip";
 
 export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
     (
@@ -25,7 +11,8 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
             children,
             label,
             position = "top",
-            offset: offsetProp = 5,
+            onPositionChange,
+            offset = 6,
             disabled = false,
             opened,
             withArrow = false,
@@ -40,69 +27,25 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
             zIndex = 1000,
             className,
             classNames,
+            middlewares,
             ...others
         },
         ref
     ) => {
         const { theme, cx, settings } = useTheme();
 
-        const [open, setOpen] = useState(opened || false);
-        const arrowRef = useRef<SVGSVGElement>(null);
-
-        const convertPosition = (pos: string): Placement => {
-            return pos as Placement;
-        };
-
-        const { x, y, strategy, refs, middlewareData, context } = useFloating({
-            placement: convertPosition(position),
-            open,
-            onOpenChange: (opened) => {
-                if (opened === undefined) return;
-                setOpen(opened);
-            },
-            middleware: [
-                offset(
-                    typeof offsetProp === "number"
-                        ? offsetProp
-                        : {
-                              mainAxis: offsetProp?.mainAxis ?? 5,
-                              crossAxis: offsetProp?.crossAxis ?? 0
-                          }
-                ),
-                flip(),
-                shift(),
-                ...(withArrow ? [arrow({ element: arrowRef })] : [])
-            ],
-            whileElementsMounted: autoUpdate
+        const tooltip = useTooltip({
+            position,
+            onPositionChange,
+            offset,
+            disabled,
+            opened,
+            withArrow,
+            trigger,
+            openDelay,
+            closeDelay,
+            middlewares
         });
-
-        const hover = useHover(context, {
-            enabled:
-                (trigger === "hover" || trigger === "click-hover") && !disabled,
-            delay: { open: openDelay, close: closeDelay }
-        });
-
-        const click = useClick(context, {
-            enabled:
-                (trigger === "click" || trigger === "click-hover") && !disabled
-        });
-
-        const dismiss = useDismiss(context);
-
-        const role = useRole(context, { role: "tooltip" });
-
-        const { getReferenceProps, getFloatingProps } = useInteractions([
-            hover,
-            click,
-            dismiss,
-            role
-        ]);
-
-        React.useEffect(() => {
-            if (opened !== undefined) {
-                setOpen(opened);
-            }
-        }, [opened]);
 
         if (!label) {
             return <>{children}</>;
@@ -111,16 +54,16 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
         const clonedChild = cloneElement(
             React.Children.only(children) as React.ReactElement,
             {
-                ref: refs.setReference,
-                ...getReferenceProps({
-                    "aria-describedby": open ? "tooltip" : undefined
+                ref: tooltip.refs.setReference,
+                ...tooltip.getReferenceProps({
+                    "aria-describedby": tooltip.opened ? "tooltip" : undefined
                 })
             } as any
         );
 
         const isCompact = compact || settings.compact?.tooltip;
 
-        const tooltipElement = open && (
+        const tooltipElement = tooltip.opened && (
             <div
                 style={{
                     position: "fixed",
@@ -128,10 +71,10 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
                     pointerEvents: "none"
                 }}
             >
-                <Transition mounted={open} transition="fade">
+                <Transition mounted={tooltip.opened} transition="fade">
                     <div
                         ref={(node) => {
-                            refs.setFloating(node);
+                            tooltip.refs.setFloating(node);
                             if (typeof ref === "function") {
                                 ref(node);
                             } else if (ref) {
@@ -143,19 +86,19 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
                         className={cx(
                             "pointer-events-none rounded-md",
                             "transition-opacity duration-200",
-                            open ? "opacity-100" : "opacity-0",
+                            tooltip.opened ? "opacity-100" : "opacity-0",
                             theme === "light"
                                 ? "bg-[var(--byteform-light-background)]"
                                 : "bg-[var(--byteform-dark-background)]",
                             classNames?.root
                         )}
                         style={{
-                            position: strategy,
-                            top: y ?? 0,
-                            left: x ?? 0,
+                            position: tooltip.strategy,
+                            top: tooltip.y ?? 0,
+                            left: tooltip.x ?? 0,
                             zIndex
                         }}
-                        {...getFloatingProps(others)}
+                        {...tooltip.getFloatingProps(others)}
                     >
                         <div
                             className={cx(
@@ -173,8 +116,8 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
                         >
                             {withArrow && (
                                 <FloatingArrow
-                                    ref={arrowRef}
-                                    context={context}
+                                    ref={tooltip.arrowRef}
+                                    context={tooltip.context}
                                     className={classNames?.arrow}
                                     fill={
                                         theme === "light"
