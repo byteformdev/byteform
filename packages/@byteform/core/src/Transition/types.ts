@@ -1,4 +1,5 @@
-import { CSSProperties } from "react";
+import { ReactNode } from "react";
+import { Variants, Transition as FramerTransition } from "framer-motion";
 
 export type TransitionName =
     | "fade"
@@ -25,40 +26,37 @@ export type TransitionName =
     | "bounce"
     | "spring";
 
-export type TimingFunction =
-    | "ease"
-    | "ease-in"
-    | "ease-out"
-    | "ease-in-out"
-    | "linear"
-    | "easeIn"
-    | "easeOut"
-    | "easeInOut"
-    | "anticipate"
-    | "backInOut"
-    | "circIn"
-    | "circOut"
-    | "circInOut";
-
-export interface TransitionStyles {
-    in: CSSProperties;
-    out: CSSProperties;
-    common?: CSSProperties;
-    transitionProperty: string;
-}
-
 export interface TransitionProps {
-    children:
-        | React.ReactNode
-        | ((styles: React.CSSProperties) => React.ReactNode);
+    /** The content to animate */
+    children: ReactNode;
+
+    /** Whether the component should be visible */
     mounted: boolean;
-    transition: TransitionName | TransitionStyles;
+
+    /** Predefined transition name or custom framer-motion variants */
+    transition?: TransitionName | Variants;
+
+    /** Animation duration in milliseconds */
     duration?: number;
-    timingFunction?: TimingFunction;
+
+    /** Framer motion transition configuration */
+    transitionConfig?: FramerTransition;
+
+    /** Delay before enter animation starts (ms) */
     enterDelay?: number;
+
+    /** Delay before exit animation starts (ms) */
     exitDelay?: number;
+
+    /** Keep component mounted in DOM when not visible */
     keepMounted?: boolean;
+
+    /** CSS class name */
     className?: string;
-    onExited?: () => void;
+
+    /** Callback fired when enter animation completes */
     onEntered?: () => void;
+
+    /** Callback fired when exit animation completes */
+    onExited?: () => void;
 }

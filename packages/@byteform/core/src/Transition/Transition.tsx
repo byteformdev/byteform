@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { TransitionProps } from "./types";
 import { TRANSITIONS } from "./transitions";
@@ -6,9 +6,9 @@ import { TRANSITIONS } from "./transitions";
 export const Transition = ({
     children,
     mounted,
-    transition,
+    transition = "fade",
     duration = 250,
-    timingFunction = "ease",
+    transitionConfig,
     enterDelay = 0,
     exitDelay = 0,
     keepMounted = false,
@@ -16,96 +16,55 @@ export const Transition = ({
     onEntered,
     className
 }: TransitionProps) => {
-    const [visible, setVisible] = useState(mounted);
-
-    const transitionStyles = useMemo(() => {
+    const variants = useMemo(() => {
         if (typeof transition === "string") {
-            return TRANSITIONS[transition] || TRANSITIONS.fade;
+            return TRANSITIONS[transition];
         }
-        return transition;
+        return transition as Variants;
     }, [transition]);
 
-    const easingValue = useMemo(() => {
-        const easingMap: Record<string, string> = {
-            ease: "easeInOut",
-            "ease-in": "easeIn",
-            "ease-out": "easeOut",
-            "ease-in-out": "easeInOut",
-            linear: "linear",
-            easeIn: "easeIn",
-            easeOut: "easeOut",
-            easeInOut: "easeInOut",
-            anticipate: "anticipate",
-            backInOut: "backInOut",
-            circIn: "circIn",
-            circOut: "circOut",
-            circInOut: "circInOut"
+    const motionTransition = useMemo(() => {
+        const baseTransition = {
+            duration: duration / 1000,
+            ease: "easeInOut" as const,
+            ...transitionConfig
         };
-        return easingMap[timingFunction] || "easeInOut";
-    }, [timingFunction]);
 
-    useEffect(() => {
-        if (mounted) {
-            setVisible(true);
-        } else if (!keepMounted) {
-            setVisible(false);
-        }
-    }, [mounted, keepMounted]);
+        return {
+            ...baseTransition,
+            delay: mounted ? enterDelay / 1000 : exitDelay / 1000
+        };
+    }, [duration, transitionConfig, mounted, enterDelay, exitDelay]);
 
-    const variants = useMemo(
-        () => ({
-            initial: {
-                ...transitionStyles.out,
-                ...(transitionStyles.common || {})
-            },
-            animate: {
-                ...transitionStyles.in,
-                ...(transitionStyles.common || {})
-            },
-            exit: {
-                ...transitionStyles.out,
-                ...(transitionStyles.common || {})
-            }
-        }),
-        [transitionStyles]
-    );
-
-    const currentStyles = useMemo(
-        () =>
-            (mounted
-                ? variants.animate
-                : variants.initial) as React.CSSProperties,
-        [mounted, variants]
-    );
+    const shouldRender = mounted || keepMounted;
 
     return (
         <AnimatePresence
+            mode="wait"
             onExitComplete={() => {
-                !keepMounted && setVisible(false);
                 onExited?.();
             }}
         >
-            {(mounted || (keepMounted && visible)) && (
+            {shouldRender && (
                 <motion.div
+                    key={mounted ? "mounted" : "unmounted"}
                     initial="initial"
-                    animate="animate"
+                    animate={mounted ? "animate" : "exit"}
                     exit="exit"
-                    variants={variants as any}
-                    transition={{
-                        duration: duration / 1000,
-                        ease: easingValue as any,
-                        delay: mounted ? enterDelay / 1000 : exitDelay / 1000
-                    }}
-                    onAnimationComplete={() => {
-                        if (mounted) {
+                    variants={variants}
+                    transition={motionTransition}
+                    onAnimationComplete={(definition) => {
+                        if (definition === "animate" && mounted) {
                             onEntered?.();
                         }
                     }}
                     className={className}
+                    style={{
+                        visibility:
+                            !mounted && keepMounted ? "hidden" : "visible"
+                    }}
                 >
-                    {typeof children === "function"
-                        ? children(currentStyles)
-                        : children}
+                    {children}
                 </motion.div>
             )}
         </AnimatePresence>

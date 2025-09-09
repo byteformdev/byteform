@@ -1,151 +1,152 @@
-import { TransitionStyles } from "./types";
+import { Variants } from "framer-motion";
+import { TransitionName } from "./types";
 
-export const TRANSITIONS: Record<string, TransitionStyles> = {
+export const TRANSITIONS: Record<TransitionName, Variants> = {
     fade: {
-        in: { opacity: 1 },
-        out: { opacity: 0 },
-        transitionProperty: "opacity"
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0 }
     },
 
     "fade-up": {
-        in: { opacity: 1, transform: "translateY(0)" },
-        out: { opacity: 0, transform: "translateY(10px)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, y: 10 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: 10 }
     },
 
     "fade-down": {
-        in: { opacity: 1, transform: "translateY(0)" },
-        out: { opacity: 0, transform: "translateY(-10px)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, y: -10 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: -10 }
     },
 
     "fade-left": {
-        in: { opacity: 1, transform: "translateX(0)" },
-        out: { opacity: 0, transform: "translateX(10px)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, x: 10 },
+        animate: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: 10 }
     },
 
     "fade-right": {
-        in: { opacity: 1, transform: "translateX(0)" },
-        out: { opacity: 0, transform: "translateX(-10px)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, x: -10 },
+        animate: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: -10 }
     },
 
     scale: {
-        in: { opacity: 1, transform: "scale(1)" },
-        out: { opacity: 0, transform: "scale(0.95)" },
-        common: { transformOrigin: "center" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, scale: 0.95 },
+        animate: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 0.95 }
     },
 
     "scale-y": {
-        in: { opacity: 1, transform: "scaleY(1)" },
-        out: { opacity: 0, transform: "scaleY(0)" },
-        common: { transformOrigin: "top" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, scaleY: 0, originY: 0 },
+        animate: { opacity: 1, scaleY: 1, originY: 0 },
+        exit: { opacity: 0, scaleY: 0, originY: 0 }
     },
 
     "scale-x": {
-        in: { opacity: 1, transform: "scaleX(1)" },
-        out: { opacity: 0, transform: "scaleX(0)" },
-        common: { transformOrigin: "left" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, scaleX: 0, originX: 0 },
+        animate: { opacity: 1, scaleX: 1, originX: 0 },
+        exit: { opacity: 0, scaleX: 0, originX: 0 }
     },
 
     "skew-up": {
-        in: { opacity: 1, transform: "translateY(0) skew(0deg, 0deg)" },
-        out: { opacity: 0, transform: "translateY(-20px) skew(-10deg, -5deg)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, y: -20, skewX: -10, skewY: -5 },
+        animate: { opacity: 1, y: 0, skewX: 0, skewY: 0 },
+        exit: { opacity: 0, y: -20, skewX: -10, skewY: -5 }
     },
 
     "skew-down": {
-        in: { opacity: 1, transform: "translateY(0) skew(0deg, 0deg)" },
-        out: { opacity: 0, transform: "translateY(20px) skew(-10deg, -5deg)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, y: 20, skewX: -10, skewY: -5 },
+        animate: { opacity: 1, y: 0, skewX: 0, skewY: 0 },
+        exit: { opacity: 0, y: 20, skewX: -10, skewY: -5 }
     },
 
     "rotate-left": {
-        in: { opacity: 1, transform: "translateY(0) rotate(0deg)" },
-        out: { opacity: 0, transform: "translateY(20px) rotate(-5deg)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, y: 20, rotate: -5 },
+        animate: { opacity: 1, y: 0, rotate: 0 },
+        exit: { opacity: 0, y: 20, rotate: -5 }
     },
 
     "rotate-right": {
-        in: { opacity: 1, transform: "translateY(0) rotate(0deg)" },
-        out: { opacity: 0, transform: "translateY(20px) rotate(5deg)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, y: 20, rotate: 5 },
+        animate: { opacity: 1, y: 0, rotate: 0 },
+        exit: { opacity: 0, y: 20, rotate: 5 }
     },
 
     "slide-down": {
-        in: { opacity: 1, transform: "translateY(0)" },
-        out: { opacity: 0, transform: "translateY(-100%)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, y: "-100%" },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: "-100%" }
     },
 
     "slide-up": {
-        in: { opacity: 1, transform: "translateY(0)" },
-        out: { opacity: 0, transform: "translateY(100%)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, y: "100%" },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: "100%" }
     },
 
     "slide-left": {
-        in: { opacity: 1, transform: "translateX(0)" },
-        out: { opacity: 0, transform: "translateX(100%)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, x: "100%" },
+        animate: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: "100%" }
     },
 
     "slide-right": {
-        in: { opacity: 1, transform: "translateX(0)" },
-        out: { opacity: 0, transform: "translateX(-100%)" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, x: "-100%" },
+        animate: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: "-100%" }
     },
 
     pop: {
-        in: { opacity: 1, transform: "scale(1)" },
-        out: { opacity: 0, transform: "scale(0)" },
-        common: { transformOrigin: "center" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, scale: 0 },
+        animate: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 0 }
     },
 
     "pop-bottom-left": {
-        in: { opacity: 1, transform: "scale(1)" },
-        out: { opacity: 0, transform: "scale(0)" },
-        common: { transformOrigin: "bottom left" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, scale: 0, originX: 0, originY: 1 },
+        animate: { opacity: 1, scale: 1, originX: 0, originY: 1 },
+        exit: { opacity: 0, scale: 0, originX: 0, originY: 1 }
     },
 
     "pop-bottom-right": {
-        in: { opacity: 1, transform: "scale(1)" },
-        out: { opacity: 0, transform: "scale(0)" },
-        common: { transformOrigin: "bottom right" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, scale: 0, originX: 1, originY: 1 },
+        animate: { opacity: 1, scale: 1, originX: 1, originY: 1 },
+        exit: { opacity: 0, scale: 0, originX: 1, originY: 1 }
     },
 
     "pop-top-left": {
-        in: { opacity: 1, transform: "scale(1)" },
-        out: { opacity: 0, transform: "scale(0)" },
-        common: { transformOrigin: "top left" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, scale: 0, originX: 0, originY: 0 },
+        animate: { opacity: 1, scale: 1, originX: 0, originY: 0 },
+        exit: { opacity: 0, scale: 0, originX: 0, originY: 0 }
     },
 
     "pop-top-right": {
-        in: { opacity: 1, transform: "scale(1)" },
-        out: { opacity: 0, transform: "scale(0)" },
-        common: { transformOrigin: "top right" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, scale: 0, originX: 1, originY: 0 },
+        animate: { opacity: 1, scale: 1, originX: 1, originY: 0 },
+        exit: { opacity: 0, scale: 0, originX: 1, originY: 0 }
     },
 
     bounce: {
-        in: { opacity: 1, transform: "scale(1) translateY(0)" },
-        out: { opacity: 0, transform: "scale(0.3) translateY(50px)" },
-        common: { transformOrigin: "center" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, scale: 0.3, y: 50 },
+        animate: {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            transition: { type: "spring", bounce: 0.4 }
+        },
+        exit: { opacity: 0, scale: 0.3, y: 50 }
     },
 
     spring: {
-        in: { opacity: 1, transform: "scale(1) translateY(0)" },
-        out: { opacity: 0, transform: "scale(0.8) translateY(20px)" },
-        common: { transformOrigin: "center" },
-        transitionProperty: "opacity, transform"
+        initial: { opacity: 0, scale: 0.8, y: 20 },
+        animate: {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            transition: { type: "spring", stiffness: 300, damping: 20 }
+        },
+        exit: { opacity: 0, scale: 0.8, y: 20 }
     }
 };
