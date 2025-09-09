@@ -1,12 +1,14 @@
 import React from "react";
 
-export interface PortalProps {
-    children: React.ReactNode;
-    target?: HTMLElement | string | null;
+export interface BasePortalProps extends React.ComponentPropsWithoutRef<"div"> {
+    target?: HTMLElement | string;
     reuseTargetNode?: boolean;
 }
 
-export interface OptionalPortalProps extends Omit<PortalProps, "children"> {
+export interface PortalProps extends BasePortalProps {
     children: React.ReactNode;
+}
+
+export interface OptionalPortalProps extends PortalProps {
     withinPortal?: boolean;
 }

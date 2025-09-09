@@ -1,22 +1,19 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Portal } from "./Portal";
 import { OptionalPortalProps } from "./types";
 
-export const OptionalPortal = ({
-    children,
-    withinPortal = true,
-    target,
-    ...others
-}: OptionalPortalProps) => {
-    if (withinPortal) {
+export const OptionalPortal = forwardRef<HTMLDivElement, OptionalPortalProps>(
+    ({ withinPortal = true, children, ...props }, ref) => {
+        if (!withinPortal) {
+            return <>{children}</>;
+        }
+
         return (
-            <Portal target={target} {...others}>
+            <Portal ref={ref} {...props}>
                 {children}
             </Portal>
         );
     }
+);
 
-    return <>{children}</>;
-};
-
-OptionalPortal.displayName = "@byteform/core/Portal.Optional";
+OptionalPortal.displayName = "@byteform/core/OptionalPortal";
