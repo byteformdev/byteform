@@ -33,7 +33,6 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
             className,
             classNames,
 
-            // Form input props
             inputLabel,
             description,
             error,
