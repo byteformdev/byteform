@@ -13,6 +13,7 @@ export const TableTfoot = forwardRef<HTMLTableSectionElement, TableTfootProps>(
                 theme === "light"
                     ? "bg-[var(--byteform-light-background)]"
                     : "bg-[var(--byteform-dark-background)]",
+
                 classNames?.tfoot,
                 className
             );

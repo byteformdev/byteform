@@ -1,15 +1,6 @@
-import { createContext, useContext } from "react";
+import { createSafeContext } from "../_utils/createContext";
 import { TableContextValue } from "./types";
 
-export const TableContext = createContext<TableContextValue | null>(null);
-
-export const useTable = () => {
-    const context = useContext(TableContext);
-    if (!context) {
-        throw new Error(
-            "Table components must be used within a Table component"
-        );
-    }
-
-    return context;
-};
+export const [TableProvider, useTable] = createSafeContext<TableContextValue>(
+    "Table components must be used within a Table component"
+);

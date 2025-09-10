@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 
 export type TableVariant = "default" | "vertical";
 export type CaptionSide = "top" | "bottom";
+export type TableSpacing = "xs" | "sm" | "md" | "lg" | "xl";
 
 export interface TableClassNames {
     root?: string;
@@ -16,12 +17,22 @@ export interface TableClassNames {
 
 export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
     children: ReactNode;
+
+    // Main visual features
     stickyHeader?: boolean;
     striped?: boolean;
     highlightOnHover?: boolean;
+
+    // Border controls
     withTableBorder?: boolean;
     withColumnBorders?: boolean;
     withRowBorders?: boolean;
+
+    // Spacing controls (new feature)
+    verticalSpacing?: TableSpacing;
+    horizontalSpacing?: TableSpacing;
+
+    // Other props
     variant?: TableVariant;
     className?: string;
     classNames?: TableClassNames;
@@ -71,10 +82,19 @@ export interface TableCaptionProps
 }
 
 export interface TableContextValue {
-    striped?: boolean;
-    highlightOnHover?: boolean;
-    withColumnBorders?: boolean;
-    withRowBorders?: boolean;
-    variant?: TableVariant;
+    // Visual features
+    striped: boolean;
+    highlightOnHover: boolean;
+
+    // Border controls
+    withColumnBorders: boolean;
+    withRowBorders: boolean;
+
+    // Spacing
+    verticalSpacing: TableSpacing;
+    horizontalSpacing: TableSpacing;
+
+    // Other
+    variant: TableVariant;
     classNames?: TableClassNames;
 }

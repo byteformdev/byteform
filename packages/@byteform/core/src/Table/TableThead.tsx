@@ -1,18 +1,19 @@
 import { forwardRef } from "react";
 import { TableTheadProps } from "./types";
+import { useTheme } from "../_theme";
 import { useTable } from "./context";
-import { cx } from "../_theme";
 
 export const TableThead = forwardRef<HTMLTableSectionElement, TableTheadProps>(
     ({ children, className, ...props }, ref) => {
+        const { cx } = useTheme();
         const { classNames } = useTable();
 
+        const getHeaderClasses = () => {
+            return cx(classNames?.thead, className);
+        };
+
         return (
-            <thead
-                ref={ref}
-                className={cx(classNames?.thead, className)}
-                {...props}
-            >
+            <thead ref={ref} className={getHeaderClasses()} {...props}>
                 {children}
             </thead>
         );

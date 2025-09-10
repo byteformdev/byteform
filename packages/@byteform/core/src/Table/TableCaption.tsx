@@ -16,7 +16,9 @@ export const TableCaption = forwardRef<
             theme === "light"
                 ? "text-[var(--byteform-light-hint)]"
                 : "text-[var(--byteform-dark-hint)]",
+
             captionSide === "top" ? "caption-top" : "caption-bottom",
+
             classNames?.caption,
             className
         );
