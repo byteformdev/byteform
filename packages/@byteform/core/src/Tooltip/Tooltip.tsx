@@ -61,7 +61,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
             } as any
         );
 
-        const isCompact = compact || settings.compact?.tooltip;
+        const isCompact = compact || settings.tooltip?.compact;
 
         const tooltipElement = tooltip.opened && (
             <div

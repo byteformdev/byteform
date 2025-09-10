@@ -2,14 +2,18 @@ import { ButtonAnimation } from "../../Button/types";
 
 export type Theme = "light" | "dark";
 
-export interface CompactSettings {
-    button?: boolean;
-    tooltip?: boolean;
+export interface ButtonThemeSettings {
+    compact?: boolean;
+    animation?: ButtonAnimation;
+}
+
+export interface TooltipThemeSettings {
+    compact?: boolean;
 }
 
 export interface ThemeSettings {
-    buttonAnimation?: ButtonAnimation;
-    compact?: CompactSettings;
+    button?: ButtonThemeSettings;
+    tooltip?: TooltipThemeSettings;
 }
 
 export interface ThemeProviderProps {

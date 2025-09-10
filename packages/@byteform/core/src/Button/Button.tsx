@@ -162,7 +162,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         };
 
         const gridClasses = useMemo(() => getGrid(align), [align]);
-        const isCompact = compact || settings.compact?.button;
+        const isCompact = compact || settings.button?.compact;
 
         const sizeClasses = useMemo(
             () => getSize(size, isCompact),
@@ -173,8 +173,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             [theme, variant]
         );
         const animationClasses = useMemo(
-            () => getAnimation(animation, settings.buttonAnimation),
-            [animation, settings.buttonAnimation]
+            () => getAnimation(animation, settings.button?.animation),
+            [animation, settings.button?.animation]
         );
 
         const Element = Component as ElementType;
