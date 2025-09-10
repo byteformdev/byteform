@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import { SwitchProps, SwitchSize } from "./types";
 import { useTheme } from "../_theme";
 
@@ -28,17 +28,17 @@ const sizeClasses = {
         label: "text-sm"
     },
     lg: {
-        track: "w-12 h-7",
+        track: "w-14 h-7",
         thumb: "w-5 h-5",
-        thumbTranslate: "translate-x-5",
+        thumbTranslate: "translate-x-7",
         thumbOffset: "left-1",
         trackLabel: "text-sm",
         label: "text-base"
     },
     xl: {
-        track: "w-14 h-8",
+        track: "w-16 h-9",
         thumb: "w-6 h-6",
-        thumbTranslate: "translate-x-5",
+        thumbTranslate: "translate-x-7",
         thumbOffset: "left-1.5",
         trackLabel: "text-base",
         label: "text-lg"
@@ -48,6 +48,10 @@ const sizeClasses = {
 const getSize = (size: SwitchSize) => {
     return sizeClasses[size] || sizeClasses.md;
 };
+
+const baseSwitchStyles = [
+    "relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out cursor-pointer border outline-none"
+];
 
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     (
@@ -63,8 +67,6 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             checked,
             defaultChecked,
             onChange,
-            onLabel,
-            offLabel,
             thumbIcon,
             className,
             classNames,
@@ -74,34 +76,65 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     ) => {
         const { theme, cx } = useTheme();
 
-        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            if (!disabled && !readOnly && onChange) {
-                onChange(event.target.checked);
+        const isControlled = checked !== undefined;
+        const [internalChecked, setInternalChecked] = useState(
+            defaultChecked || false
+        );
+
+        useEffect(() => {
+            if (!isControlled && defaultChecked !== undefined) {
+                setInternalChecked(defaultChecked);
             }
+        }, [defaultChecked, isControlled]);
+
+        const currentChecked = isControlled ? checked : internalChecked;
+
+        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+            if (disabled || readOnly) return;
+
+            const newChecked = event.target.checked;
+
+            if (!isControlled) {
+                setInternalChecked(newChecked);
+            }
+
+            onChange?.(newChecked);
         };
 
-        const getSwitchStyles = () => {
-            const baseStyles = [
-                "relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out cursor-pointer border outline-none"
-            ];
+        const handleToggle = () => {
+            if (disabled || readOnly) return;
 
+            const newChecked = !currentChecked;
+
+            if (!isControlled) {
+                setInternalChecked(newChecked);
+            }
+
+            onChange?.(newChecked);
+        };
+
+        const switchStyles = useMemo(() => {
             const themeStyles =
                 theme === "light"
                     ? [
                           "bg-[var(--byteform-light-background)] border-[var(--byteform-light-border)]",
                           !disabled &&
+                              !readOnly &&
                               "hover:bg-[var(--byteform-light-background-hover)]"
                       ]
                     : [
                           "bg-[var(--byteform-dark-background)] border-[var(--byteform-dark-border)]",
                           !disabled &&
+                              !readOnly &&
                               "hover:bg-[var(--byteform-dark-background-hover)]"
                       ];
 
-            const checkedStyles = checked
+            const checkedStyles = currentChecked
                 ? [
                       "bg-[var(--byteform-primary)] border-[var(--byteform-primary)]",
-                      !disabled && "hover:bg-[var(--byteform-primary-hover)]"
+                      !disabled &&
+                          !readOnly &&
+                          "hover:bg-[var(--byteform-primary-hover)]"
                   ]
                 : [];
 
@@ -110,34 +143,32 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                 : [];
 
             return cx([
-                ...baseStyles,
+                ...baseSwitchStyles,
                 ...themeStyles,
                 ...checkedStyles,
                 ...disabledStyles
             ]);
-        };
+        }, [theme, disabled, readOnly, currentChecked, cx]);
 
         const currentSize = getSize(size);
 
-        const renderLabel = () => {
+        const renderLabel = useMemo(() => {
             if (!label) return null;
 
             return (
                 <label
                     className={cx(
-                        "cursor-pointer select-none",
                         currentSize.label,
                         theme === "light"
                             ? "text-[var(--byteform-light-text)]"
                             : "text-[var(--byteform-dark-text)]",
                         disabled && "cursor-not-allowed",
+                        !readOnly && "cursor-pointer",
                         classNames?.label
                     )}
                     onClick={(e) => {
                         e.preventDefault();
-                        if (disabled || readOnly) return;
-
-                        onChange?.(!checked);
+                        handleToggle();
                     }}
                 >
                     {label}
@@ -148,9 +179,16 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                     )}
                 </label>
             );
-        };
+        }, [
+            label,
+            withAsterisk,
+            currentSize.label,
+            theme,
+            disabled,
+            classNames?.label
+        ]);
 
-        const renderDescription = () => {
+        const renderDescription = useMemo(() => {
             if (!description || error) return null;
 
             return (
@@ -167,9 +205,9 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                     {description}
                 </div>
             );
-        };
+        }, [description, error, theme, disabled, classNames?.description]);
 
-        const renderError = () => {
+        const renderError = useMemo(() => {
             if (!error) return null;
 
             return (
@@ -182,7 +220,13 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                     {error}
                 </div>
             );
-        };
+        }, [error, classNames?.error]);
+
+        const renderThumbIcon = useMemo(() => {
+            if (!thumbIcon) return null;
+
+            return thumbIcon(currentChecked, size);
+        }, [thumbIcon, currentChecked, size]);
 
         return (
             <div
@@ -205,8 +249,10 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                             ref={ref}
                             type="checkbox"
                             className="sr-only"
-                            checked={checked}
-                            defaultChecked={defaultChecked}
+                            checked={isControlled ? checked : undefined}
+                            defaultChecked={
+                                !isControlled ? defaultChecked : undefined
+                            }
                             disabled={disabled}
                             readOnly={readOnly}
                             required={required}
@@ -218,54 +264,41 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                             className={cx(
                                 "outline-none",
                                 currentSize.track,
-                                getSwitchStyles(),
+                                switchStyles,
                                 disabled && "cursor-not-allowed",
-                                classNames?.track,
-                                checked && classNames?.activeTrack
+                                readOnly && "cursor-default",
+                                classNames?.track
                             )}
                             onClick={
                                 !disabled && !readOnly
-                                    ? () => onChange?.(!checked)
+                                    ? handleToggle
                                     : undefined
                             }
                             role="switch"
-                            aria-checked={checked}
+                            aria-checked={currentChecked}
+                            data-checked={currentChecked}
                         >
-                            {(onLabel || offLabel) && (
-                                <div
-                                    className={cx(
-                                        "absolute inset-0 flex items-center justify-center text-white font-medium",
-                                        currentSize.trackLabel,
-                                        classNames?.trackLabel
-                                    )}
-                                >
-                                    {checked ? onLabel : offLabel}
-                                </div>
-                            )}
-
                             <span
                                 className={cx(
-                                    "absolute rounded-full transition-transform duration-200 ease-in-out bg-[var(--byteform-white)] flex items-center justify-center",
-                                    thumbIcon
-                                        ? "bg-[var(--byteform-white)] text-[var(--byteform-black)] ring-0"
-                                        : "ring-[var(--byteform-white)]",
+                                    "absolute rounded-full bg-[var(--byteform-white)] flex items-center justify-center transition-transform duration-200",
                                     currentSize.thumb,
                                     currentSize.thumbOffset,
-                                    checked && currentSize.thumbTranslate,
-                                    classNames?.thumb,
-                                    checked && classNames?.activeThumb
+                                    currentChecked &&
+                                        currentSize.thumbTranslate,
+                                    classNames?.thumb
                                 )}
+                                data-checked={currentChecked}
                             >
-                                {thumbIcon}
+                                {renderThumbIcon}
                             </span>
                         </div>
                     </div>
 
-                    {renderLabel()}
+                    {renderLabel}
                 </div>
 
-                {renderDescription()}
-                {renderError()}
+                {renderDescription}
+                {renderError}
             </div>
         );
     }
