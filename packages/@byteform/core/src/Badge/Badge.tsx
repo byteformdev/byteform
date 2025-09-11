@@ -67,14 +67,17 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
             );
         };
 
+        const currentSize = useMemo(() => getSize(size), [size]);
+        const currentVariant = useMemo(() => getVariant(variant), [variant]);
+
         return (
             <div
                 ref={ref}
                 {...props}
                 className={cx(
                     "inline-flex items-center whitespace-nowrap font-medium w-fit rounded-md outline-none",
-                    getSize(size),
-                    getVariant(variant),
+                    currentSize,
+                    currentVariant,
                     fullWidth && "w-full",
                     className,
                     classNames?.wrapper

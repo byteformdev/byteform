@@ -1,6 +1,6 @@
 import { IconUserCircle } from "@tabler/icons-react";
 import { AvatarProps } from "./types";
-import { ElementType, forwardRef } from "react";
+import { ElementType, forwardRef, useMemo } from "react";
 import { cx, useTheme } from "../_theme";
 import { AvatarGroup } from "./AvatarGroup";
 
@@ -63,12 +63,14 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     ) => {
         const { theme, cx } = useTheme();
 
+        const currentSize = useMemo(() => getSize(size), [size]);
+
         const Element = Component as ElementType;
         return (
             <Element
                 className={cx(
-                    "inline-flex items-center justify-center overflow-hidden rounded-full outline-none",
-                    getSize(size),
+                    "inline-flex items-center justify-center rounded-full overflow-hidden outline-none",
+                    currentSize,
                     theme === "light"
                         ? "bg-[var(--byteform-light-background)] text-[var(--byteform-light-text)]"
                         : "bg-[var(--byteform-dark-background)] text-[var(--byteform-dark-text)]",
