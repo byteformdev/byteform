@@ -74,6 +74,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
         const { theme, cx } = useTheme();
 
         const [isOpen, setIsOpen] = useState(initialOpened);
+        const [isMounted, setIsMounted] = useState(initialOpened || false);
         const [selectedValue, setSelectedValue] = useState<string | string[]>(
             multiple
                 ? Array.isArray(value)
@@ -221,6 +222,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
 
         useEffect(() => {
             if (isOpen) {
+                setIsMounted(true);
                 onDropdownOpen?.();
                 if (searchable) {
                     setTimeout(() => inputRef.current?.focus(), 0);
@@ -233,6 +235,10 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
                         onSearchChange?.("");
                     }
                 }
+                // For non-transition case, unmount immediately
+                if (!withTransition) {
+                    setIsMounted(false);
+                }
             }
         }, [
             isOpen,
@@ -240,7 +246,8 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
             searchValue,
             onDropdownOpen,
             onDropdownClose,
-            onSearchChange
+            onSearchChange,
+            withTransition
         ]);
 
         const handleOptionClick = (option: SelectOption) => {
@@ -541,7 +548,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
                         mounted={isOpen}
                         transition="fade-down"
                         duration={200}
-                        timingFunction="easeOut"
+                        onExited={() => setIsMounted(false)}
                         {...transitionProps}
                     >
                         {dropdownContent}
@@ -608,7 +615,7 @@ export const Select = forwardRef<HTMLInputElement, SelectProps>(
                     {...props}
                 />
 
-                {isOpen && (
+                {isMounted && (
                     <div
                         ref={refs.setFloating}
                         style={{
