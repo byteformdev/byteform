@@ -148,5 +148,69 @@ export const TRANSITIONS: Record<TransitionName, Variants> = {
             transition: { type: "spring", stiffness: 300, damping: 20 }
         },
         exit: { opacity: 0, scale: 0.8, y: 20 }
+    },
+
+    flip: {
+        initial: { opacity: 0, rotateX: 90 },
+        animate: { opacity: 1, rotateX: 0 },
+        exit: { opacity: 0, rotateX: 90 }
+    },
+
+    "flip-x": {
+        initial: { opacity: 0, rotateY: 90 },
+        animate: { opacity: 1, rotateY: 0 },
+        exit: { opacity: 0, rotateY: 90 }
+    },
+
+    "flip-y": {
+        initial: { opacity: 0, rotateX: 90 },
+        animate: { opacity: 1, rotateX: 0 },
+        exit: { opacity: 0, rotateX: 90 }
+    },
+
+    "zoom-in": {
+        initial: { opacity: 0, scale: 0.5 },
+        animate: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 0.5 }
+    },
+
+    "zoom-out": {
+        initial: { opacity: 0, scale: 1.5 },
+        animate: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 1.5 }
+    },
+
+    blur: {
+        initial: { opacity: 0, filter: "blur(10px)" },
+        animate: { opacity: 1, filter: "blur(0px)" },
+        exit: { opacity: 0, filter: "blur(10px)" }
+    },
+
+    elastic: {
+        initial: { opacity: 0, scale: 0.3 },
+        animate: {
+            opacity: 1,
+            scale: 1,
+            transition: {
+                type: "spring",
+                bounce: 0.6,
+                stiffness: 400,
+                damping: 10
+            }
+        },
+        exit: { opacity: 0, scale: 0.3 }
+    },
+
+    "rubber-band": {
+        initial: { opacity: 0, scale: 1 },
+        animate: {
+            opacity: 1,
+            scale: [1, 1.25, 0.75, 1.15, 0.95, 1],
+            transition: {
+                duration: 0.8,
+                times: [0, 0.4, 0.6, 0.7, 0.8, 1]
+            }
+        },
+        exit: { opacity: 0, scale: 0.8 }
     }
 };

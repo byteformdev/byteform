@@ -28,7 +28,15 @@ export type TransitionName =
     | "pop-top-left"
     | "pop-top-right"
     | "bounce"
-    | "spring";
+    | "spring"
+    | "flip"
+    | "flip-x"
+    | "flip-y"
+    | "zoom-in"
+    | "zoom-out"
+    | "blur"
+    | "elastic"
+    | "rubber-band";
 
 export interface TransitionProps {
     /** The content to animate */
@@ -55,8 +63,10 @@ export interface TransitionProps {
     /** Keep component mounted in DOM when not visible */
     keepMounted?: boolean;
 
+    /** Whether to use in view */
     useInView?: boolean;
 
+    /** In view options */
     inViewOptions?: UseInViewOptions;
 
     /** CSS class name */
