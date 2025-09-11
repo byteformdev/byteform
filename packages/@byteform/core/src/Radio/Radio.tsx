@@ -1,7 +1,8 @@
-import { forwardRef, useRef } from "react";
+import React, { forwardRef, useRef, useMemo, useCallback } from "react";
 import { RadioProps, RadioSize } from "./types";
 import { cx, useTheme } from "../_theme";
 import { RadioGroup } from "./RadioGroup";
+import { RadioCard } from "./RadioCard";
 
 const sizeClasses = {
     xs: {
@@ -40,59 +41,24 @@ const getSize = (size: RadioSize) => {
     return sizeClasses[size] || sizeClasses.md;
 };
 
-const getStyles = (
-    disabled: boolean,
-    checked: boolean,
-    theme: "light" | "dark"
-) => {
-    const baseStyles = [
-        "relative inline-flex items-center justify-center rounded-full border transition-all duration-200 ease-in-out cursor-pointer outline-none"
-    ];
+const baseRadioStyles = [
+    "relative inline-flex items-center justify-center rounded-full border transition-all duration-200 ease-in-out cursor-pointer outline-none"
+];
 
-    const themeStyles =
-        theme === "light"
-            ? [
-                  "bg-[var(--byteform-light-background)] border-[var(--byteform-light-border)]",
-                  !disabled &&
-                      "hover:bg-[var(--byteform-light-background-hover)]"
-              ]
-            : [
-                  "bg-[var(--byteform-dark-background)] border-[var(--byteform-dark-border)]",
-                  !disabled &&
-                      "hover:bg-[var(--byteform-dark-background-hover)]"
-              ];
-
-    const checkedStyles = checked
-        ? [
-              "bg-[var(--byteform-primary)] border-[var(--byteform-primary)]",
-              !disabled && "hover:bg-[var(--byteform-primary-hover)]"
-          ]
-        : [];
-
-    const disabledStyles = disabled ? ["opacity-60 cursor-not-allowed"] : [];
-
-    return cx([
-        ...baseStyles,
-        ...themeStyles,
-        ...checkedStyles,
-        ...disabledStyles
-    ]);
-};
-
-const Radio = forwardRef<HTMLInputElement, RadioProps>(
+const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
     (
         {
             size = "md",
             label,
             description,
             error,
-            withAsterisk,
-            required,
-            readOnly,
-            disabled,
-            autoFocus,
+            withAsterisk = false,
+            required = false,
+            readOnly = false,
+            disabled = false,
+            autoFocus = false,
             checked,
-            defaultChecked,
+            defaultChecked = false,
             onChange,
             className,
             classNames,
@@ -101,51 +67,107 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
         ref
     ) => {
         const { theme, cx } = useTheme();
-
         const localRef = useRef<HTMLInputElement>(null);
         const resolvedRef = (ref ||
             localRef) as React.RefObject<HTMLInputElement>;
 
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (readOnly || disabled) return;
-            onChange?.(e);
-        };
+        const sizeStyles = useMemo(() => getSize(size), [size]);
 
-        const sizeStyles = getSize(size);
+        const isChecked = checked !== undefined ? checked : false;
+        const isDisabled = disabled;
+        const isReadOnly = readOnly;
 
-        const renderDot = () => (
-            <div
-                className={cx(
-                    "rounded-full transition-all duration-200 ease-in-out bg-[var(--byteform-white)]",
-                    sizeStyles.dot,
-                    checked ? "opacity-100 scale-100" : "opacity-0 scale-75",
-                    classNames?.icon
-                )}
-            />
+        const handleChange = useCallback(
+            (event: React.ChangeEvent<HTMLInputElement>) => {
+                if (isReadOnly || isDisabled) return;
+                onChange?.(event);
+            },
+            [onChange, isReadOnly, isDisabled]
         );
 
-        const renderLabel = () => {
+        const handleLabelClick = useCallback(
+            (event: React.MouseEvent<HTMLElement>) => {
+                if (isDisabled || isReadOnly) {
+                    event.preventDefault();
+                    return;
+                }
+                resolvedRef.current?.click();
+            },
+            [isDisabled, isReadOnly, resolvedRef]
+        );
+
+        const radioStyles = useMemo(() => {
+            const themeStyles =
+                theme === "light"
+                    ? [
+                          "bg-[var(--byteform-light-background)] border-[var(--byteform-light-border)]",
+                          !isDisabled &&
+                              !isReadOnly &&
+                              "hover:bg-[var(--byteform-light-background-hover)]"
+                      ]
+                    : [
+                          "bg-[var(--byteform-dark-background)] border-[var(--byteform-dark-border)]",
+                          !isDisabled &&
+                              !isReadOnly &&
+                              "hover:bg-[var(--byteform-dark-background-hover)]"
+                      ];
+
+            const checkedStyles = isChecked
+                ? [
+                      "bg-[var(--byteform-primary)] border-[var(--byteform-primary)]",
+                      !isDisabled &&
+                          !isReadOnly &&
+                          "hover:bg-[var(--byteform-primary-hover)]"
+                  ]
+                : [];
+
+            const disabledStyles = isDisabled
+                ? ["opacity-60 cursor-not-allowed"]
+                : [];
+
+            return cx([
+                ...baseRadioStyles,
+                ...themeStyles,
+                ...checkedStyles,
+                ...disabledStyles
+            ]);
+        }, [theme, isDisabled, isReadOnly, isChecked, cx]);
+
+        const dotElement = useMemo(
+            () => (
+                <div
+                    className={cx(
+                        "rounded-full transition-all duration-200 ease-in-out bg-[var(--byteform-white)]",
+                        sizeStyles.dot,
+                        isChecked
+                            ? "opacity-100 scale-100"
+                            : "opacity-0 scale-75",
+                        classNames?.dot
+                    )}
+                    data-checked={isChecked}
+                    data-disabled={isDisabled}
+                />
+            ),
+            [sizeStyles.dot, isChecked, isDisabled, classNames?.dot, cx]
+        );
+
+        const labelElement = useMemo(() => {
             if (!label) return null;
 
             return (
                 <label
                     className={cx(
                         "outline-none select-none",
-                        !readOnly && "cursor-pointer",
+                        !isReadOnly && "cursor-pointer",
                         sizeStyles.text,
                         theme === "light"
                             ? "text-[var(--byteform-light-text)]"
                             : "text-[var(--byteform-dark-text)]",
-                        disabled && "opacity-60 cursor-not-allowed",
+                        isDisabled && "opacity-60 cursor-not-allowed",
                         classNames?.label
                     )}
-                    onClick={(e) => {
-                        if (disabled || readOnly) {
-                            e.preventDefault();
-                            return;
-                        }
-                        resolvedRef.current?.click();
-                    }}
+                    onClick={handleLabelClick}
+                    data-disabled={isDisabled}
                 >
                     {label}
                     {withAsterisk && (
@@ -155,9 +177,19 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
                     )}
                 </label>
             );
-        };
+        }, [
+            label,
+            withAsterisk,
+            isReadOnly,
+            sizeStyles.text,
+            theme,
+            isDisabled,
+            classNames?.label,
+            handleLabelClick,
+            cx
+        ]);
 
-        const renderDescription = () => {
+        const descriptionElement = useMemo(() => {
             if (!description || error) return null;
 
             return (
@@ -167,81 +199,121 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
                         theme === "light"
                             ? "text-[var(--byteform-light-hint)]"
                             : "text-[var(--byteform-dark-hint)]",
-                        disabled && "opacity-60 cursor-not-allowed",
+                        isDisabled && "opacity-60",
                         classNames?.description
                     )}
+                    data-disabled={isDisabled}
                 >
                     {description}
                 </div>
             );
-        };
+        }, [
+            description,
+            error,
+            theme,
+            isDisabled,
+            classNames?.description,
+            cx
+        ]);
 
-        const renderError = () => {
+        const errorElement = useMemo(() => {
             if (!error) return null;
 
             return (
                 <div
                     className={cx(
                         "text-xs text-[var(--byteform-error)] mt-1",
-                        disabled && "opacity-60 cursor-not-allowed",
                         classNames?.error
                     )}
                 >
                     {error}
                 </div>
             );
-        };
+        }, [error, classNames?.error, cx]);
 
-        const renderRadioControl = () => (
-            <div
-                className={cx(
-                    sizeStyles.radio,
-                    getStyles(disabled ?? false, checked ?? false, theme),
-                    classNames?.body
-                )}
-            >
-                {renderDot()}
-
-                <input
-                    ref={resolvedRef}
-                    type="radio"
+        const radioControlElement = useMemo(
+            () => (
+                <div
                     className={cx(
-                        "absolute inset-0 w-full h-full opacity-0 cursor-pointer",
-                        disabled && "cursor-not-allowed",
-                        readOnly && "cursor-default",
-                        classNames?.input
+                        sizeStyles.radio,
+                        radioStyles,
+                        classNames?.radio
                     )}
-                    checked={checked}
-                    defaultChecked={defaultChecked}
-                    required={required}
-                    disabled={disabled}
-                    readOnly={readOnly}
-                    autoFocus={autoFocus}
-                    onChange={handleChange}
-                    {...props}
-                />
-            </div>
+                    data-checked={isChecked}
+                    data-disabled={isDisabled}
+                    data-readonly={isReadOnly}
+                >
+                    {dotElement}
+
+                    <input
+                        ref={resolvedRef}
+                        type="radio"
+                        className={cx(
+                            "absolute inset-0 w-full h-full opacity-0 cursor-pointer",
+                            isDisabled && "cursor-not-allowed",
+                            isReadOnly && "cursor-default",
+                            classNames?.input
+                        )}
+                        checked={checked}
+                        defaultChecked={defaultChecked}
+                        required={required}
+                        disabled={isDisabled}
+                        readOnly={isReadOnly}
+                        autoFocus={autoFocus}
+                        onChange={handleChange}
+                        data-checked={isChecked}
+                        data-disabled={isDisabled}
+                        data-readonly={isReadOnly}
+                        {...props}
+                    />
+                </div>
+            ),
+            [
+                sizeStyles.radio,
+                radioStyles,
+                classNames?.radio,
+                classNames?.input,
+                isChecked,
+                isDisabled,
+                isReadOnly,
+                dotElement,
+                resolvedRef,
+                checked,
+                defaultChecked,
+                required,
+                autoFocus,
+                handleChange,
+                props,
+                cx
+            ]
         );
 
-        const renderContent = () => {
+        const contentElements = useMemo(() => {
             const elements = [];
 
             elements.push(
-                <div key="radio" className={cx(classNames?.inner)}>
-                    {renderRadioControl()}
+                <div key="radio" className={cx(classNames?.body)}>
+                    {radioControlElement}
                 </div>
             );
 
             if (label) {
                 elements.push(
                     <div key="label" className={cx(classNames?.labelWrapper)}>
-                        {renderLabel()}
+                        {labelElement}
                     </div>
                 );
             }
 
             return elements;
-        };
+        }, [
+            radioControlElement,
+            label,
+            labelElement,
+            classNames?.body,
+            classNames?.labelWrapper,
+            cx
+        ]);
 
         return (
             <div
@@ -250,26 +322,31 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
                     classNames?.root,
                     className
                 )}
+                data-checked={isChecked}
+                data-disabled={isDisabled}
+                data-readonly={isReadOnly}
+                data-size={size}
             >
                 <div
                     className={cx(
                         "inline-flex items-center",
                         sizeStyles.gap,
-                        classNames?.body
+                        classNames?.container
                     )}
                 >
-                    {renderContent()}
+                    {contentElements}
                 </div>
 
-                {renderDescription()}
-                {renderError()}
+                {descriptionElement}
+                {errorElement}
             </div>
         );
     }
 );
 
-const ExtendedRadio = Object.assign(Radio, {
-    Group: RadioGroup
+const ExtendedRadio = Object.assign(RadioComponent, {
+    Group: RadioGroup,
+    Card: RadioCard
 });
 
 ExtendedRadio.displayName = "@byteform/core/Radio";
