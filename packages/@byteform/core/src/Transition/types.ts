@@ -1,5 +1,9 @@
 import { ReactNode } from "react";
-import { Variants, Transition as FramerTransition } from "framer-motion";
+import {
+    Variants,
+    Transition as FramerTransition,
+    UseInViewOptions
+} from "framer-motion";
 
 export type TransitionName =
     | "fade"
@@ -50,6 +54,10 @@ export interface TransitionProps {
 
     /** Keep component mounted in DOM when not visible */
     keepMounted?: boolean;
+
+    useInView?: boolean;
+
+    inViewOptions?: UseInViewOptions;
 
     /** CSS class name */
     className?: string;
