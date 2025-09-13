@@ -2,25 +2,70 @@ import {
     ComponentPropsWithoutRef,
     ComponentPropsWithRef,
     ElementType,
-    PropsWithChildren
+    PropsWithChildren,
+    ReactElement
 } from "react";
 
-export type AsProp<C extends ElementType> = {
+/**
+ * Base props for polymorphic components
+ */
+export type PolymorphicAsProp<C extends ElementType> = {
     as?: C;
 };
 
-type PropsToOmit<C extends ElementType, P> = keyof (AsProp<C> & P);
-
-export type PolymorphicComponentProp<
-    C extends ElementType,
-    Props = {}
-> = PropsWithChildren<Props & AsProp<C>> &
-    Omit<ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
-
+/**
+ * Extract the ref type for a given component
+ */
 export type PolymorphicRef<C extends ElementType> =
     ComponentPropsWithRef<C>["ref"];
 
-export type PolymorphicComponentPropWithRef<
+/**
+ * Props to omit from the component when using polymorphic behavior
+ * We omit 'as' and any conflicting props from the component's own props
+ */
+type PropsToOmit<C extends ElementType, P> = keyof (PolymorphicAsProp<C> & P);
+
+/**
+ * Polymorphic component props without ref
+ */
+export type PolymorphicComponentProps<
     C extends ElementType,
     Props = {}
-> = PolymorphicComponentProp<C, Props> & { ref?: PolymorphicRef<C> };
+> = PropsWithChildren<Props & PolymorphicAsProp<C>> &
+    Omit<ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
+
+/**
+ * Polymorphic component props with ref
+ */
+export type PolymorphicComponentPropsWithRef<
+    C extends ElementType,
+    Props = {}
+> = PolymorphicComponentProps<C, Props> & {
+    ref?: PolymorphicRef<C>;
+};
+
+/**
+ * Type for the polymorphic component function
+ */
+export type PolymorphicComponent<
+    DefaultElement extends ElementType,
+    Props = {}
+> = {
+    <C extends ElementType = DefaultElement>(
+        props: PolymorphicComponentPropsWithRef<C, Props>
+    ): ReactElement | null;
+    displayName?: string;
+};
+
+/**
+ * Helper type for creating polymorphic forwardRef components
+ */
+export type PolymorphicForwardRefExoticComponent<
+    DefaultElement extends ElementType,
+    Props = {}
+> = {
+    <C extends ElementType = DefaultElement>(
+        props: PolymorphicComponentPropsWithRef<C, Props>
+    ): ReactElement | null;
+    displayName?: string;
+};
