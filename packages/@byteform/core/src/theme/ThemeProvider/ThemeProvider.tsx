@@ -11,22 +11,14 @@ export function ThemeProvider({
     persistTheme = true,
     storageKey = KEY,
     primaryColor = "blue",
-    variantOpacity = 0.6
+    variantOpacity = 0.6,
+    themeSettings,
+    components
 }: ThemeProviderProps) {
     const [persist, setPersist] = useState(persistTheme);
-    const [currentTheme, setCurrentTheme] = useState<ResolvedTheme>(() => {
-        if (persist) {
-            const saved = localStorage.getItem(storageKey);
-            if (saved === "dark" || saved === "light") return saved;
-        }
-        if (theme === "system") {
-            return window.matchMedia("(prefers-color-scheme: dark)").matches
-                ? "dark"
-                : "light";
-        }
-
-        return theme;
-    });
+    const [currentTheme, setCurrentTheme] = useState<ResolvedTheme>(
+        theme === "system" ? "light" : theme
+    );
 
     const [currentPrimaryColor, setCurrentPrimaryColor] =
         useState(primaryColor);
@@ -34,7 +26,39 @@ export function ThemeProvider({
         useState(variantOpacity);
 
     useEffect(() => {
-        if (theme !== "system") return;
+        if (typeof window === "undefined") return;
+
+        let resolvedTheme: ResolvedTheme | undefined;
+
+        if (persist && typeof localStorage !== "undefined") {
+            const saved = localStorage.getItem(storageKey);
+            if (saved === "dark" || saved === "light") {
+                resolvedTheme = saved;
+            }
+        }
+
+        if (!resolvedTheme && theme === "system") {
+            resolvedTheme = window.matchMedia("(prefers-color-scheme: dark)")
+                .matches
+                ? "dark"
+                : "light";
+        }
+
+        if (!resolvedTheme && theme !== "system") {
+            resolvedTheme = theme;
+        }
+
+        if (!resolvedTheme) {
+            resolvedTheme = "light";
+        }
+
+        setCurrentTheme((prev) =>
+            prev !== resolvedTheme ? resolvedTheme : prev
+        );
+    }, [theme, persist, storageKey]);
+
+    useEffect(() => {
+        if (theme !== "system" || typeof window === "undefined") return;
 
         const mq = window.matchMedia("(prefers-color-scheme: dark)");
         const listener = (e: MediaQueryListEvent) =>
@@ -45,10 +69,14 @@ export function ThemeProvider({
     }, [theme]);
 
     useEffect(() => {
-        if (persist) localStorage.setItem(storageKey, currentTheme);
+        if (persist && typeof localStorage !== "undefined") {
+            localStorage.setItem(storageKey, currentTheme);
+        }
     }, [currentTheme, persist, storageKey]);
 
     useEffect(() => {
+        if (typeof document === "undefined") return;
+
         const vars: ThemeVars = getThemeColors(
             currentTheme,
             currentPrimaryColor,
@@ -75,7 +103,9 @@ export function ThemeProvider({
                 primaryColor: currentPrimaryColor,
                 setPrimaryColor: setCurrentPrimaryColor,
                 variantOpacity: currentVariantOpacity,
-                setVariantOpacity: setCurrentVariantOpacity
+                setVariantOpacity: setCurrentVariantOpacity,
+                themeSettings,
+                components
             }}
         >
             {children}

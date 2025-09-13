@@ -37,6 +37,7 @@ export const getThemeColors = (
     const primaryColorValue = colors[primaryColor][6];
     vars[`${DEFAULT_TEMPLATE}-primary`] = primaryColorValue;
     vars[`${DEFAULT_TEMPLATE}-primary-hover`] = colors[primaryColor][5];
+    vars[`${DEFAULT_TEMPLATE}-primary-text`] = colors[primaryColor][0];
     vars[`${DEFAULT_TEMPLATE}-primary-light`] = rgba(
         primaryColorValue,
         variantOpacity
